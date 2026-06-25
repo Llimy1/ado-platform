@@ -1,0 +1,24 @@
+{
+  "name": "ado-platform",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@9.15.4",
+  "engines": {
+    "node": ">=20.9.0"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "dev": "turbo run dev --parallel",
+    "db:migration:show": "pnpm --filter @ado/persistence migration:show",
+    "db:migration:run": "pnpm --filter @ado/persistence migration:run",
+    "openapi:generate": "pnpm --filter @ado/api openapi:generate"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "turbo": "^2.3.3",
+    "typescript": "^5.7.2"
+  }
+}
