@@ -7,13 +7,18 @@ immutable specification revision is pinned in `ado-spec.lock.json`.
 
 ## Current Stage
 
-This repository is in A1 Foundation.
+This repository is transitioning from the historical NestJS A1/A2 foundation
+to the approved Django + Next platform architecture.
 
-A1 provides the pnpm/Turborepo monorepo, NestJS API, standalone Worker,
-Next.js Control app, PostgreSQL Docker profile, TypeORM migration baseline,
-health checks, OpenAPI generation, and CI baseline.
+The current NestJS/TypeORM/Turborepo implementation is historical
+implementation evidence, not the target architecture for new work. Follow
+`docs/PLATFORM_DJANGO_NEXT_TRANSITION_RULES.md` before changing platform code.
 
 ## Local Quick Start
+
+The commands below describe the historical NestJS foundation that currently
+exists in the repository. They remain useful only for inspecting the old
+baseline until the Django + Next skeleton PR replaces them.
 
 ```bash
 corepack enable

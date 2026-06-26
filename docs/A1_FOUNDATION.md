@@ -1,5 +1,10 @@
 # A1 Foundation
 
+> Historical note: this document describes the original NestJS/TypeORM A1
+> foundation. New implementation work follows
+> `docs/PLATFORM_DJANGO_NEXT_TRANSITION_RULES.md` and the approved ADO Spec
+> Library Django + Next architecture.
+
 ## Purpose
 
 A1 creates the minimum runnable ADO Platform foundation. It does not implement
