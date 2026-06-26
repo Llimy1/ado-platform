@@ -14,6 +14,12 @@ this document must be updated before implementation continues.
 This document is a transition contract. It does not complete the platform
 pivot by itself.
 
+The first implementation pass must also follow
+`docs/LEARNING_FIRST_SETUP_PROTOCOL.md`. That protocol exists because the
+Human Owner wants to learn the project setup while building it. Do not replace
+that learning path with a complete generated skeleton unless the Human Owner
+explicitly changes this rule.
+
 ## 2. Non-Negotiable Principles
 
 1. `main` is human-controlled and must not be targeted by ADO work.
@@ -29,6 +35,8 @@ pivot by itself.
    Room.
 9. External agent/model output is a claim until validated by evidence gates.
 10. Human Owner approval remains required for final merge.
+11. The initial Django + Next setup is learning-led and proceeds in small
+    Learning Units.
 
 ## 3. Source And Target Baseline
 
@@ -279,18 +287,24 @@ spec defines a safe automated ingestion path.
 The pivot proceeds in this order unless a later approved PR updates this list.
 
 1. Transition rules: add this document and link it from repository docs.
-2. Skeleton reset: create Django + Next repository shape, root commands, and
-   dependency files.
-3. A1 Django foundation: health/readiness API, OpenAPI generation, Worker
+2. Learning setup LU-01/LU-02: establish Python `uv` baseline and create the
+   Django project shell with the Human Owner following each step.
+3. Learning setup LU-03/LU-04: configure Django settings/environment and add
+   the Django Ninja health API/OpenAPI path.
+4. Learning setup LU-05/LU-06: connect PostgreSQL migrations and add the
+   Python Worker command.
+5. Learning setup LU-07/LU-08: connect Next health UI and root command surface.
+6. A1 Django foundation closeout: health/readiness API, OpenAPI generation,
+   Worker
    skeleton, PostgreSQL migration baseline, Control health panel.
-4. A2 Django domain: core orchestration models, migrations, admin read views,
+7. A2 Django domain: core orchestration models, migrations, admin read views,
    and domain fixtures/tests.
-5. State, policy, and evidence services: authoritative transitions and audit.
-6. PostgreSQL queue and Worker lease loop: `Job`, `JobAttempt`, heartbeat,
+8. State, policy, and evidence services: authoritative transitions and audit.
+9. PostgreSQL queue and Worker lease loop: `Job`, `JobAttempt`, heartbeat,
    stale recovery, and retry behavior.
-7. Artifact and document pipeline: DB-backed artifact lineage and generated
+10. Artifact and document pipeline: DB-backed artifact lineage and generated
    working documents.
-8. Control Room operational slice: Project, Feature Unit, Component Work, Job,
+11. Control Room operational slice: Project, Feature Unit, Component Work, Job,
    Run, review, incident, and human gate screens.
 
 Each PR states which step it implements, what obsolete files remain, and what

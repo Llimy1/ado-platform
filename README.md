@@ -14,6 +14,10 @@ The current NestJS/TypeORM/Turborepo implementation is historical
 implementation evidence, not the target architecture for new work. Follow
 `docs/PLATFORM_DJANGO_NEXT_TRANSITION_RULES.md` before changing platform code.
 
+The first Django + Next implementation is learning-led. Follow
+`docs/LEARNING_FIRST_SETUP_PROTOCOL.md`; do not generate a complete skeleton
+before the setup steps have been discussed and approved.
+
 ## Local Quick Start
 
 The commands below describe the historical NestJS foundation that currently
