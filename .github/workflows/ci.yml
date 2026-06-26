@@ -1,0 +1,46 @@
+name: ci
+
+on:
+  pull_request:
+    branches: [integrate]
+  push:
+    branches: [integrate]
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: ado
+          POSTGRES_PASSWORD: ado
+          POSTGRES_DB: ado_platform
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U ado -d ado_platform"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      ADO_DATABASE_URL: postgres://ado:ado@localhost:5432/ado_platform
+      ADO_API_PORT: 3001
+      ADO_CONTROL_ORIGIN: http://localhost:3000
+      ADO_API_ENV: test
+      NEXT_PUBLIC_ADO_API_ORIGIN: http://localhost:3001
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: corepack enable
+      - run: corepack prepare pnpm@9.15.4 --activate
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm build
+      - run: pnpm db:migration:run
+      - run: pnpm openapi:generate
+      - run: git diff --exit-code -- apps/api/openapi.json

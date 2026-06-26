@@ -1,10 +1,10 @@
-.DS_Store
-.env
-.env.*
-!.env.example
 node_modules/
-.pnpm-store/
 .turbo/
 dist/
+.next/
 coverage/
-*.log
+/openapi.json
+!apps/api/openapi.json
+.env
+.env.local
+!.env.example
