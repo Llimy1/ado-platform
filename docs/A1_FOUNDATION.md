@@ -12,6 +12,11 @@ New A1 work must follow:
 
 - `docs/PLATFORM_DJANGO_NEXT_TRANSITION_RULES.md`
 - `docs/LEARNING_FIRST_SETUP_PROTOCOL.md`
+- `docs/LOCAL_DEVELOPMENT_ENVIRONMENT.md`
+- `docs/LEARNING_UNIT_TEMPLATE.md`
+- `docs/DJANGO_PROJECT_STRUCTURE.md`
+- `docs/CONFIGURATION_POLICY.md`
+- `docs/LEARNING_PR_POLICY.md`
 
 ## Learning-First Scope
 

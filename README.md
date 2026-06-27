@@ -17,6 +17,11 @@ Read these before adding code:
 
 - `docs/PLATFORM_DJANGO_NEXT_TRANSITION_RULES.md`
 - `docs/LEARNING_FIRST_SETUP_PROTOCOL.md`
+- `docs/LOCAL_DEVELOPMENT_ENVIRONMENT.md`
+- `docs/LEARNING_UNIT_TEMPLATE.md`
+- `docs/DJANGO_PROJECT_STRUCTURE.md`
+- `docs/CONFIGURATION_POLICY.md`
+- `docs/LEARNING_PR_POLICY.md`
 - `docs/A1_FOUNDATION.md`
 
 ## Local Quick Start
@@ -25,6 +30,9 @@ There is no runnable application yet.
 
 The first implementation step is LU-01 from
 `docs/LEARNING_FIRST_SETUP_PROTOCOL.md`: Python and `uv` baseline setup.
+
+Before LU-01, review `docs/LOCAL_DEVELOPMENT_ENVIRONMENT.md` so the editor,
+Python, `uv`, Node, `pnpm`, PostgreSQL, and local-only file rules are clear.
 
 ## Verification
 

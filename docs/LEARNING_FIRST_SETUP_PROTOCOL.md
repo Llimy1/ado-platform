@@ -38,6 +38,14 @@ Codex must not:
 
 The Django + Next transition proceeds through Learning Units.
 
+Supporting policy documents:
+
+- `docs/LOCAL_DEVELOPMENT_ENVIRONMENT.md`
+- `docs/LEARNING_UNIT_TEMPLATE.md`
+- `docs/DJANGO_PROJECT_STRUCTURE.md`
+- `docs/CONFIGURATION_POLICY.md`
+- `docs/LEARNING_PR_POLICY.md`
+
 Each Learning Unit has:
 
 1. a concept goal;
@@ -57,6 +65,11 @@ the Human Owner explicitly asks to move faster.
 
 Goal: understand why `uv` owns Python dependency and command execution.
 
+Required policy:
+
+- `docs/LOCAL_DEVELOPMENT_ENVIRONMENT.md`
+- `docs/LEARNING_UNIT_TEMPLATE.md`
+
 Scope:
 
 - inspect installed Python and `uv`;
@@ -74,6 +87,10 @@ Checkpoint:
 
 Goal: understand Django project structure before ADO domain code exists.
 
+Required policy:
+
+- `docs/DJANGO_PROJECT_STRUCTURE.md`
+
 Scope:
 
 - create `apps/api/manage.py`;
@@ -90,6 +107,10 @@ Checkpoint:
 ### LU-03: Settings And Environment
 
 Goal: understand non-secret configuration boundaries.
+
+Required policy:
+
+- `docs/CONFIGURATION_POLICY.md`
 
 Scope:
 
@@ -171,6 +192,10 @@ Checkpoint:
 ### LU-08: Root Command Surface
 
 Goal: understand why `make` wraps Python and frontend commands.
+
+Required policy:
+
+- `docs/LEARNING_PR_POLICY.md`
 
 Scope:
 
