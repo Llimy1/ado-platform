@@ -4,8 +4,5 @@ node_modules/
 dist/
 .next/
 coverage/
-/openapi.json
-!apps/api/openapi.json
 .env
 .env.local
-!.env.example

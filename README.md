@@ -7,57 +7,37 @@ immutable specification revision is pinned in `ado-spec.lock.json`.
 
 ## Current Stage
 
-This repository is transitioning from the historical NestJS A1/A2 foundation
-to the approved Django + Next platform architecture.
+This repository has been reset for a learning-first Django + Next rebuild.
 
-The current NestJS/TypeORM/Turborepo implementation is historical
-implementation evidence, not the target architecture for new work. Follow
-`docs/PLATFORM_DJANGO_NEXT_TRANSITION_RULES.md` before changing platform code.
+The historical NestJS/TypeORM/Turborepo implementation has been removed from
+the active codebase. The next implementation starts from framework setup, not
+from a pre-generated skeleton.
 
-The first Django + Next implementation is learning-led. Follow
-`docs/LEARNING_FIRST_SETUP_PROTOCOL.md`; do not generate a complete skeleton
-before the setup steps have been discussed and approved.
+Read these before adding code:
+
+- `docs/PLATFORM_DJANGO_NEXT_TRANSITION_RULES.md`
+- `docs/LEARNING_FIRST_SETUP_PROTOCOL.md`
+- `docs/A1_FOUNDATION.md`
 
 ## Local Quick Start
 
-The commands below describe the historical NestJS foundation that currently
-exists in the repository. They remain useful only for inspecting the old
-baseline until the Django + Next skeleton PR replaces them.
+There is no runnable application yet.
 
-```bash
-corepack enable
-pnpm install
-cp .env.example .env
-docker compose -f infra/docker/compose.yaml up -d
-pnpm db:migration:run
-pnpm build
-pnpm --filter @ado/api start
-pnpm --filter @ado/control dev
-```
-
-Default local URLs:
-
-- Control UI: `http://localhost:3000`
-- API health: `http://localhost:3001/v1/health`
-- API docs: `http://localhost:3001/docs`
-- OpenAPI JSON: `apps/api/openapi.json`
-
-ADO's local PostgreSQL container maps host port `5434` to avoid common
-conflicts with other projects that already use `5432`.
+The first implementation step is LU-01 from
+`docs/LEARNING_FIRST_SETUP_PROTOCOL.md`: Python and `uv` baseline setup.
 
 ## Verification
 
-Run these before opening an ADO Platform PR:
+There are no framework verification commands yet.
+
+For documentation-only changes, run:
 
 ```bash
-pnpm lint
-pnpm typecheck
-pnpm test
-pnpm build
-pnpm db:migration:show
-pnpm openapi:generate
-git diff --exit-code -- apps/api/openapi.json
+git diff --check
 ```
+
+As each Learning Unit creates real files, it must add the corresponding
+verification commands and update this section.
 
 ## Safety
 

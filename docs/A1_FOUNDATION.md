@@ -1,119 +1,49 @@
 # A1 Foundation
 
-> Historical note: this document describes the original NestJS/TypeORM A1
-> foundation. New implementation work follows
-> `docs/PLATFORM_DJANGO_NEXT_TRANSITION_RULES.md` and the approved ADO Spec
-> Library Django + Next architecture.
+## Current Status
 
-## Purpose
+A1 is intentionally not implemented yet.
 
-A1 creates the minimum runnable ADO Platform foundation. It does not implement
-orchestration domain behavior yet. It proves that the monorepo, API, Control
-app, Worker, PostgreSQL, migrations, OpenAPI artifact, and CI commands can all
-run from one repository.
+The historical NestJS/TypeORM/Turborepo implementation has been removed so the
+Human Owner can rebuild the platform from the first framework setup step while
+learning Django, Python, PostgreSQL, local LLM integration, and Next.js.
 
-## Included
+New A1 work must follow:
 
-- pnpm workspace and Turborepo task graph
-- NestJS API with `GET /v1/health`
+- `docs/PLATFORM_DJANGO_NEXT_TRANSITION_RULES.md`
+- `docs/LEARNING_FIRST_SETUP_PROTOCOL.md`
+
+## Learning-First Scope
+
+A1 will be rebuilt through Learning Units instead of a generated skeleton:
+
+1. LU-01 Python and `uv` baseline
+2. LU-02 Django project creation
+3. LU-03 settings and environment
+4. LU-04 Django Ninja health API and OpenAPI
+5. LU-05 PostgreSQL and migrations
+6. LU-06 Python Worker command
+7. LU-07 Next Control health screen
+8. LU-08 root command surface
+
+Each Learning Unit must explain the concept, list touched files, run a small
+verification command, and leave a checkpoint summary before moving on.
+
+## Target A1 Outcome
+
+A1 is complete only when the repository contains a runnable Django + Next
+foundation:
+
+- Python `uv` baseline and lockfile
+- Django + Django Ninja API with `GET /v1/health`
 - Next.js Control app with an API health panel
-- Standalone Worker process with database preflight and graceful shutdown
-- PostgreSQL Docker Compose profile
-- TypeORM DataSource and initial bootstrap migration
+- Python Worker command with database preflight and graceful shutdown
+- PostgreSQL local development profile
+- Django migration path
 - OpenAPI JSON generation at `apps/api/openapi.json`
-- CI baseline for lint, typecheck, test, build, migration, and OpenAPI drift
+- root commands for lint, typecheck, test, integration, Control build,
+  migrations, OpenAPI, and generated client checks
+- CI baseline for the same gates
 
-## Excluded
-
-- Project, Roadmap, Feature Unit, Component Work, and Agent Run tables
-- Queue leasing and retry semantics
-- Real SSE event stream
-- Authentication and authorization
-- Agent runner integrations
-- GitHub PR automation beyond repository branch policy
-- Production deployment hardening
-
-## Local Environment
-
-Copy `.env.example` to `.env`.
-
-```bash
-cp .env.example .env
-```
-
-The default ADO PostgreSQL port is `5434`, not `5432`, so it can coexist with
-other local project databases.
-
-## Database
-
-Start PostgreSQL:
-
-```bash
-docker compose -f infra/docker/compose.yaml up -d
-```
-
-Apply migrations:
-
-```bash
-pnpm db:migration:run
-```
-
-Check pending migrations:
-
-```bash
-pnpm db:migration:show
-```
-
-## API
-
-Start the API after `pnpm build`:
-
-```bash
-pnpm --filter @ado/api start
-```
-
-Expected health response:
-
-```json
-{
-  "status": "ready",
-  "checkedAt": "2026-06-25T00:00:00.000Z"
-}
-```
-
-`status` is `ready` only when the API can query PostgreSQL.
-
-## Control App
-
-Start the Control app:
-
-```bash
-pnpm --filter @ado/control dev
-```
-
-The first screen shows API health. A1 intentionally keeps the UI small because
-the full Control Room page contracts are not implemented until the approved
-spec revision is pinned in `ado-spec.lock.json`.
-
-## Worker
-
-Start the Worker after migrations:
-
-```bash
-pnpm --filter @ado/worker start
-```
-
-The A1 Worker performs a database preflight and remains alive until `SIGINT` or
-`SIGTERM`. The real dequeue loop is a later phase.
-
-## Acceptance Checklist
-
-- `pnpm lint` passes.
-- `pnpm typecheck` passes.
-- `pnpm test` passes.
-- `pnpm build` passes.
-- `pnpm db:migration:run` applies the bootstrap migration or reports no work.
-- `pnpm db:migration:show` reports no pending migrations after apply.
-- `pnpm openapi:generate` writes `apps/api/openapi.json`.
-- `GET /v1/health` returns `status: "ready"` against local PostgreSQL.
-- The Worker starts, performs DB preflight, and exits cleanly on interrupt.
+Until those Learning Units are completed, commands from the removed historical
+implementation must not be treated as current.
