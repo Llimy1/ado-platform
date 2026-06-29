@@ -1,114 +1,57 @@
 # A1 Foundation
 
-## Purpose
+## Current Status
 
-A1 creates the minimum runnable ADO Platform foundation. It does not implement
-orchestration domain behavior yet. It proves that the monorepo, API, Control
-app, Worker, PostgreSQL, migrations, OpenAPI artifact, and CI commands can all
-run from one repository.
+A1 is intentionally not implemented yet.
 
-## Included
+The Human Owner has chosen to rebuild ADO Platform with NestJS, TypeORM,
+PostgreSQL, local LLM review adapters, and Next.js while learning each setup
+step.
 
-- pnpm workspace and Turborepo task graph
+New A1 work must follow:
+
+- `docs/PLATFORM_NESTJS_TYPEORM_RULES.md`
+- `docs/LEARNING_FIRST_SETUP_PROTOCOL.md`
+- `docs/LOCAL_DEVELOPMENT_ENVIRONMENT.md`
+- `docs/LEARNING_UNIT_TEMPLATE.md`
+- `docs/NESTJS_PROJECT_STRUCTURE.md`
+- `docs/CONFIGURATION_POLICY.md`
+- `docs/LEARNING_PR_POLICY.md`
+
+## Learning-First Scope
+
+A1 will be rebuilt through Learning Units instead of a generated skeleton:
+
+1. LU-01 Node.js and `pnpm` baseline
+2. LU-02 NestJS workspace and app shells
+3. LU-03 settings and environment
+4. LU-04 Nest health API and OpenAPI
+5. LU-05 PostgreSQL and TypeORM migrations
+6. LU-06 Nest Worker process shell
+7. LU-07 Next Control health screen
+8. LU-08 root command surface
+
+Each Learning Unit must explain the concept, list touched files, run a small
+verification command, and leave a checkpoint summary before moving on.
+
+## Target A1 Outcome
+
+A1 is complete only when the repository contains a runnable NestJS + TypeORM +
+Next.js foundation:
+
+- Node.js `pnpm` workspace and lockfile
 - NestJS API with `GET /v1/health`
 - Next.js Control app with an API health panel
-- Standalone Worker process with database preflight and graceful shutdown
-- PostgreSQL Docker Compose profile
-- TypeORM DataSource and initial bootstrap migration
+- NestJS Worker process shell with database preflight, `--worker-id`, `--once`,
+  and graceful shutdown
+- PostgreSQL local development profile
+- TypeORM migration path with `synchronize: false`
 - OpenAPI JSON generation at `apps/api/openapi.json`
-- CI baseline for lint, typecheck, test, build, migration, and OpenAPI drift
+- generated TypeScript contract/client under `packages/contracts`
+- root commands for lint, typecheck, test, integration, builds, migrations,
+  Spec Library preflight, OpenAPI, and generated client checks
+- CI baseline for the same gates
 
-## Excluded
-
-- Project, Roadmap, Feature Unit, Component Work, and Agent Run tables
-- Queue leasing and retry semantics
-- Real SSE event stream
-- Authentication and authorization
-- Agent runner integrations
-- GitHub PR automation beyond repository branch policy
-- Production deployment hardening
-
-## Local Environment
-
-Copy `.env.example` to `.env`.
-
-```bash
-cp .env.example .env
-```
-
-The default ADO PostgreSQL port is `5434`, not `5432`, so it can coexist with
-other local project databases.
-
-## Database
-
-Start PostgreSQL:
-
-```bash
-docker compose -f infra/docker/compose.yaml up -d
-```
-
-Apply migrations:
-
-```bash
-pnpm db:migration:run
-```
-
-Check pending migrations:
-
-```bash
-pnpm db:migration:show
-```
-
-## API
-
-Start the API after `pnpm build`:
-
-```bash
-pnpm --filter @ado/api start
-```
-
-Expected health response:
-
-```json
-{
-  "status": "ready",
-  "checkedAt": "2026-06-25T00:00:00.000Z"
-}
-```
-
-`status` is `ready` only when the API can query PostgreSQL.
-
-## Control App
-
-Start the Control app:
-
-```bash
-pnpm --filter @ado/control dev
-```
-
-The first screen shows API health. A1 intentionally keeps the UI small because
-the full Control Room page contracts are not implemented until the approved
-spec revision is pinned in `ado-spec.lock.json`.
-
-## Worker
-
-Start the Worker after migrations:
-
-```bash
-pnpm --filter @ado/worker start
-```
-
-The A1 Worker performs a database preflight and remains alive until `SIGINT` or
-`SIGTERM`. The real dequeue loop is a later phase.
-
-## Acceptance Checklist
-
-- `pnpm lint` passes.
-- `pnpm typecheck` passes.
-- `pnpm test` passes.
-- `pnpm build` passes.
-- `pnpm db:migration:run` applies the bootstrap migration or reports no work.
-- `pnpm db:migration:show` reports no pending migrations after apply.
-- `pnpm openapi:generate` writes `apps/api/openapi.json`.
-- `GET /v1/health` returns `status: "ready"` against local PostgreSQL.
-- The Worker starts, performs DB preflight, and exits cleanly on interrupt.
+A1 does not complete the stateful Worker lease loop. Job leasing, artifacts,
+audit evidence, stale recovery, retry behavior, local LLM review feedback
+loops, and state transitions require later State/Evidence/Job contracts.

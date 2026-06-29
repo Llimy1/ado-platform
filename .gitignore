@@ -1,10 +1,9 @@
 node_modules/
+.DS_Store
+.idea/
 .turbo/
 dist/
 .next/
 coverage/
-/openapi.json
-!apps/api/openapi.json
 .env
 .env.local
-!.env.example

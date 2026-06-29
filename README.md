@@ -7,48 +7,52 @@ immutable specification revision is pinned in `ado-spec.lock.json`.
 
 ## Current Stage
 
-This repository is in A1 Foundation.
+This repository is being rebuilt through a learning-first NestJS + TypeORM +
+Next.js path.
 
-A1 provides the pnpm/Turborepo monorepo, NestJS API, standalone Worker,
-Next.js Control app, PostgreSQL Docker profile, TypeORM migration baseline,
-health checks, OpenAPI generation, and CI baseline.
+The next implementation starts from framework setup and proceeds in small
+Learning Units. Treat only the files and rules listed in the current policy
+documents as active implementation guidance.
+
+Read these before adding code:
+
+- `docs/PLATFORM_NESTJS_TYPEORM_RULES.md`
+- `docs/LEARNING_FIRST_SETUP_PROTOCOL.md`
+- `docs/LOCAL_DEVELOPMENT_ENVIRONMENT.md`
+- `docs/LEARNING_UNIT_TEMPLATE.md`
+- `docs/NESTJS_PROJECT_STRUCTURE.md`
+- `docs/CONFIGURATION_POLICY.md`
+- `docs/LEARNING_PR_POLICY.md`
+- `docs/A1_FOUNDATION.md`
 
 ## Local Quick Start
 
-```bash
-corepack enable
-pnpm install
-cp .env.example .env
-docker compose -f infra/docker/compose.yaml up -d
-pnpm db:migration:run
-pnpm build
-pnpm --filter @ado/api start
-pnpm --filter @ado/control dev
-```
+There is no runnable application yet.
 
-Default local URLs:
+The first implementation step is LU-01 from
+`docs/LEARNING_FIRST_SETUP_PROTOCOL.md`: Node.js and `pnpm` baseline setup.
 
-- Control UI: `http://localhost:3000`
-- API health: `http://localhost:3001/v1/health`
-- API docs: `http://localhost:3001/docs`
-- OpenAPI JSON: `apps/api/openapi.json`
+Before LU-01, review `docs/LOCAL_DEVELOPMENT_ENVIRONMENT.md` so the editor,
+Node.js, `pnpm`, PostgreSQL, and local-only file rules are clear.
 
-ADO's local PostgreSQL container maps host port `5434` to avoid common
-conflicts with other projects that already use `5432`.
+LU-01 must also run the Spec Library preflight described in
+`docs/PLATFORM_NESTJS_TYPEORM_RULES.md`. Any referenced Spec Library document
+missing from `ado-spec.lock.json` is confirmation required before it is treated
+as authority.
 
 ## Verification
 
-Run these before opening an ADO Platform PR:
+There are no framework verification commands yet.
+
+For documentation-only changes, run:
 
 ```bash
-pnpm lint
-pnpm typecheck
-pnpm test
-pnpm build
-pnpm db:migration:show
-pnpm openapi:generate
-git diff --exit-code -- apps/api/openapi.json
+git diff --check
+git status --short --ignored
 ```
+
+As each Learning Unit creates real files, it must add the corresponding
+verification commands and update this section.
 
 ## Safety
 
@@ -56,4 +60,6 @@ git diff --exit-code -- apps/api/openapi.json
 - ADO work targets `integrate` through PRs only.
 - Secrets, provider credentials, raw logs, and artifact payloads are not
   committed.
+- `.idea/`, `.env`, and `.DS_Store` remain local-only unless a later PR
+  explicitly allowlists a narrow shared editor setting.
 - Every packet and run must be compatible with the pinned Spec Library revision.
