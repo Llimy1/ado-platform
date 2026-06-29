@@ -9,5 +9,17 @@
   "scripts": {
     "check:node": "node --version",
     "check:pnpm": "pnpm --version"
+  },
+  "devDependencies": {
+    "@types/node": "24.13.2",
+    "tsx": "4.22.4",
+    "typescript": "6.0.3"
+  },
+  "dependencies": {
+    "@nestjs/common": "11.1.27",
+    "@nestjs/core": "11.1.27",
+    "@nestjs/platform-express": "11.1.27",
+    "reflect-metadata": "0.2.2",
+    "rxjs": "7.8.2"
   }
 }
