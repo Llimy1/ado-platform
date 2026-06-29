@@ -3,7 +3,7 @@
 ## 1. Purpose
 
 This document defines how pull requests should be shaped while ADO Platform is
-rebuilt through Learning Units.
+rebuilt through NestJS + TypeORM Learning Units.
 
 The PR should prove both code progress and learning progress.
 
@@ -44,11 +44,24 @@ Use the `ado/` prefix.
 Recommended branch names:
 
 ```text
-ado/lu-01-python-uv-baseline
-ado/lu-02-django-project-shell
+ado/lu-01-node-pnpm-baseline
+ado/lu-02-nest-app-shells
 ado/lu-03-configuration-policy
-ado/lu-04-django-ninja-health
+ado/lu-04-nest-health-openapi
 ```
+
+Start every Learning Unit from the repository root with:
+
+```bash
+git status --short
+git fetch origin
+git switch integrate
+git merge --ff-only origin/integrate
+git switch -c ado/lu-XX-short-title
+```
+
+If the work is intentionally stacked on another branch, replace `integrate`
+with the stack base and state that base in the PR body.
 
 ## 5. PR Body Template
 
@@ -92,44 +105,57 @@ Important output or summary:
 
 ## 6. Required Verification
 
-Every PR must include at least one verification item.
+Every PR must include the mandatory verification for its Learning Unit. Extra
+verification is encouraged when the PR claims broader behavior.
 
-Documentation-only PRs:
+Documentation-only PRs that are not implementing a Learning Unit:
 
 ```bash
 git diff --check
 ```
 
-Python setup PRs may include:
+Learning Unit PRs must use the mandatory gate for their LU. Optional extra
+commands may be included, but they do not replace the mandatory gate.
+
+| LU | Mandatory verification from repo root | Claim boundary |
+|---|---|---|
+| LU-01 | version checks, then `pnpm install` and `pnpm exec tsc --version` after package metadata exists | Node and `pnpm` baseline only |
+| LU-02 | `pnpm typecheck` or `pnpm exec tsc --noEmit` | Nest app/package shell imports and checks |
+| LU-03 | config validation command with documented env values | settings parse and fail-fast behavior only |
+| LU-04 | API health test/check and OpenAPI generation command | health route and OpenAPI artifact only |
+| LU-05 | PostgreSQL health check and TypeORM migration command | PostgreSQL connectivity and migrations only |
+| LU-06 | Worker command with `--worker-id local-dev --once` | Worker process shell only |
+| LU-07 | frontend typecheck/build command for Control health screen | browser/API health UI only |
+| LU-08 | `make lint`, `make typecheck`, `make test` | root command surface only |
+
+Reference examples:
+
+Node setup PRs:
 
 ```bash
-uv --version
-uv sync
-uv run python --version
-```
-
-Django setup PRs may include:
-
-```bash
-uv run python apps/api/manage.py check
-```
-
-Frontend setup PRs may include:
-
-```bash
+node --version
+corepack --version
+pnpm --version
 pnpm install
-pnpm --filter @ado/control typecheck
+pnpm exec tsc --version
 ```
 
-Database PRs may include:
+Backend setup PRs:
 
 ```bash
-docker compose up -d
-uv run python apps/api/manage.py migrate
+pnpm typecheck
+```
+
+Database PRs:
+
+```bash
+docker compose -f infra/docker/compose.local.yml up -d postgres
+make db-migrate
 ```
 
 The command must match the claim. Do not use a narrow command to prove a broad
-behavior.
+behavior. A failing command may be recorded as evidence only when the PR is not
+claiming the failed behavior is complete.
 
 ## 7. Learning Checkpoint
 
@@ -166,6 +192,10 @@ During early learning setup:
 - Human Owner approval is required before merge;
 - if the Human Owner wants to practice GitHub merge flow manually, Codex should
   stop at PR creation.
+
+Before a PR is merged, required checks must be rerun after the branch is up to
+date with its target. The first CI baseline must define stable required check
+names for backend, frontend, OpenAPI, migrations, and integration gates.
 
 ## 10. Completion Criteria
 

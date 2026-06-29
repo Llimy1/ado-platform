@@ -3,8 +3,8 @@
 ## 1. Purpose
 
 This document defines the local development environment for rebuilding ADO
-Platform from scratch with Django, Python, PostgreSQL, local LLM practice, and
-Next.js.
+Platform from scratch with NestJS, TypeScript, TypeORM, PostgreSQL, local LLM
+review practice, and Next.js.
 
 The goal is not only to make the app run. The goal is to make each setup step
 understandable to the Human Owner.
@@ -21,11 +21,12 @@ Windows-specific process behavior is not part of the initial setup path.
 Open the repository root in the editor:
 
 ```text
-/Users/iminhyeog/dev/agent/ado-platform
+<repo-root>
 ```
 
-PyCharm is acceptable and recommended for learning Django/Python. IntelliJ is
-also acceptable if Python support is configured correctly.
+WebStorm or IntelliJ are acceptable for learning NestJS/TypeScript. PyCharm is
+not the primary editor for this NestJS path unless TypeScript support is
+configured correctly.
 
 Editor-generated files are local by default:
 
@@ -42,10 +43,9 @@ Required tools:
 
 | Tool | Purpose | Version rule |
 |---|---|---|
-| Python | Django API and Worker runtime | use the local installed version if compatible with the pinned project range |
-| `uv` | Python dependency and command runner | required |
-| Node.js | Next.js and TypeScript tooling | use LTS or the version later pinned by the repo |
-| `pnpm` | frontend package manager | required for Next.js workspace |
+| Node.js | NestJS, Worker, Next.js, and TypeScript runtime/tooling | use LTS or the version later pinned by the repo |
+| Corepack | package manager activation | required when available |
+| `pnpm` | workspace package manager | required |
 | Docker or local PostgreSQL | local PostgreSQL | one local method is chosen during LU-05 |
 | Git | branches, commits, PRs | required |
 | GitHub CLI `gh` | PR workflow | recommended |
@@ -53,34 +53,25 @@ Required tools:
 If a version is unknown, Codex must ask the Human Owner to run the version
 command instead of guessing.
 
-## 5. Python And uv Policy
+LU-01 must record observed versions in the PR evidence and then pin the
+project-supported ranges in `package.json` or a later tool-version file. Exact
+framework versions are confirmation required until LU-01 checks local versions
+and official compatibility.
 
-Python dependencies are declared in `pyproject.toml`.
+## 5. Node And pnpm Policy
 
-`uv` owns:
+TypeScript dependencies are declared in `package.json` files and locked in
+`pnpm-lock.yaml`.
+
+`pnpm` owns:
 
 - dependency resolution;
 - lockfile generation;
-- virtual environment management;
-- Python command execution through `uv run`.
+- workspace linking;
+- command execution through `pnpm` scripts.
 
-Do not install Django globally for this project. Do not rely on whichever
-Python packages happen to be installed outside the repository.
-
-Recommended first checks:
-
-```bash
-python3 --version
-uv --version
-uv python list
-```
-
-## 6. Node And pnpm Policy
-
-Node and `pnpm` are used for the Next.js Control Room and generated TypeScript
-client only.
-
-`pnpm` does not orchestrate the Django API or Python Worker.
+Do not install NestJS, TypeORM, or Next.js globally for this project. Do not
+rely on whichever packages happen to be installed outside the repository.
 
 Recommended first checks:
 
@@ -90,10 +81,17 @@ corepack --version
 pnpm --version
 ```
 
-If `pnpm` is unavailable, enable it through Corepack during the relevant
-Learning Unit.
+If `pnpm` is unavailable, enable it through Corepack during LU-01.
 
-## 7. PostgreSQL Local Policy
+The first Node baseline must decide:
+
+- supported Node major version;
+- package manager expectation;
+- initial TypeScript version;
+- runtime dependencies for NestJS and TypeORM work;
+- development dependencies for formatting, linting, typing, and tests.
+
+## 6. PostgreSQL Local Policy
 
 ADO uses PostgreSQL as the orchestration single source of truth.
 
@@ -103,6 +101,9 @@ The first local PostgreSQL setup should use one of these methods:
 - an existing local PostgreSQL server.
 
 Do not mix methods in one Learning Unit.
+
+The default LU-05 path is Docker Compose inside the repository unless the Human
+Owner explicitly chooses an existing local PostgreSQL server.
 
 Default local values, unless changed during LU-05:
 
@@ -117,7 +118,24 @@ Default local values, unless changed during LU-05:
 The non-default port `5434` avoids collisions with other local projects that
 may already use `5432`.
 
-## 8. Environment Files
+Minimum Docker Compose runbook for LU-05:
+
+```bash
+docker compose -f infra/docker/compose.local.yml up -d postgres
+docker compose -f infra/docker/compose.local.yml ps
+docker compose -f infra/docker/compose.local.yml exec postgres pg_isready -U ado -d ado_platform
+docker compose -f infra/docker/compose.local.yml exec postgres psql -U ado -d ado_platform -c "select version();"
+make db-migrate
+```
+
+If `infra/docker/compose.local.yml` does not exist yet, LU-05 must create it
+before claiming PostgreSQL setup is complete. If an existing local PostgreSQL
+server is chosen instead, the LU summary must list equivalent `pg_isready`,
+`psql`, and migration verification commands. Before LU-08 creates `make
+db-migrate`, LU-05 must document the visible `pnpm` or TypeORM command that the
+Makefile will wrap.
+
+## 7. Environment Files
 
 `.env.example` is committed only after LU-03 defines the first required
 variables.
@@ -137,18 +155,19 @@ variables.
 
 `.env` is local only and must remain ignored.
 
-## 9. Local LLM Practice Boundary
+## 8. Local LLM Practice Boundary
 
 Local LLM setup is allowed later, but it is not part of LU-01.
 
-When local LLM work begins:
+When local LLM review work begins:
 
 - model installation is documented separately;
-- model output is treated as a claim;
-- no model output becomes completion evidence without review and validation;
+- model output is treated as a ReviewResult claim;
+- Human/Codex decisions are recorded against findings;
+- no model output becomes completion evidence without validation;
 - local model paths and cache directories are not committed.
 
-## 10. Local Cleanup Rules
+## 9. Local Cleanup Rules
 
 The repository should stay understandable while learning.
 
@@ -156,15 +175,23 @@ Allowed local-only clutter:
 
 - `.idea/`;
 - `.env`;
-- virtual environment/cache directories managed by `uv`;
 - Node dependency directories;
+- package-manager caches;
 - `.DS_Store`.
 
 Before committing, run:
 
 ```bash
 git status --short
+git check-ignore -v .idea .env .DS_Store
 ```
 
 Only intentional source, config, lockfile, and documentation changes should be
 staged.
+
+The expected result is:
+
+- `.idea/`, `.env`, and `.DS_Store` are ignored;
+- no private local path is added to committed documentation;
+- any shared IDE setting is added only after the Human Owner explicitly
+  approves a narrow allowlist.

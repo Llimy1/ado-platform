@@ -4,17 +4,17 @@
 
 A1 is intentionally not implemented yet.
 
-The historical NestJS/TypeORM/Turborepo implementation has been removed so the
-Human Owner can rebuild the platform from the first framework setup step while
-learning Django, Python, PostgreSQL, local LLM integration, and Next.js.
+The Human Owner has chosen to rebuild ADO Platform with NestJS, TypeORM,
+PostgreSQL, local LLM review adapters, and Next.js while learning each setup
+step.
 
 New A1 work must follow:
 
-- `docs/PLATFORM_DJANGO_NEXT_TRANSITION_RULES.md`
+- `docs/PLATFORM_NESTJS_TYPEORM_RULES.md`
 - `docs/LEARNING_FIRST_SETUP_PROTOCOL.md`
 - `docs/LOCAL_DEVELOPMENT_ENVIRONMENT.md`
 - `docs/LEARNING_UNIT_TEMPLATE.md`
-- `docs/DJANGO_PROJECT_STRUCTURE.md`
+- `docs/NESTJS_PROJECT_STRUCTURE.md`
 - `docs/CONFIGURATION_POLICY.md`
 - `docs/LEARNING_PR_POLICY.md`
 
@@ -22,12 +22,12 @@ New A1 work must follow:
 
 A1 will be rebuilt through Learning Units instead of a generated skeleton:
 
-1. LU-01 Python and `uv` baseline
-2. LU-02 Django project creation
+1. LU-01 Node.js and `pnpm` baseline
+2. LU-02 NestJS workspace and app shells
 3. LU-03 settings and environment
-4. LU-04 Django Ninja health API and OpenAPI
-5. LU-05 PostgreSQL and migrations
-6. LU-06 Python Worker command
+4. LU-04 Nest health API and OpenAPI
+5. LU-05 PostgreSQL and TypeORM migrations
+6. LU-06 Nest Worker process shell
 7. LU-07 Next Control health screen
 8. LU-08 root command surface
 
@@ -36,19 +36,22 @@ verification command, and leave a checkpoint summary before moving on.
 
 ## Target A1 Outcome
 
-A1 is complete only when the repository contains a runnable Django + Next
-foundation:
+A1 is complete only when the repository contains a runnable NestJS + TypeORM +
+Next.js foundation:
 
-- Python `uv` baseline and lockfile
-- Django + Django Ninja API with `GET /v1/health`
+- Node.js `pnpm` workspace and lockfile
+- NestJS API with `GET /v1/health`
 - Next.js Control app with an API health panel
-- Python Worker command with database preflight and graceful shutdown
+- NestJS Worker process shell with database preflight, `--worker-id`, `--once`,
+  and graceful shutdown
 - PostgreSQL local development profile
-- Django migration path
+- TypeORM migration path with `synchronize: false`
 - OpenAPI JSON generation at `apps/api/openapi.json`
-- root commands for lint, typecheck, test, integration, Control build,
-  migrations, OpenAPI, and generated client checks
+- generated TypeScript contract/client under `packages/contracts`
+- root commands for lint, typecheck, test, integration, builds, migrations,
+  Spec Library preflight, OpenAPI, and generated client checks
 - CI baseline for the same gates
 
-Until those Learning Units are completed, commands from the removed historical
-implementation must not be treated as current.
+A1 does not complete the stateful Worker lease loop. Job leasing, artifacts,
+audit evidence, stale recovery, retry behavior, local LLM review feedback
+loops, and state transitions require later State/Evidence/Job contracts.

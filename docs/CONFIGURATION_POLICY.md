@@ -3,23 +3,40 @@
 ## 1. Purpose
 
 This document defines how ADO Platform handles configuration while being
-rebuilt from scratch.
+rebuilt with NestJS, TypeORM, PostgreSQL, and Next.js.
 
 Configuration must be explicit enough for learning, safe enough for a public
 repository, and stable enough for future automation.
 
 ## 2. Sources Of Configuration
 
-Configuration sources, from most local to most durable:
+Configuration sources, from highest runtime precedence to lowest:
 
 1. shell environment;
 2. local `.env`;
 3. committed `.env.example`;
-4. Django settings defaults for non-secret local development;
-5. deployment environment later.
+4. safe code defaults for non-secret local development.
 
-The database remains the application source of truth. Environment variables
-configure processes; they do not replace database state.
+Deployment environment variables will also enter through process environment
+when deployment rules exist.
+
+Runtime precedence is:
+
+```text
+process environment > local .env > safe code default
+```
+
+`.env.example` documents names and safe examples only. It is never loaded as a
+runtime source.
+
+Initial implementation decisions:
+
+- `@ado/config` owns typed config parsing;
+- config validation uses a schema library chosen in LU-03;
+- `ADO_DATABASE_URL` is parsed once and shared by API, Worker, and TypeORM
+  DataSource setup;
+- frontend code reads only `NEXT_PUBLIC_*` values and never reads server
+  secrets directly.
 
 ## 3. File Rules
 
@@ -39,7 +56,7 @@ configure processes; they do not replace database state.
 
 ## 4. Variable Naming
 
-ADO-owned variables use the `ADO_` prefix.
+ADO-owned server variables use the `ADO_` prefix.
 
 Frontend variables exposed to the browser use the `NEXT_PUBLIC_` prefix and
 must never contain secrets.
@@ -50,9 +67,21 @@ Examples:
 |---|---|---|
 | `ADO_API_ENV` | local/test/development mode | no |
 | `ADO_DATABASE_URL` | non-production DB URL | local value may be sensitive |
-| `ADO_DJANGO_SECRET_KEY` | Django signing secret | yes |
+| `ADO_APP_SECRET` | local signing/session placeholder | yes |
 | `ADO_WORKER_ID` | local Worker identity | no |
+| `ADO_LOCAL_LLM_ORIGIN` | local model server origin | no |
 | `NEXT_PUBLIC_ADO_API_ORIGIN` | browser-visible API origin | no |
+
+Initial required variable matrix:
+
+| Variable | API local | API test | Worker local | Frontend local | CI |
+|---|---|---|---|---|---|
+| `ADO_API_ENV` | required | required | required | no | required |
+| `ADO_DATABASE_URL` | required after LU-03 | no for unit tests without DB | required after LU-06 | no | required for PostgreSQL gates |
+| `ADO_APP_SECRET` | required | safe test value allowed | no unless used by Worker | no | required outside isolated tests |
+| `ADO_WORKER_ID` | no | no | required unless passed as `--worker-id` | no | no |
+| `ADO_LOCAL_LLM_ORIGIN` | no | no | optional after local review LU | no | no |
+| `NEXT_PUBLIC_ADO_API_ORIGIN` | no | no | no | required after LU-07 | required for Control build |
 
 ## 5. Environment Names
 
@@ -76,35 +105,37 @@ postgres://ado:ado@localhost:5434/ado_platform
 
 Reasons:
 
-- it maps cleanly to Django settings;
+- it maps cleanly to TypeORM DataSource configuration;
 - it is easy to pass to tools;
 - it avoids scattering DB parts across many variables too early.
 
 If the Human Owner wants separate `POSTGRES_*` variables later, that change
 must update this policy and the settings parser.
 
+The parser must reject missing or malformed database URLs in API local, Worker
+local, and PostgreSQL-backed CI modes before the process does real work.
+
 ## 7. Test Database Policy
 
-Early unit tests may use SQLite only when the test does not claim PostgreSQL
-behavior.
+Unit tests may avoid PostgreSQL only when they do not claim database behavior.
 
 Any test involving these behaviors must use PostgreSQL:
 
 - migrations;
 - row locks;
-- `select_for_update`;
+- `FOR UPDATE SKIP LOCKED`;
 - JSON/index behavior;
 - queue leasing;
 - transaction isolation;
 - pgvector.
 
-PR summaries must not use SQLite-only tests as proof of PostgreSQL behavior.
+PR summaries must not use no-DB or mock tests as proof of PostgreSQL behavior.
 
 ## 8. Secret Policy
 
 Never commit:
 
-- real Django secret keys;
+- real app/session secrets;
 - provider API keys;
 - GitHub tokens;
 - local LLM private service credentials;
@@ -123,6 +154,9 @@ local-only-example
 The API and Worker should fail before doing real work when required
 configuration is missing or invalid.
 
+Fail-fast errors must include the variable name and configuration source
+guidance. They must not print secret values.
+
 During learning setup, failures should be explained in plain language:
 
 - which variable was missing;
@@ -136,6 +170,6 @@ LU-03 is complete when:
 
 1. `.env.example` exists with safe values;
 2. local `.env` remains untracked;
-3. Django settings can parse `ADO_DATABASE_URL`;
-4. test settings are clearly separated from local settings;
+3. `@ado/config` can parse `ADO_DATABASE_URL`;
+4. TypeORM DataSource receives config from `@ado/config`;
 5. the Human Owner can explain which variables are browser-visible.

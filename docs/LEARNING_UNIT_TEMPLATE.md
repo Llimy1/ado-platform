@@ -54,6 +54,8 @@ Describe the important output, not every line.
 - command:
 - result:
 - files changed:
+- claim proven:
+- claim not proven:
 
 ## Commit Boundary
 
@@ -71,6 +73,8 @@ verification command passes.
 4. Codex must list touched files before editing.
 5. Codex must explain commands before running them.
 6. A failed command is useful evidence and should be explained, not hidden.
+7. Verification evidence must state the exact claim it proves. A narrow command
+   must not be used as proof of broad platform readiness.
 
 ## 4. Minimum PR Body For A Learning Unit
 
@@ -90,6 +94,8 @@ LU-XX: Title
 ## Verification
 
 - [ ] command
+- Claim proven:
+- Claim not proven:
 
 ## Follow-up
 
