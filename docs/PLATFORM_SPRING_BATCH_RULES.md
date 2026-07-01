@@ -43,7 +43,7 @@ Expected result:
 Target baseline:
 
 - Java 21 LTS;
-- Gradle wrapper with Kotlin DSL, created during LU-01 through Spring
+- Gradle wrapper with Groovy DSL, created during LU-01 through Spring
   Initializr or a verified local Gradle installation;
 - Spring Boot HTTP API in `apps/api`;
 - Spring Batch Worker in `apps/worker`;
@@ -56,6 +56,7 @@ Target baseline:
 - OpenAPI generated from Spring and consumed by a generated TypeScript client;
 - OpenAPI client output generated into `apps/control/src/generated/api/` after
   the Control app exists;
+- Spring configuration files use `.properties` during A1;
 - npm only inside `apps/control`;
 - no root pnpm workspace.
 
@@ -103,11 +104,11 @@ Humans and agents use Gradle tasks. During early Learning Units, the owning
 project task is the source of truth. LU-09 may add root alias tasks after the
 Human Owner understands the delegated commands.
 
-Gradle project paths are fixed by `settings.gradle.kts`:
+Gradle project paths are fixed by `settings.gradle`:
 
-```kotlin
-include("apps:api")
-include("apps:worker")
+```groovy
+include 'apps:api'
+include 'apps:worker'
 ```
 
 This means the API project path is `:apps:api` and the Worker project path is

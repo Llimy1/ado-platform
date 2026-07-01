@@ -15,18 +15,18 @@ LU-02 may create only this minimal shape:
 ```text
 ado-platform/
   .java-version
-  settings.gradle.kts
-  build.gradle.kts
+  settings.gradle
+  build.gradle
   gradle/
   gradlew
   gradlew.bat
   apps/
     api/
-      build.gradle.kts
+      build.gradle
       src/main/java/com/ado/platform/api/
       src/test/java/com/ado/platform/api/
     worker/
-      build.gradle.kts
+      build.gradle
       src/main/java/com/ado/platform/worker/
       src/test/java/com/ado/platform/worker/
     control/
@@ -59,8 +59,8 @@ ado-platform/
   infra/
     docker/
   docs/
-  build.gradle.kts
-  settings.gradle.kts
+  build.gradle
+  settings.gradle
   gradlew
   gradlew.bat
   gradle/
@@ -103,15 +103,15 @@ Forbidden dependencies:
 
 ## 5. Gradle Rules
 
-Use Gradle Kotlin DSL.
+Use Gradle Groovy DSL.
 
-Root `settings.gradle.kts` owns project inclusion. Root `build.gradle.kts` owns
+Root `settings.gradle` owns project inclusion. Root `build.gradle` owns
 shared plugin versions, repositories, Java toolchain policy, and common test
 configuration.
 
 Project inclusion uses nested Gradle paths that match the directory layout:
 
-```kotlin
+```groovy
 pluginManagement {
     repositories {
         gradlePluginPortal()
@@ -128,8 +128,8 @@ dependencyResolutionManagement {
 
 rootProject.name = "ado-platform"
 
-include("apps:api")
-include("apps:worker")
+include 'apps:api'
+include 'apps:worker'
 ```
 
 With this rule, the canonical project commands are:
@@ -153,6 +153,8 @@ Initial API app:
 apps/api/src/main/java/com/ado/platform/api/
   AdoApiApplication.java
   health/
+apps/api/src/main/resources/
+  application.properties
 ```
 
 Rules:
@@ -169,6 +171,8 @@ Initial Worker app:
 ```text
 apps/worker/src/main/java/com/ado/platform/worker/
   AdoWorkerApplication.java
+apps/worker/src/main/resources/
+  application.properties
 ```
 
 Rules:
@@ -249,6 +253,6 @@ LU-02 is complete only when:
 
 1. Java 21 is visible through `.java-version`;
 2. Gradle wrapper exists and runs;
-3. `settings.gradle.kts` includes only the projects actually created;
+3. `settings.gradle` includes only the projects actually created;
 4. `./gradlew projects` or an equivalent Gradle check passes;
 5. the Human Owner can explain app vs module vs package boundaries.

@@ -149,9 +149,10 @@ Initial allowed Spring profiles:
 - `test`
 - `ci`
 
-Profile-specific files may exist only when they contain non-secret defaults.
+Profile-specific `.properties` files may exist only when they contain
+non-secret defaults.
 Secrets belong in environment variables or local `.env`, never in committed
-`application-*.yml`.
+`application-*.properties`.
 
 ## 8. Test Database Policy
 

@@ -78,7 +78,7 @@ Scope:
 - pin Java 21 through `.java-version`;
 - create or review the Gradle wrapper through Spring Initializr, a verified
   local Gradle installation, or another documented official bootstrap method;
-- create or review root `settings.gradle.kts` and `build.gradle.kts`;
+- create or review root `settings.gradle` and `build.gradle`;
 - run a trivial Gradle command.
 
 Minimum command sequence:
@@ -117,8 +117,8 @@ Scope:
 - create `apps/api` Spring Boot API shell;
 - create `apps/worker` Spring Batch Worker shell;
 - reserve or defer `apps/control` for Next.js;
-- include only projects that exist in `settings.gradle.kts`;
-- use `include("apps:api")` and `include("apps:worker")` so the canonical
+- include only projects that exist in `settings.gradle`;
+- use `include 'apps:api'` and `include 'apps:worker'` so the canonical
   Gradle paths are `:apps:api` and `:apps:worker`;
 - run a Gradle project/build check.
 
@@ -133,6 +133,16 @@ Minimum command sequence:
 Codex may use Spring Initializr only after explaining what it generates. Manual
 file creation is allowed when it better matches the staged structure, but the
 LU summary must list every file and why it exists.
+
+Spring Initializr settings for A1:
+
+```text
+Language: Java
+Type: Gradle - Groovy
+Java: 21
+Packaging: Jar
+Configuration: Properties
+```
 
 Checkpoint:
 
@@ -150,6 +160,7 @@ Required policy:
 Scope:
 
 - map `.env.example` variables to Spring configuration properties;
+- use `application.properties` for Spring config files during A1;
 - add PostgreSQL database configuration;
 - use `SPRING_PROFILES_ACTIVE` as the only Spring profile source;
 - explain why secrets are not committed;
