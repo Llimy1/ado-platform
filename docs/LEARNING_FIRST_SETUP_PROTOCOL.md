@@ -115,11 +115,12 @@ Required policy:
 Scope:
 
 - create `apps/api` Spring Boot API shell;
-- create `apps/worker` Spring Batch Worker shell;
+- defer `apps/worker` until the Worker shell Learning Unit unless the Human
+  Owner explicitly chooses to create it earlier;
 - reserve or defer `apps/control` for Next.js;
 - include only projects that exist in `settings.gradle`;
-- use `include 'apps:api'` and `include 'apps:worker'` so the canonical
-  Gradle paths are `:apps:api` and `:apps:worker`;
+- use `include 'apps:api'` for the API shell and add `include 'apps:worker'`
+  only when the Worker project exists;
 - run a Gradle project/build check.
 
 Minimum command sequence:
@@ -127,8 +128,9 @@ Minimum command sequence:
 ```bash
 ./gradlew projects
 ./gradlew :apps:api:test
-./gradlew :apps:worker:test
 ```
+
+Add `./gradlew :apps:worker:test` only after `apps/worker` exists.
 
 Codex may use Spring Initializr only after explaining what it generates. Manual
 file creation is allowed when it better matches the staged structure, but the

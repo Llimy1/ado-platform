@@ -43,7 +43,7 @@ Required tools:
 | Tool | Purpose | Version rule |
 |---|---|---|
 | Java | Spring API and Worker runtime | Java 21 LTS |
-| Gradle wrapper | project build execution | committed wrapper; exact version chosen in LU-01 |
+| Gradle wrapper | project build execution | Gradle `8.14.5` wrapper |
 | Docker or local PostgreSQL | local PostgreSQL | one local method is chosen during LU-04 |
 | Git | branches, commits, PRs | required |
 | GitHub CLI `gh` | PR workflow | recommended |
@@ -56,9 +56,12 @@ command instead of guessing.
 The local Java baseline is Java 21. The current machine has Temurin 21.0.11
 available, and `.java-version` pins `21.0.11`.
 
-Exact Spring Boot, Gradle, springdoc-openapi, Querydsl, Flyway, Testcontainers,
-and Next.js versions must be checked against official compatibility docs during
-the Learning Unit that pins them.
+The first Spring Boot API shell uses Spring Boot `3.5.16` and the Spring
+dependency management Gradle plugin `1.1.7`.
+
+Exact springdoc-openapi, Querydsl, Flyway, Testcontainers, and Next.js versions
+must be checked against official compatibility docs during the Learning Unit
+that pins them.
 
 ## 5. Java And Gradle Policy
 

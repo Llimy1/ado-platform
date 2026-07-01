@@ -65,13 +65,15 @@ Recommended baseline versions as of this policy update:
 | Tool | Policy |
 |---|---|
 | Java | `21.0.11` locally, Java 21 language/toolchain |
-| Spring Boot | 3.5.x unless LU-01/LU-02 deliberately verifies Boot 4 readiness |
-| Gradle | wrapper-pinned version chosen during LU-01; must support the chosen Spring Boot line |
+| Spring Boot | `3.5.16` |
+| Gradle | `8.14.5` wrapper |
+| Spring dependency management plugin | `1.1.7` |
 | Node.js | only for `apps/control`; exact version decided when Next is created |
 | npm | use `package-lock.json` inside `apps/control` |
 
-Version numbers that affect compatibility must be checked against official
-docs during the Learning Unit that pins them.
+Version numbers that affect compatibility must be verified by the Learning
+Unit that pins them. If an exact version cannot be resolved locally, mark it as
+확인 필요 instead of guessing.
 
 ## 4. Persistence Position
 
@@ -113,6 +115,7 @@ include 'apps:worker'
 
 This means the API project path is `:apps:api` and the Worker project path is
 `:apps:worker`.
+Do not include `apps:worker` before the Worker project exists.
 
 Required A1 target commands:
 

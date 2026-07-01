@@ -120,7 +120,7 @@ commands may be included, but they do not replace the mandatory gate.
 | LU | Mandatory verification from repo root | Claim boundary |
 |---|---|---|
 | LU-01 | `java -version`, `javac -version`, `./gradlew --version`, `./gradlew projects` after wrapper exists | Java and Gradle baseline only |
-| LU-02 | `./gradlew projects`, `./gradlew :apps:api:test`, `./gradlew :apps:worker:test` | Spring app shells only |
+| LU-02 | `./gradlew projects`, `./gradlew :apps:api:test`; add `./gradlew :apps:worker:test` only after `apps/worker` exists | Spring app shells only |
 | LU-03 | config validation command with documented env values | settings parse and fail-fast behavior only |
 | LU-04 | PostgreSQL health check, `./gradlew :apps:api:flywayInfo`, and `./gradlew :apps:api:flywayMigrate` | PostgreSQL connectivity and migrations only |
 | LU-05 | PostgreSQL-backed Testcontainers persistence test and Querydsl Q-class regeneration evidence | JPA/Querydsl persistence behavior only |
@@ -144,8 +144,9 @@ Backend setup PRs:
 
 ```bash
 ./gradlew :apps:api:test
-./gradlew :apps:worker:test
 ```
+
+Add `./gradlew :apps:worker:test` only after `apps/worker` exists.
 
 Database PRs:
 

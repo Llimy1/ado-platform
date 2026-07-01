@@ -105,9 +105,9 @@ Forbidden dependencies:
 
 Use Gradle Groovy DSL.
 
-Root `settings.gradle` owns project inclusion. Root `build.gradle` owns
-shared plugin versions, repositories, Java toolchain policy, and common test
-configuration.
+Root `settings.gradle` owns project inclusion and dependency repositories.
+Root `build.gradle` owns shared plugin versions, Java toolchain policy, and
+common test configuration.
 
 Project inclusion uses nested Gradle paths that match the directory layout:
 
@@ -132,12 +132,15 @@ include 'apps:api'
 include 'apps:worker'
 ```
 
+Do not include `apps:worker` until the Worker project directory exists.
+
 With this rule, the canonical project commands are:
 
 ```bash
 ./gradlew :apps:api:test
-./gradlew :apps:worker:test
 ```
+
+Add `./gradlew :apps:worker:test` only after `apps/worker` exists.
 
 Each app/module owns its direct dependencies. Do not hide direct app
 dependencies in unrelated shared modules for convenience.
