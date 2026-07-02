@@ -37,8 +37,8 @@ runtime source.
 Initial implementation decisions:
 
 - Spring Boot configuration properties own typed config parsing;
-- validation uses Jakarta Bean Validation or another explicit validator chosen
-  in LU-03;
+- validation uses Jakarta Bean Validation first; a separate validator is added
+  only for cross-field or profile-specific rules;
 - `ADO_DATABASE_URL`, `ADO_DATABASE_USERNAME`, and `ADO_DATABASE_PASSWORD` are
   parsed once and shared by API, Worker, Flyway, JPA, and JDBC setup;
 - `SPRING_PROFILES_ACTIVE` is the source of truth for Spring profile selection;
@@ -176,7 +176,26 @@ PostgreSQL-backed tests use Testcontainers by default during A1. A different
 isolated PostgreSQL method is allowed only when the Learning Unit explains why
 Testcontainers is not appropriate.
 
-## 9. Secret Policy
+## 9. Test Naming Policy
+
+Every test method should include a Korean JUnit 5 `@DisplayName`.
+
+The Java method name remains English. The display name explains the behavior in
+short Korean so local and CI test reports are readable.
+
+Preferred style:
+
+```java
+@Test
+@DisplayName("DB 설정이 비어 있으면 컨텍스트가 실패한다")
+void failsWhenDatabasePropertiesAreBlank() {
+}
+```
+
+Inline Korean comments are optional and should be used only when setup or
+assertion intent is not obvious from the display name.
+
+## 10. Secret Policy
 
 Never commit:
 
@@ -194,7 +213,7 @@ replace-me
 local-only-example
 ```
 
-## 10. Settings Failure Policy
+## 11. Settings Failure Policy
 
 The API and Worker should fail before doing real work when required
 configuration is missing or invalid.
@@ -209,7 +228,7 @@ During learning setup, failures should be explained in plain language:
 - whether it belongs in `.env` or `.env.example`;
 - whether it is safe to commit.
 
-## 11. LU-03 Completion Criteria
+## 12. LU-03 Completion Criteria
 
 LU-03 is complete when:
 

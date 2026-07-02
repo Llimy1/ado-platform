@@ -186,6 +186,7 @@ Codex review should check:
 - whether generated framework files are understood and documented;
 - whether secrets are absent;
 - whether verification evidence matches the claim;
+- whether test methods include Korean `@DisplayName` values;
 - whether the next step is clear.
 
 Local reviewer models may provide comments later, but their output is only a

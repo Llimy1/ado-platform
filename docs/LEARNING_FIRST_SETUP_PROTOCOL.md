@@ -164,6 +164,8 @@ Scope:
 - map `.env.example` variables to Spring configuration properties;
 - use `application.properties` for Spring config files during A1;
 - add PostgreSQL database configuration;
+- validate required configuration with `@Validated` and Jakarta Bean
+  Validation before adding custom validation classes;
 - use `SPRING_PROFILES_ACTIVE` as the only Spring profile source;
 - explain why secrets are not committed;
 - separate API, Worker, frontend, test, and CI settings.
@@ -175,6 +177,7 @@ Minimum decisions before editing config:
   not load `.env` by default;
 - which variables are required for API, Worker, frontend, and CI;
 - how missing app secrets fail in non-test modes.
+- how each test states its intent with a Korean `@DisplayName`.
 
 Checkpoint:
 
