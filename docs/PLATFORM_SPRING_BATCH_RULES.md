@@ -37,6 +37,9 @@ Expected result:
 8. Local LLM output is a ReviewResult claim until validated by evidence gates.
 9. Human Owner approval remains required for final merge.
 10. The initial setup is learning-led and proceeds in small Learning Units.
+11. When the Human Owner implements code manually, Codex owns the final
+    verification pass and must rerun the relevant evidence commands before a
+    Learning Unit is called complete.
 
 ## 3. Target Baseline
 
@@ -151,6 +154,12 @@ thin convenience wrapper only after the Gradle task names are understood.
 7. OpenAPI is generated in CI and checked for drift.
 8. Breaking transport changes require `/v2` or a human-approved compatibility
    plan.
+9. ADO-owned API responses use a common `ApiResponse<T>` wrapper. Domain DTOs
+   are placed under `data`; they do not inherit from the common response type.
+10. Success and failure responses share the same top-level fields:
+    `success`, `code`, `message`, `data`, and `errors`.
+11. Validation failures use `VALIDATION_FAILED` and return field-level errors
+    with Korean messages.
 
 Initial OpenAPI standard:
 

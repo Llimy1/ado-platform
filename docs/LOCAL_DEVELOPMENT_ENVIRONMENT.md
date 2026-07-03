@@ -163,10 +163,10 @@ may already use `5432`.
 Minimum Docker Compose runbook for LU-04:
 
 ```bash
-docker compose -f infra/docker/compose.local.yml up -d postgres
-docker compose -f infra/docker/compose.local.yml ps
-docker compose -f infra/docker/compose.local.yml exec postgres pg_isready -U ado -d ado_platform
-docker compose -f infra/docker/compose.local.yml exec postgres psql -U ado -d ado_platform -c "select version();"
+docker compose --env-file .env -f infra/docker/compose.local.yml up -d postgres
+docker compose --env-file .env -f infra/docker/compose.local.yml ps
+docker compose --env-file .env -f infra/docker/compose.local.yml exec postgres pg_isready -U ado -d ado_platform
+docker compose --env-file .env -f infra/docker/compose.local.yml exec postgres psql -U ado -d ado_platform -c "select version();"
 ./gradlew :apps:api:flywayInfo
 ./gradlew :apps:api:flywayMigrate
 ```
@@ -175,6 +175,14 @@ If `infra/docker/compose.local.yml` does not exist yet, LU-04 must create it
 before claiming PostgreSQL setup is complete. If an existing local PostgreSQL
 server is chosen instead, the LU summary must list equivalent `pg_isready`,
 `psql`, and migration verification commands.
+
+The local Compose file must read database values from `.env`; it must not
+hard-code database names, users, passwords, or host ports. The repository uses
+`.yml` for Docker Compose files.
+
+For PostgreSQL 18 or newer Docker images, the local named volume must mount to
+`/var/lib/postgresql`, not `/var/lib/postgresql/data`. PostgreSQL 18 images use
+major-version-specific data directories below that mount point.
 
 PostgreSQL-backed integration tests use Testcontainers by default. A Learning
 Unit may use another isolated PostgreSQL method only when the PR explains why

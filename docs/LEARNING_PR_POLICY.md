@@ -108,6 +108,10 @@ Important output or summary:
 Every PR must include the mandatory verification for its Learning Unit. Extra
 verification is encouraged when the PR claims broader behavior.
 
+Implementation evidence and final verification evidence are different. When the
+Human Owner implements code manually, Codex must independently rerun the
+mandatory verification before the PR or Learning Unit is marked complete.
+
 Documentation-only PRs that are not implementing a Learning Unit:
 
 ```bash
@@ -151,10 +155,16 @@ Add `./gradlew :apps:worker:test` only after `apps/worker` exists.
 Database PRs:
 
 ```bash
-docker compose -f infra/docker/compose.local.yml up -d postgres
+docker compose --env-file .env -f infra/docker/compose.local.yml up -d postgres
+docker compose --env-file .env -f infra/docker/compose.local.yml exec postgres pg_isready -U ado -d ado_platform
 ./gradlew :apps:api:flywayInfo
 ./gradlew :apps:api:flywayMigrate
+./gradlew :apps:api:flywayInfo
 ```
+
+LU-04 evidence must show that Flyway found at least one migration. `No
+migrations found` is a failed verification, even when the Gradle task exits
+successfully.
 
 Frontend PRs:
 
@@ -216,5 +226,6 @@ This policy is satisfied when each Learning Unit PR:
 1. has a clear LU number and title;
 2. has a small scope;
 3. lists verification commands;
-4. records what the Human Owner should understand;
-5. avoids unrelated cleanup or framework jumps.
+4. includes Codex-rerun final verification evidence before ready/merge;
+5. records what the Human Owner should understand;
+6. avoids unrelated cleanup or framework jumps.

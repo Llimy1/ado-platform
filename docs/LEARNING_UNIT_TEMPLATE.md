@@ -75,6 +75,8 @@ verification command passes.
 6. A failed command is useful evidence and should be explained, not hidden.
 7. Verification evidence must state the exact claim it proves. A narrow command
    must not be used as proof of broad platform readiness.
+8. When the Human Owner writes the implementation code, Codex still owns the
+   final verification pass and must rerun the relevant command evidence itself.
 
 ## 4. Minimum PR Body For A Learning Unit
 
@@ -107,7 +109,8 @@ LU-XX: Title
 A Learning Unit is complete when:
 
 1. the intended files exist;
-2. the verification command has been run;
+2. the verification command has been rerun by Codex after implementation is
+   reported complete;
 3. the result is recorded in the PR or final summary;
 4. the Human Owner can answer the checkpoint questions;
 5. no unexplained framework files were created.

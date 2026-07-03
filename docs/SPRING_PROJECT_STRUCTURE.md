@@ -204,10 +204,16 @@ modules/persistence/src/main/resources/db/migration/
 Rules:
 
 - migration filenames use Flyway conventions such as `V1__initial_schema.sql`;
+  the separator between version and description is two underscores;
 - migrations are reviewed SQL files;
 - the API project owns Flyway tasks during A1 setup, so early migration commands
   use `./gradlew :apps:api:flywayMigrate` and
   `./gradlew :apps:api:flywayInfo`;
+- the Gradle Flyway task uses
+  `filesystem:${projectDir}/src/main/resources/db/migration` during A1 so it
+  can find migration files from the owning project directory;
+- `classpath:db/migration` is allowed only for Spring Boot runtime migration
+  loading or after the Gradle task classpath behavior is explicitly verified;
 - LU-09 may add root alias tasks named `flywayMigrate` and `flywayInfo`;
 - Hibernate never auto-updates schema;
 - PostgreSQL behavior must be verified on PostgreSQL, not SQLite or H2.

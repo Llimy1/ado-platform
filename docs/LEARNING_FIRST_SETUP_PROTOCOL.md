@@ -31,6 +31,15 @@ Codex must not:
 - treat green tests as sufficient if the Human Owner cannot explain what was
   created.
 
+Final verification ownership is separate from implementation ownership:
+
+- the Human Owner may write the implementation code directly;
+- after the Human Owner reports that implementation is complete, Codex must run
+  the final relevant verification commands itself before calling the Learning
+  Unit complete;
+- Codex must report the exact command evidence and any unverified claim instead
+  of accepting "tests passed" as completion evidence.
+
 ## 3. Learning Unit Model
 
 The Spring rebuild proceeds through Learning Units.
@@ -203,16 +212,37 @@ Minimum command sequence after `infra/docker/compose.local.yml` and Flyway
 configuration exist:
 
 ```bash
-docker compose -f infra/docker/compose.local.yml up -d postgres
-docker compose -f infra/docker/compose.local.yml exec postgres pg_isready -U ado -d ado_platform
+docker compose --env-file .env -f infra/docker/compose.local.yml up -d postgres
+docker compose --env-file .env -f infra/docker/compose.local.yml exec postgres pg_isready -U ado -d ado_platform
 ./gradlew :apps:api:flywayInfo
 ./gradlew :apps:api:flywayMigrate
+```
+
+Flyway Gradle tasks must use a filesystem migration location during A1:
+
+```groovy
+flyway {
+    locations = ["filesystem:${projectDir}/src/main/resources/db/migration"]
+}
+```
+
+Do not use `classpath:db/migration` for the Gradle Flyway task unless the LU
+also proves the task classpath contains `src/main/resources`. The Spring Boot
+runtime may still use the standard classpath migration convention.
+
+The initial migration file must be named with Flyway's double-underscore
+separator:
+
+```text
+apps/api/src/main/resources/db/migration/V1__initial_schema.sql
 ```
 
 Checkpoint:
 
 - the Human Owner can explain migration ownership and why Hibernate schema
   update stays disabled.
+- `./gradlew :apps:api:flywayInfo` shows the initial migration before it is
+  applied and `Success` after `./gradlew :apps:api:flywayMigrate`.
 
 ### LU-05: JPA And Querydsl Persistence Shell
 
@@ -350,6 +380,10 @@ For each Learning Unit, Codex should respond in this order:
 
 Codex may combine steps only when the Human Owner explicitly says to move
 faster.
+
+If the Human Owner implements a step manually, Codex should skip direct code
+editing and move to explanation, debugging, and final verification. The unit is
+not complete until Codex has independently rerun the relevant verification.
 
 ## 6. Commit And PR Rules
 

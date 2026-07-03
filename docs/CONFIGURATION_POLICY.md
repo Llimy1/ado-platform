@@ -77,6 +77,9 @@ Examples:
 | Variable | Purpose | Secret? |
 |---|---|---|
 | `SPRING_PROFILES_ACTIVE` | Spring runtime profile | no |
+| `ADO_API_PORT` | local Spring Boot API port | no |
+| `ADO_POSTGRES_DATABASE` | local Compose PostgreSQL database name | no |
+| `ADO_POSTGRES_PORT` | local host port mapped to PostgreSQL `5432` | no |
 | `ADO_DATABASE_URL` | JDBC database URL | no unless credentials are embedded |
 | `ADO_DATABASE_USERNAME` | database user | local value may be sensitive |
 | `ADO_DATABASE_PASSWORD` | database password | yes |
@@ -90,6 +93,9 @@ Initial required variable matrix:
 | Variable | API local | API test | Worker local | Control local | CI |
 |---|---|---|---|---|---|
 | `SPRING_PROFILES_ACTIVE` | required | required | required | no | required |
+| `ADO_API_PORT` | required after LU-03 | no | no | no | no |
+| `ADO_POSTGRES_DATABASE` | required for local Compose | no | required for local Compose | no | no |
+| `ADO_POSTGRES_PORT` | required for local Compose | no | required for local Compose | no | no |
 | `ADO_DATABASE_URL` | required after LU-03 | no for unit tests without DB | required after LU-07 | no | required for PostgreSQL gates |
 | `ADO_DATABASE_USERNAME` | required after LU-03 | no for unit tests without DB | required after LU-07 | no | required for PostgreSQL gates |
 | `ADO_DATABASE_PASSWORD` | required after LU-03 | no for unit tests without DB | required after LU-07 | no | required for PostgreSQL gates |
@@ -123,10 +129,16 @@ Use these variables as the first database configuration interface:
 Default local example:
 
 ```text
+ADO_POSTGRES_DATABASE=ado_platform
+ADO_POSTGRES_PORT=5434
 ADO_DATABASE_URL=jdbc:postgresql://localhost:5434/ado_platform
 ADO_DATABASE_USERNAME=ado
 ADO_DATABASE_PASSWORD=ado
 ```
+
+`ADO_POSTGRES_DATABASE` and `ADO_POSTGRES_PORT` are Docker Compose inputs.
+Spring Boot and Flyway connect through `ADO_DATABASE_URL`,
+`ADO_DATABASE_USERNAME`, and `ADO_DATABASE_PASSWORD`.
 
 Reasons:
 
