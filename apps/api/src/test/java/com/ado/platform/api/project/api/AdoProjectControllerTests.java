@@ -6,6 +6,7 @@ import com.ado.platform.api.project.api.dto.AdoProjectCreateRequest;
 import com.ado.platform.api.project.api.dto.AdoProjectResponse;
 import com.ado.platform.api.project.application.AdoProjectCommandService;
 import com.ado.platform.api.project.application.AdoProjectQueryService;
+import com.ado.platform.api.project.exception.DuplicateProjectKeyException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,6 +97,34 @@ public class AdoProjectControllerTests {
                 .andExpect(jsonPath("$.data.name").value("ADO Platform"))
                 .andExpect(jsonPath("$.data.createdAt").value("2026-07-03T13:00:00Z"))
                 .andExpect(jsonPath("$.data.updatedAt").value("2026-07-03T13:00:00Z"))
+                .andExpect(jsonPath("$.errors").isEmpty());
+
+        then(commandService).should().createProject(argThat(request ->
+                request != null
+                        && request.projectKey().equals("ado-platform")
+                        && request.name().equals("ADO Platform")
+        ));
+    }
+
+    @Test
+    @DisplayName("프로젝트 생성 실패 - 프로젝트 키 중복")
+    void failsWhenProjectKeyAlreadyExists() throws Exception {
+        given(commandService.createProject(any(AdoProjectCreateRequest.class)))
+                .willThrow(new DuplicateProjectKeyException());
+
+        mockMvc.perform(post("/v1/projects")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "projectKey": "ado-platform",
+                                  "name": "ADO Platform"
+                                }
+                                """))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.success").value(false))
+                .andExpect(jsonPath("$.code").value("PROJECT_KEY_ALREADY_EXISTS"))
+                .andExpect(jsonPath("$.message").value("이미 존재하는 프로젝트 키입니다."))
+                .andExpect(jsonPath("$.data").doesNotExist())
                 .andExpect(jsonPath("$.errors").isEmpty());
 
         then(commandService).should().createProject(argThat(request ->
