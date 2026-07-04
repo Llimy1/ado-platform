@@ -52,4 +52,15 @@ public class AdoProjectRepositoryTests {
         assertThat(found.getName()).isEqualTo("ADO Platform");
         assertThat(found.getCreatedAt()).isNotNull();
     }
+
+    @Test
+    @DisplayName("프로젝트 키 존재 여부를 확인")
+    void checksWhetherProjectKeyExists() {
+        repository.saveAndFlush(
+                AdoProjectEntity.create("ado-platform", "ADO Platform")
+        );
+
+        assertThat(repository.existsByProjectKey("ado-platform")).isTrue();
+        assertThat(repository.existsByProjectKey("missing-project")).isFalse();
+    }
 }

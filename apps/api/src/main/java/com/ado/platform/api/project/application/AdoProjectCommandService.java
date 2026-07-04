@@ -2,6 +2,7 @@ package com.ado.platform.api.project.application;
 
 import com.ado.platform.api.project.api.dto.AdoProjectCreateRequest;
 import com.ado.platform.api.project.api.dto.AdoProjectResponse;
+import com.ado.platform.api.project.exception.DuplicateProjectKeyException;
 import com.ado.platform.api.project.persistence.entity.AdoProjectEntity;
 import com.ado.platform.api.project.persistence.repository.AdoProjectRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,10 @@ public class AdoProjectCommandService {
 
     @Transactional
     public AdoProjectResponse createProject(AdoProjectCreateRequest request) {
+        if (repository.existsByProjectKey(request.projectKey())) {
+            throw new DuplicateProjectKeyException();
+        }
+
         AdoProjectEntity saved = repository.save(
                 AdoProjectEntity.create(request.projectKey(), request.name())
         );

@@ -2,6 +2,7 @@ package com.ado.platform.api.common.api.error;
 
 import com.ado.platform.api.common.api.response.ApiFieldError;
 import com.ado.platform.api.common.api.response.ApiResponse;
+import com.ado.platform.api.project.exception.DuplicateProjectKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -26,6 +27,16 @@ public class GlobalExceptionHandler {
                 "VALIDATION_FAILED",
                 "요청 값이 올바르지 않습니다.",
                 fieldErrors
+        );
+    }
+
+    @ExceptionHandler(DuplicateProjectKeyException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ApiResponse<Void> handleDuplicateProjectKeyException(DuplicateProjectKeyException exception) {
+        return ApiResponse.error(
+                DuplicateProjectKeyException.CODE,
+                DuplicateProjectKeyException.MESSAGE,
+                List.of()
         );
     }
 }
