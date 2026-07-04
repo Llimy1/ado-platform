@@ -10,6 +10,7 @@ import com.ado.platform.api.project.application.AdoProjectCommandService;
 import com.ado.platform.api.project.application.AdoProjectQueryService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
@@ -139,6 +140,36 @@ public class AdoProjectControllerTests {
     void failsWhenProjectKeyAlreadyExists() throws Exception {
         given(commandService.createProject(any(AdoProjectCreateRequest.class)))
                 .willThrow(new BusinessException(ErrorCode.PROJECT_KEY_ALREADY_EXISTS));
+
+        mockMvc.perform(post("/v1/projects")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "projectKey": "ado-platform",
+                                  "name": "ADO Platform"
+                                }
+                                """))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.success").value(false))
+                .andExpect(jsonPath("$.code").value("PROJECT_KEY_ALREADY_EXISTS"))
+                .andExpect(jsonPath("$.message").value("이미 존재하는 프로젝트 키입니다."))
+                .andExpect(jsonPath("$.data").doesNotExist())
+                .andExpect(jsonPath("$.errors").isEmpty());
+
+        then(commandService).should().createProject(argThat(request ->
+                request != null
+                        && request.projectKey().equals("ado-platform")
+                        && request.name().equals("ADO Platform")
+        ));
+    }
+
+    @Test
+    @DisplayName("프로젝트 생성 실패 - DB 프로젝트 키 unique 제약 위반")
+    void failsWhenProjectKeyUniqueConstraintIsViolated() throws Exception {
+        given(commandService.createProject(any(AdoProjectCreateRequest.class)))
+                .willThrow(new DataIntegrityViolationException(
+                        "duplicate key value violates unique constraint \"ado_project_project_key_key\""
+                ));
 
         mockMvc.perform(post("/v1/projects")
                         .contentType(MediaType.APPLICATION_JSON)

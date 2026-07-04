@@ -5,6 +5,7 @@ import com.ado.platform.api.common.persistence.config.JpaAuditingConfig;
 import com.ado.platform.api.project.persistence.entity.AdoProjectEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -16,6 +17,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Testcontainers
 @DataJpaTest(properties = {
@@ -62,5 +64,17 @@ public class AdoProjectRepositoryTests {
 
         assertThat(repository.existsByProjectKey("ado-platform")).isTrue();
         assertThat(repository.existsByProjectKey("missing-project")).isFalse();
+    }
+
+    @Test
+    @DisplayName("프로젝트 키 unique 제약을 검증")
+    void enforcesProjectKeyUniqueConstraint() {
+        repository.saveAndFlush(
+                AdoProjectEntity.create("ado-platform", "ADO Platform")
+        );
+
+        assertThatThrownBy(() -> repository.saveAndFlush(
+                AdoProjectEntity.create("ado-platform", "ADO Platform Duplicate")
+        )).isInstanceOf(DataIntegrityViolationException.class);
     }
 }
