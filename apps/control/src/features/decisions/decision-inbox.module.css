@@ -1,0 +1,82 @@
+.wrapper {
+  border: var(--ado-border-width) solid var(--ado-color-border);
+  border-radius: var(--ado-radius-panel);
+  overflow-x: auto;
+  position: relative;
+  background: var(--ado-color-surface);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 820px;
+}
+
+.table th,
+.table td {
+  text-align: left;
+  padding: var(--ado-space-2) var(--ado-space-3);
+  border-bottom: var(--ado-border-width) solid var(--ado-color-border);
+  font-size: var(--ado-text-dense-size);
+  vertical-align: middle;
+}
+
+.table thead th {
+  background: var(--ado-color-surface-muted);
+  font-size: var(--ado-text-label-size);
+  font-weight: var(--ado-text-label-weight);
+  color: var(--ado-color-text-secondary);
+  height: var(--ado-row-passive);
+}
+
+.caption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.muted {
+  color: var(--ado-color-text-tertiary);
+}
+
+.expired {
+  color: var(--ado-color-state-failure);
+  font-weight: 600;
+}
+
+.cardList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ado-space-3);
+}
+
+.card {
+  border: var(--ado-border-width) solid var(--ado-color-border);
+  border-radius: var(--ado-radius-panel);
+  padding: var(--ado-panel-padding);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ado-space-2);
+  font-size: var(--ado-text-dense-size);
+}
+
+.cardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ado-space-2);
+}
+
+.summaryBar {
+  display: flex;
+  gap: var(--ado-space-4);
+  flex-wrap: wrap;
+  font-size: var(--ado-text-dense-size);
+  color: var(--ado-color-text-secondary);
+  margin-bottom: var(--ado-space-3);
+}

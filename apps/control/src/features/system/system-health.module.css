@@ -1,0 +1,105 @@
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--ado-space-3);
+  margin-bottom: var(--ado-space-4);
+}
+
+@media (min-width: 768px) {
+  .cardGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.healthCard {
+  border: var(--ado-border-width) solid var(--ado-color-border);
+  border-radius: var(--ado-radius-panel);
+  padding: var(--ado-panel-padding);
+  background: var(--ado-color-surface);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ado-space-1);
+}
+
+.healthCardLabel {
+  font-size: var(--ado-text-label-size);
+  color: var(--ado-color-text-tertiary);
+}
+
+.healthCardValue {
+  font-size: var(--ado-text-page-title-size);
+  font-weight: 700;
+}
+
+.wrapper {
+  border: var(--ado-border-width) solid var(--ado-color-border);
+  border-radius: var(--ado-radius-panel);
+  overflow-x: auto;
+  position: relative;
+  background: var(--ado-color-surface);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 700px;
+}
+
+.table th,
+.table td {
+  text-align: left;
+  padding: var(--ado-space-2) var(--ado-space-3);
+  border-bottom: var(--ado-border-width) solid var(--ado-color-border);
+  font-size: var(--ado-text-dense-size);
+  vertical-align: middle;
+}
+
+.table thead th {
+  background: var(--ado-color-surface-muted);
+  font-size: var(--ado-text-label-size);
+  font-weight: var(--ado-text-label-weight);
+  color: var(--ado-color-text-secondary);
+  height: var(--ado-row-passive);
+}
+
+.caption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.muted {
+  color: var(--ado-color-text-tertiary);
+}
+
+.cardList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ado-space-3);
+}
+
+.card {
+  border: var(--ado-border-width) solid var(--ado-color-border);
+  border-radius: var(--ado-radius-panel);
+  padding: var(--ado-panel-padding);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ado-space-2);
+  font-size: var(--ado-text-dense-size);
+}
+
+.cardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ado-space-2);
+}
+
+.section {
+  margin-bottom: var(--ado-space-4);
+}

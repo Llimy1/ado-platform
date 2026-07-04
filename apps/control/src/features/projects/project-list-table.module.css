@@ -1,0 +1,147 @@
+.wrapper {
+  border: var(--ado-border-width) solid var(--ado-color-border);
+  border-radius: var(--ado-radius-panel);
+  overflow-x: auto;
+  /* Containing block for absolutely-positioned sr-only spans (e.g. the
+     "Open" column header label); see overview-panels.module.css .tableWrap
+     for why this matters. */
+  position: relative;
+  background: var(--ado-color-surface);
+}
+
+@media (min-width: 1280px) {
+  .wrapper {
+    overflow-x: visible;
+  }
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px;
+}
+
+@media (min-width: 1280px) {
+  .table {
+    min-width: 0;
+  }
+}
+
+.table th,
+.table td {
+  text-align: left;
+  padding: var(--ado-space-2) var(--ado-space-3);
+  border-bottom: var(--ado-border-width) solid var(--ado-color-border);
+  font-size: var(--ado-text-dense-size);
+  line-height: var(--ado-text-dense-line);
+  vertical-align: middle;
+}
+
+.table thead th {
+  /*
+   * No position: sticky here. This table scrolls with the whole page (it
+   * grows via a "load more" button, not inside its own fixed-height box),
+   * and ADO/CONTROL_ROOM_COMPONENT_SPECS.md §4 only allows sticky headers
+   * "inside a bounded scroll container". Page-level sticky here collided
+   * with the sticky top bar, which shares the same z-index layer.
+   */
+  background: var(--ado-color-surface-muted);
+  font-size: var(--ado-text-label-size);
+  font-weight: var(--ado-text-label-weight);
+  color: var(--ado-color-text-secondary);
+  height: var(--ado-row-passive);
+}
+
+.table tbody tr {
+  min-height: var(--ado-row-passive);
+}
+
+.table tbody tr:hover {
+  background: var(--ado-color-surface-muted);
+}
+
+.sortButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ado-space-1);
+  background: none;
+  border: none;
+  padding: var(--ado-space-1) 0;
+  min-height: var(--ado-hit-target);
+  font: inherit;
+  font-weight: var(--ado-text-label-weight);
+  color: inherit;
+  cursor: pointer;
+}
+
+/* Sortable-but-inactive columns get a muted neutral affordance; the active
+   sort direction is bold and colored so it reads at a glance, per common
+   sortable-table conventions (e.g. https://adrianroselli.com/2021/04/sortable-table-columns.html). */
+.sortIconInactive {
+  color: var(--ado-color-text-tertiary);
+  flex-shrink: 0;
+}
+
+.sortIconActive {
+  color: var(--ado-color-focus);
+  flex-shrink: 0;
+}
+
+.colProject {
+  min-width: 240px;
+}
+.colStatus {
+  width: 132px;
+}
+.colFeatureUnit {
+  min-width: 220px;
+}
+.colWork {
+  width: 128px;
+}
+.colAttention {
+  width: 160px;
+}
+.colActivity {
+  width: 156px;
+}
+.colOpen {
+  width: 48px;
+}
+
+.projectName {
+  font-weight: 600;
+  display: block;
+}
+
+.projectDescription {
+  color: var(--ado-color-text-tertiary);
+  font-size: var(--ado-text-dense-size);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 320px;
+  display: block;
+}
+
+.muted {
+  color: var(--ado-color-text-tertiary);
+}
+
+.openLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--ado-hit-target);
+  height: var(--ado-hit-target);
+  color: var(--ado-color-focus);
+}
+
+.caption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+

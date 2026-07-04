@@ -1,0 +1,82 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ado-space-2);
+  min-height: var(--ado-hit-target);
+  padding: 0 var(--ado-space-4);
+  border-radius: var(--ado-radius-control);
+  border: var(--ado-border-width) solid transparent;
+  font-size: var(--ado-text-body-size);
+  line-height: var(--ado-text-body-line);
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color var(--ado-motion-duration-base) var(--ado-motion-easing-standard),
+    border-color var(--ado-motion-duration-base) var(--ado-motion-easing-standard),
+    color var(--ado-motion-duration-base) var(--ado-motion-easing-standard);
+}
+
+.sizeDefault {
+  height: var(--ado-hit-target);
+}
+
+.sizeDense {
+  height: var(--ado-control-height);
+  min-height: var(--ado-hit-target);
+  padding: 0 var(--ado-space-3);
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.primary {
+  background: var(--ado-color-focus);
+  border-color: var(--ado-color-focus);
+  color: var(--ado-color-surface);
+}
+.primary:hover:not(:disabled) {
+  background: #1a44bc;
+}
+
+.secondary {
+  background: var(--ado-color-surface);
+  border-color: var(--ado-color-border-strong);
+  color: var(--ado-color-text-strong);
+}
+.secondary:hover:not(:disabled) {
+  background: var(--ado-color-surface-muted);
+}
+
+.danger {
+  background: var(--ado-color-surface);
+  border-color: var(--ado-color-state-failure);
+  color: var(--ado-color-state-failure);
+}
+.danger:hover:not(:disabled) {
+  background: var(--ado-color-state-failure-bg);
+}
+
+.ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--ado-color-text-secondary);
+}
+.ghost:hover:not(:disabled) {
+  background: var(--ado-color-surface-muted);
+  color: var(--ado-color-text-strong);
+}
+
+.icon {
+  background: transparent;
+  border-color: transparent;
+  color: var(--ado-color-text-secondary);
+  width: var(--ado-hit-target);
+  padding: 0;
+}
+.icon:hover:not(:disabled) {
+  background: var(--ado-color-surface-muted);
+  color: var(--ado-color-text-strong);
+}

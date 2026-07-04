@@ -1,0 +1,30 @@
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ado-space-3);
+}
+
+.card {
+  border: var(--ado-border-width) solid var(--ado-color-border);
+  border-radius: var(--ado-radius-panel);
+  padding: var(--ado-panel-padding);
+  background: var(--ado-color-surface);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ado-space-2);
+}
+
+.description {
+  font-weight: 600;
+}
+
+.metaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ado-space-3);
+  font-size: var(--ado-text-dense-size);
+  color: var(--ado-color-text-secondary);
+}

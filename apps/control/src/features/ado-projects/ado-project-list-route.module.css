@@ -1,0 +1,73 @@
+.header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--ado-space-3);
+  flex-wrap: wrap;
+  margin-bottom: var(--ado-space-2);
+}
+
+.breadcrumb {
+  font-size: var(--ado-text-dense-size);
+  color: var(--ado-color-text-tertiary);
+}
+
+.title {
+  font-size: var(--ado-text-page-title-size);
+  line-height: var(--ado-text-page-title-line);
+  font-weight: var(--ado-text-page-title-weight);
+  margin: 0;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--ado-space-2);
+}
+
+.wrapper {
+  border: var(--ado-border-width) solid var(--ado-color-border);
+  border-radius: var(--ado-radius-panel);
+  overflow-x: auto;
+  background: var(--ado-color-surface);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  text-align: left;
+  padding: var(--ado-space-2) var(--ado-space-3);
+  border-bottom: var(--ado-border-width) solid var(--ado-color-border);
+  font-size: var(--ado-text-dense-size);
+  line-height: var(--ado-text-dense-line);
+  vertical-align: middle;
+}
+
+.table thead th {
+  background: var(--ado-color-surface-muted);
+  font-size: var(--ado-text-label-size);
+  font-weight: var(--ado-text-label-weight);
+  color: var(--ado-color-text-secondary);
+  height: var(--ado-row-passive);
+}
+
+.table tbody tr:hover {
+  background: var(--ado-color-surface-muted);
+}
+
+.openLink {
+  color: var(--ado-color-focus);
+  font-weight: 600;
+}
+
+.caption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}

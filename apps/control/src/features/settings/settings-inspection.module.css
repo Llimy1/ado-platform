@@ -1,0 +1,48 @@
+.section {
+  margin-bottom: var(--ado-space-4);
+}
+
+.kvGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--ado-space-3) var(--ado-space-4);
+  font-size: var(--ado-text-dense-size);
+}
+
+@media (min-width: 768px) {
+  .kvGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.kvLabel {
+  color: var(--ado-color-text-tertiary);
+  display: block;
+  font-size: var(--ado-text-label-size);
+  margin-bottom: 2px;
+}
+
+.kvNote {
+  color: var(--ado-color-text-tertiary);
+  display: block;
+  margin-top: 2px;
+}
+
+.profileList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ado-space-1);
+  font-size: var(--ado-text-dense-size);
+}
+
+.profileRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ado-space-2);
+  min-height: var(--ado-row-passive);
+  border-bottom: var(--ado-border-width) solid var(--ado-color-border);
+}

@@ -1,0 +1,113 @@
+.breadcrumb {
+  font-size: var(--ado-text-dense-size);
+  color: var(--ado-color-text-tertiary);
+  margin-bottom: var(--ado-space-2);
+}
+
+.breadcrumb a {
+  color: inherit;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ado-space-2);
+  margin-bottom: var(--ado-space-3);
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--ado-space-3);
+  flex-wrap: wrap;
+}
+
+.title {
+  font-size: var(--ado-text-page-title-size);
+  line-height: var(--ado-text-page-title-line);
+  font-weight: var(--ado-text-page-title-weight);
+  margin: 0;
+}
+
+.intent {
+  font-size: var(--ado-text-body-size);
+  color: var(--ado-color-text-secondary);
+  max-width: 72ch;
+}
+
+.metaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ado-space-4);
+  font-size: var(--ado-text-dense-size);
+  color: var(--ado-color-text-secondary);
+  align-items: center;
+}
+
+.metaLabel {
+  color: var(--ado-color-text-tertiary);
+  margin-right: 4px;
+}
+
+.commandStrip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ado-space-3);
+  padding: var(--ado-space-3) var(--ado-space-4);
+  border: var(--ado-border-width) solid var(--ado-color-border);
+  border-radius: var(--ado-radius-panel);
+  background: var(--ado-color-surface);
+  margin-bottom: var(--ado-space-4);
+}
+
+.pausedNotice {
+  font-size: var(--ado-text-dense-size);
+  color: var(--ado-color-state-warning);
+  font-weight: 600;
+}
+
+.disabledReason {
+  font-size: var(--ado-text-label-size);
+  color: var(--ado-color-text-tertiary);
+}
+
+.section {
+  margin-bottom: var(--ado-space-4);
+}
+
+/* min-width: 0 prevents a wide bounded-scroll child from pushing the page
+   wider than the viewport; see feature-unit-detail-route.module.css. */
+.topGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--ado-space-4);
+  margin-bottom: var(--ado-space-4);
+}
+
+.topGrid > * {
+  min-width: 0;
+}
+
+@media (min-width: 1280px) {
+  .topGrid {
+    grid-template-columns: 7fr 5fr;
+  }
+}
+
+.middleGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--ado-space-4);
+  margin-bottom: var(--ado-space-4);
+}
+
+.middleGrid > * {
+  min-width: 0;
+}
+
+@media (min-width: 1024px) {
+  .middleGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}

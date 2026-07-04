@@ -1,0 +1,123 @@
+/*
+ * ADO Control Room design tokens.
+ * Source of truth: ADO/CONTROL_ROOM_DESIGN_TOKENS.md
+ * Do not introduce a literal color/spacing/radius value in component code;
+ * add a token here first.
+ */
+
+:root {
+  /* 2.1 Foundation */
+  --ado-color-canvas: #f8fafc;
+  --ado-color-surface: #ffffff;
+  --ado-color-surface-muted: #f1f5f9;
+  --ado-color-border: #e2e8f0;
+  --ado-color-border-strong: #cbd5e1;
+  --ado-color-text-strong: #0f172a;
+  --ado-color-text-secondary: #475569;
+  --ado-color-text-tertiary: #64748b;
+  --ado-color-focus: #1d4ed8;
+
+  /* 2.2 State */
+  --ado-color-state-queued: #64748b;
+  --ado-color-state-running: #0f766e;
+  --ado-color-state-success: #047857;
+  --ado-color-state-warning: #92400e;
+  --ado-color-state-failure: #b91c1c;
+  --ado-color-state-info: #1d4ed8;
+
+  /* tinted surfaces derived for badges/bands (kept semantic, not ad hoc) */
+  --ado-color-state-queued-bg: #f1f5f9;
+  --ado-color-state-running-bg: #ecfdf7;
+  --ado-color-state-success-bg: #ecfdf5;
+  --ado-color-state-warning-bg: #fffbeb;
+  --ado-color-state-failure-bg: #fef2f2;
+  --ado-color-state-info-bg: #eff6ff;
+
+  /* 3. Typography */
+  --ado-font-sans: "Pretendard Variable", Pretendard, "Noto Sans KR",
+    system-ui, sans-serif;
+  --ado-font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo,
+    monospace;
+
+  --ado-text-page-title-size: 24px;
+  --ado-text-page-title-line: 32px;
+  --ado-text-page-title-weight: 650;
+
+  --ado-text-section-title-size: 16px;
+  --ado-text-section-title-line: 24px;
+  --ado-text-section-title-weight: 650;
+
+  --ado-text-body-size: 14px;
+  --ado-text-body-line: 20px;
+  --ado-text-body-weight: 400;
+
+  --ado-text-dense-size: 13px;
+  --ado-text-dense-line: 18px;
+  --ado-text-dense-weight: 400;
+
+  --ado-text-label-size: 12px;
+  --ado-text-label-line: 16px;
+  --ado-text-label-weight: 600;
+
+  --ado-text-code-size: 12px;
+  --ado-text-code-line: 18px;
+  --ado-text-code-weight: 450;
+
+  /* 4. Spacing / radius / border */
+  --ado-space-0: 0;
+  --ado-space-1: 4px;
+  --ado-space-2: 8px;
+  --ado-space-3: 12px;
+  --ado-space-4: 16px;
+  --ado-space-5: 20px;
+  --ado-space-6: 24px;
+  --ado-space-8: 32px;
+  --ado-space-10: 40px;
+  --ado-space-12: 48px;
+  --ado-space-16: 64px;
+
+  --ado-radius-control: 4px;
+  --ado-radius-panel: 6px;
+  --ado-radius-dialog: 8px;
+  --ado-border-width: 1px;
+  --ado-focus-width: 2px;
+
+  /* 5. Layout */
+  --ado-topbar-height: 56px;
+  --ado-sidebar-width: 256px;
+  --ado-rail-width: 64px;
+  --ado-content-max-width: 1600px;
+
+  /* 6. Elevation / layering */
+  --ado-shadow-none: none;
+  --ado-shadow-overlay: 0 16px 40px rgba(15, 23, 42, 0.16);
+
+  --ado-z-base: 0;
+  --ado-z-sticky: 10;
+  --ado-z-drawer: 40;
+  --ado-z-dialog: 50;
+  --ado-z-toast: 60;
+  --ado-z-tooltip: 70;
+
+  /* 7. Motion */
+  --ado-motion-duration-fast: 120ms;
+  --ado-motion-duration-base: 160ms;
+  --ado-motion-duration-slow: 200ms;
+  --ado-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+
+  /* 8. Density */
+  --ado-control-height: 36px;
+  --ado-hit-target: 44px;
+  --ado-row-passive: 40px;
+  --ado-row-interactive: 44px;
+  --ado-panel-padding: 16px;
+  --ado-panel-padding-large: 20px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --ado-motion-duration-fast: 0ms;
+    --ado-motion-duration-base: 0ms;
+    --ado-motion-duration-slow: 0ms;
+  }
+}

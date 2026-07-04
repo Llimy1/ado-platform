@@ -1,0 +1,45 @@
+.gate {
+  border: var(--ado-border-width) solid var(--ado-color-state-warning);
+  background: var(--ado-color-state-warning-bg);
+  border-radius: var(--ado-radius-panel);
+  padding: var(--ado-panel-padding-large);
+  margin-bottom: var(--ado-space-4);
+}
+
+.gate.blocked {
+  border-color: var(--ado-color-state-failure);
+  background: var(--ado-color-state-failure-bg);
+}
+
+.title {
+  font-size: var(--ado-text-section-title-size);
+  line-height: var(--ado-text-section-title-line);
+  font-weight: var(--ado-text-section-title-weight);
+  margin: 0 0 var(--ado-space-3) 0;
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ado-space-2);
+  font-size: var(--ado-text-dense-size);
+  margin-bottom: var(--ado-space-4);
+}
+
+.rowLabel {
+  font-weight: 600;
+  color: var(--ado-color-text-secondary);
+  margin-right: var(--ado-space-2);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ado-space-3);
+}
+
+.disabledReason {
+  font-size: var(--ado-text-label-size);
+  color: var(--ado-color-text-tertiary);
+}

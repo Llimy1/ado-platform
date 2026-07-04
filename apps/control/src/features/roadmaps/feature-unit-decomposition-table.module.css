@@ -1,0 +1,51 @@
+.wrapper {
+  border: var(--ado-border-width) solid var(--ado-color-border);
+  border-radius: var(--ado-radius-panel);
+  overflow-x: auto;
+  position: relative;
+  background: var(--ado-color-surface);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 860px;
+}
+
+.table th,
+.table td {
+  text-align: left;
+  padding: var(--ado-space-2) var(--ado-space-3);
+  border-bottom: var(--ado-border-width) solid var(--ado-color-border);
+  font-size: var(--ado-text-dense-size);
+  vertical-align: middle;
+}
+
+.table thead th {
+  background: var(--ado-color-surface-muted);
+  font-size: var(--ado-text-label-size);
+  font-weight: var(--ado-text-label-weight);
+  color: var(--ado-color-text-secondary);
+  height: var(--ado-row-passive);
+}
+
+.table tbody tr:hover {
+  background: var(--ado-color-surface-muted);
+}
+
+.title {
+  font-weight: 600;
+  display: block;
+}
+
+.muted {
+  color: var(--ado-color-text-tertiary);
+}
+
+.caption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}

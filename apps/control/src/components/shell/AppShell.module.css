@@ -1,0 +1,238 @@
+.shell {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: var(--ado-z-sticky);
+  height: var(--ado-topbar-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ado-space-4);
+  padding: 0 var(--ado-space-4);
+  background: var(--ado-color-surface);
+  border-bottom: var(--ado-border-width) solid var(--ado-color-border);
+}
+
+.topbarLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--ado-space-3);
+  min-width: 0;
+}
+
+.topbarRight {
+  display: flex;
+  align-items: center;
+  gap: var(--ado-space-4);
+}
+
+.brand {
+  font-weight: 650;
+  font-size: var(--ado-text-body-size);
+  white-space: nowrap;
+}
+
+.menuButton {
+  display: inline-flex;
+}
+
+@media (min-width: 768px) {
+  .menuButton {
+    display: none;
+  }
+}
+
+.operator {
+  font-size: var(--ado-text-dense-size);
+  color: var(--ado-color-text-secondary);
+}
+
+.systemHealthLink {
+  font-size: var(--ado-text-dense-size);
+  color: var(--ado-color-text-secondary);
+  white-space: nowrap;
+}
+
+.body {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+.sidebar {
+  display: none;
+  width: var(--ado-rail-width);
+  flex-shrink: 0;
+  border-right: var(--ado-border-width) solid var(--ado-color-border);
+  background: var(--ado-color-surface);
+}
+
+@media (min-width: 768px) {
+  .sidebar {
+    display: block;
+  }
+}
+
+/*
+ * The page scrolls as a whole (see the table sticky-header note in
+ * project-list-table.module.css), so without this the sidebar nav — being a
+ * normal-flow flex item — scrolls out of view on a long page and leaves
+ * blank space where it used to be. `.sidebar` stretches to the height of
+ * `.main` via the parent flex container's default align-items: stretch;
+ * this inner element then stays pinned within that tall box as the page
+ * scrolls, which is the standard two-layer sticky-sidebar pattern.
+ */
+.sidebarSticky {
+  position: sticky;
+  top: var(--ado-topbar-height);
+  padding: var(--ado-space-3) 0;
+  max-height: calc(100vh - var(--ado-topbar-height));
+  overflow-y: auto;
+}
+
+@media (min-width: 1024px) {
+  .sidebar {
+    width: var(--ado-sidebar-width);
+  }
+}
+
+.navList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ado-space-1);
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  gap: var(--ado-space-2);
+  min-height: var(--ado-hit-target);
+  padding: 0 var(--ado-space-4);
+  font-size: var(--ado-text-body-size);
+  color: var(--ado-color-text-secondary);
+  justify-content: center;
+}
+
+@media (min-width: 1024px) {
+  .navLink {
+    justify-content: flex-start;
+  }
+}
+
+.navLinkActive {
+  color: var(--ado-color-focus);
+  font-weight: 600;
+  background: var(--ado-color-state-info-bg);
+}
+
+.navLinkDisabled {
+  color: var(--ado-color-text-tertiary);
+  cursor: default;
+}
+
+.navIcon {
+  flex-shrink: 0;
+}
+
+.navLabel {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .navLabel {
+    display: inline;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.navBadge {
+  display: none;
+  margin-left: auto;
+  font-size: 10px;
+  color: var(--ado-color-text-tertiary);
+}
+
+@media (min-width: 1024px) {
+  .navBadge {
+    display: inline;
+  }
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+  padding: var(--ado-space-4);
+}
+
+@media (min-width: 768px) {
+  .main {
+    padding: var(--ado-space-5);
+  }
+}
+
+@media (min-width: 1024px) {
+  .main {
+    padding: var(--ado-space-6);
+  }
+}
+
+@media (min-width: 1440px) {
+  .main {
+    padding: var(--ado-space-8);
+  }
+}
+
+.mainInner {
+  max-width: var(--ado-content-max-width);
+  margin: 0 auto;
+}
+
+.drawer {
+  border: none;
+  padding: 0;
+  margin: 0;
+  position: fixed;
+  inset: 0;
+  width: 85vw;
+  max-width: 320px;
+  height: 100vh;
+  max-height: 100vh;
+  box-shadow: var(--ado-shadow-overlay);
+}
+
+.drawer::backdrop {
+  background: rgba(15, 23, 42, 0.4);
+}
+
+.drawerInner {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: var(--ado-space-4);
+}
+
+.drawerHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--ado-space-4);
+}
+
+.drawerNavLink {
+  display: flex;
+  align-items: center;
+  gap: var(--ado-space-2);
+  min-height: var(--ado-hit-target);
+  padding: 0 var(--ado-space-2);
+  font-size: var(--ado-text-body-size);
+}

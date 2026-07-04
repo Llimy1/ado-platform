@@ -1,0 +1,33 @@
+.summary {
+  cursor: pointer;
+  font-size: var(--ado-text-dense-size);
+  color: var(--ado-color-text-secondary);
+}
+
+.tableWrap {
+  overflow-x: auto;
+  /* Containing block for the sr-only caption; see DependencyFigure note. */
+  position: relative;
+  margin-top: var(--ado-space-2);
+}
+
+.table {
+  width: 100%;
+  min-width: 480px;
+  border-collapse: collapse;
+  font-size: var(--ado-text-dense-size);
+}
+
+.table th,
+.table td {
+  text-align: left;
+  padding: var(--ado-space-2);
+  border-bottom: var(--ado-border-width) solid var(--ado-color-border);
+}
+
+.table thead th {
+  font-size: var(--ado-text-label-size);
+  font-weight: var(--ado-text-label-weight);
+  color: var(--ado-color-text-secondary);
+  background: var(--ado-color-surface-muted);
+}

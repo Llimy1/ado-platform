@@ -1,0 +1,42 @@
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ado-space-3);
+  margin-bottom: var(--ado-space-2);
+}
+
+.wrapToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ado-space-1);
+  font-size: var(--ado-text-dense-size);
+  color: var(--ado-color-text-secondary);
+}
+
+.pre {
+  margin: 0;
+  padding: var(--ado-space-3);
+  background: var(--ado-color-text-strong);
+  color: #e2e8f0;
+  border-radius: var(--ado-radius-panel);
+  font-family: var(--ado-font-mono);
+  font-size: var(--ado-text-code-size);
+  line-height: var(--ado-text-code-line);
+  max-height: 480px;
+  overflow: auto;
+  white-space: pre;
+}
+
+.preWrap {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.lineError {
+  color: #fca5a5;
+}
+
+.lineWarn {
+  color: #fcd34d;
+}

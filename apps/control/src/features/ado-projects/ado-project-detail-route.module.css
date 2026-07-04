@@ -1,0 +1,49 @@
+.breadcrumb {
+  font-size: var(--ado-text-dense-size);
+  color: var(--ado-color-text-tertiary);
+}
+
+.header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--ado-space-3);
+  flex-wrap: wrap;
+  margin-bottom: var(--ado-space-2);
+}
+
+.title {
+  font-size: var(--ado-text-page-title-size);
+  line-height: var(--ado-text-page-title-line);
+  font-weight: var(--ado-text-page-title-weight);
+  margin: 0;
+}
+
+.fieldList {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: var(--ado-space-2) var(--ado-space-4);
+}
+
+.fieldLabel {
+  color: var(--ado-color-text-secondary);
+  font-size: var(--ado-text-label-size);
+  font-weight: var(--ado-text-label-weight);
+}
+
+.fieldValue {
+  font-size: var(--ado-text-body-size);
+}
+
+.notFoundWrap {
+  border: var(--ado-border-width) solid var(--ado-color-border);
+  border-radius: var(--ado-radius-panel);
+  padding: var(--ado-space-6) var(--ado-space-4);
+  text-align: center;
+}
+
+.notFoundCode {
+  color: var(--ado-color-text-tertiary);
+  font-size: var(--ado-text-dense-size);
+  margin-top: var(--ado-space-1);
+}
