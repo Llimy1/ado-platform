@@ -3,8 +3,8 @@
 ## 1. Purpose
 
 This document defines the local development environment for rebuilding ADO
-Platform from scratch with NestJS, TypeScript, TypeORM, PostgreSQL, local LLM
-review practice, and Next.js.
+Platform from scratch with Spring Boot, Spring Batch, Gradle, Flyway, JPA,
+Querydsl, PostgreSQL, local LLM review practice, and Next.js.
 
 The goal is not only to make the app run. The goal is to make each setup step
 understandable to the Human Owner.
@@ -24,9 +24,8 @@ Open the repository root in the editor:
 <repo-root>
 ```
 
-WebStorm or IntelliJ are acceptable for learning NestJS/TypeScript. PyCharm is
-not the primary editor for this NestJS path unless TypeScript support is
-configured correctly.
+IntelliJ IDEA is the primary editor for the Spring path. WebStorm is acceptable
+for `apps/control` when the Next UI exists.
 
 Editor-generated files are local by default:
 
@@ -43,55 +42,98 @@ Required tools:
 
 | Tool | Purpose | Version rule |
 |---|---|---|
-| Node.js | NestJS, Worker, Next.js, and TypeScript runtime/tooling | use LTS or the version later pinned by the repo |
-| Corepack | package manager activation | required when available |
-| `pnpm` | workspace package manager | required |
-| Docker or local PostgreSQL | local PostgreSQL | one local method is chosen during LU-05 |
+| Java | Spring API and Worker runtime | Java 21 LTS |
+| Gradle wrapper | project build execution | Gradle `8.14.5` wrapper |
+| Docker or local PostgreSQL | local PostgreSQL | one local method is chosen during LU-04 |
 | Git | branches, commits, PRs | required |
 | GitHub CLI `gh` | PR workflow | recommended |
+| Node.js | Next.js Control app only | decided when `apps/control` is created |
+| npm | Next.js Control app only | use `package-lock.json` inside `apps/control` |
 
 If a version is unknown, Codex must ask the Human Owner to run the version
 command instead of guessing.
 
-LU-01 must record observed versions in the PR evidence and then pin the
-project-supported ranges in `package.json` or a later tool-version file. Exact
-framework versions are confirmation required until LU-01 checks local versions
-and official compatibility.
+The local Java baseline is Java 21. The current machine has Temurin 21.0.11
+available, and `.java-version` pins `21.0.11`.
 
-## 5. Node And pnpm Policy
+The first Spring Boot API shell uses Spring Boot `3.5.16` and the Spring
+dependency management Gradle plugin `1.1.7`.
 
-TypeScript dependencies are declared in `package.json` files and locked in
-`pnpm-lock.yaml`.
+Exact springdoc-openapi, Querydsl, Flyway, Testcontainers, and Next.js versions
+must be checked against official compatibility docs during the Learning Unit
+that pins them.
 
-`pnpm` owns:
+## 5. Java And Gradle Policy
 
-- dependency resolution;
-- lockfile generation;
-- workspace linking;
-- command execution through `pnpm` scripts.
+Java dependencies are declared in Gradle build files and resolved through the
+Gradle wrapper.
 
-Do not install NestJS, TypeORM, or Next.js globally for this project. Do not
-rely on whichever packages happen to be installed outside the repository.
+Gradle owns:
+
+- Java dependency resolution;
+- JVM test execution;
+- Spring Boot app execution;
+- Flyway migration tasks;
+- OpenAPI generation tasks;
+- generated client tasks when those tasks are introduced.
+
+Do not install Spring Boot, Flyway, Querydsl, or Gradle plugins globally for
+this project. Do not rely on whichever Java libraries happen to be installed
+outside the repository.
 
 Recommended first checks:
 
 ```bash
-node --version
-corepack --version
-pnpm --version
+java -version
+javac -version
+./gradlew --version
 ```
 
-If `pnpm` is unavailable, enable it through Corepack during LU-01.
+Before the Gradle wrapper exists, `./gradlew --version` is expected to fail.
+That failure is not a blocker; LU-01 creates the wrapper.
 
-The first Node baseline must decide:
+The first Gradle wrapper must be created by one of these visible methods:
 
-- supported Node major version;
-- package manager expectation;
-- initial TypeScript version;
-- runtime dependencies for NestJS and TypeORM work;
-- development dependencies for formatting, linting, typing, and tests.
+- Spring Initializr output committed after inspection;
+- a verified local Gradle installation running `gradle wrapper`;
+- a separately documented wrapper bootstrap command that downloads from the
+  official Gradle distribution service.
 
-## 6. PostgreSQL Local Policy
+Do not hand-write `gradlew`, `gradlew.bat`, or files under `gradle/wrapper/`.
+Do not rely on an unverified wrapper copied from another project.
+
+## 6. Node And npm Boundary
+
+Node.js is not a root platform dependency in A1. It is used only by the Next.js
+Control app after `apps/control` exists.
+
+Rules:
+
+- no root `package.json`;
+- no root `pnpm-workspace.yaml`;
+- no root `pnpm-lock.yaml`;
+- no root TypeScript workspace;
+- `apps/control/package.json` and `apps/control/package-lock.json` own UI
+  dependencies;
+- root Gradle tasks may delegate to `npm` inside `apps/control` only after the
+  Control app exists.
+
+## 7. Local Environment Injection
+
+Spring Boot does not automatically load repository `.env` files.
+
+Allowed local injection methods:
+
+- export variables in the shell before running `./gradlew ...`;
+- configure IntelliJ run configurations with environment variables;
+- use Docker Compose `env_file` for containers;
+- source `.env` manually in a visible command before running a local process.
+
+The application must not silently read `.env` through an added dotenv runtime
+library during A1. If that changes later, `docs/CONFIGURATION_POLICY.md` must
+be updated first.
+
+## 8. PostgreSQL Local Policy
 
 ADO uses PostgreSQL as the orchestration single source of truth.
 
@@ -102,10 +144,10 @@ The first local PostgreSQL setup should use one of these methods:
 
 Do not mix methods in one Learning Unit.
 
-The default LU-05 path is Docker Compose inside the repository unless the Human
+The default LU-04 path is Docker Compose inside the repository unless the Human
 Owner explicitly chooses an existing local PostgreSQL server.
 
-Default local values, unless changed during LU-05:
+Default local values, unless changed during LU-04:
 
 | Setting | Value |
 |---|---|
@@ -118,24 +160,35 @@ Default local values, unless changed during LU-05:
 The non-default port `5434` avoids collisions with other local projects that
 may already use `5432`.
 
-Minimum Docker Compose runbook for LU-05:
+Minimum Docker Compose runbook for LU-04:
 
 ```bash
-docker compose -f infra/docker/compose.local.yml up -d postgres
-docker compose -f infra/docker/compose.local.yml ps
-docker compose -f infra/docker/compose.local.yml exec postgres pg_isready -U ado -d ado_platform
-docker compose -f infra/docker/compose.local.yml exec postgres psql -U ado -d ado_platform -c "select version();"
-make db-migrate
+docker compose --env-file .env -f infra/docker/compose.local.yml up -d postgres
+docker compose --env-file .env -f infra/docker/compose.local.yml ps
+docker compose --env-file .env -f infra/docker/compose.local.yml exec postgres pg_isready -U ado -d ado_platform
+docker compose --env-file .env -f infra/docker/compose.local.yml exec postgres psql -U ado -d ado_platform -c "select version();"
+./gradlew :apps:api:flywayInfo
+./gradlew :apps:api:flywayMigrate
 ```
 
-If `infra/docker/compose.local.yml` does not exist yet, LU-05 must create it
+If `infra/docker/compose.local.yml` does not exist yet, LU-04 must create it
 before claiming PostgreSQL setup is complete. If an existing local PostgreSQL
 server is chosen instead, the LU summary must list equivalent `pg_isready`,
-`psql`, and migration verification commands. Before LU-08 creates `make
-db-migrate`, LU-05 must document the visible `pnpm` or TypeORM command that the
-Makefile will wrap.
+`psql`, and migration verification commands.
 
-## 7. Environment Files
+The local Compose file must read database values from `.env`; it must not
+hard-code database names, users, passwords, or host ports. The repository uses
+`.yml` for Docker Compose files.
+
+For PostgreSQL 18 or newer Docker images, the local named volume must mount to
+`/var/lib/postgresql`, not `/var/lib/postgresql/data`. PostgreSQL 18 images use
+major-version-specific data directories below that mount point.
+
+PostgreSQL-backed integration tests use Testcontainers by default. A Learning
+Unit may use another isolated PostgreSQL method only when the PR explains why
+Testcontainers is not appropriate.
+
+## 9. Environment Files
 
 `.env.example` is committed only after LU-03 defines the first required
 variables.
@@ -155,7 +208,7 @@ variables.
 
 `.env` is local only and must remain ignored.
 
-## 8. Local LLM Practice Boundary
+## 10. Local LLM Practice Boundary
 
 Local LLM setup is allowed later, but it is not part of LU-01.
 
@@ -167,7 +220,7 @@ When local LLM review work begins:
 - no model output becomes completion evidence without validation;
 - local model paths and cache directories are not committed.
 
-## 9. Local Cleanup Rules
+## 11. Local Cleanup Rules
 
 The repository should stay understandable while learning.
 
@@ -175,15 +228,18 @@ Allowed local-only clutter:
 
 - `.idea/`;
 - `.env`;
-- Node dependency directories;
-- package-manager caches;
-- `.DS_Store`.
+- `.DS_Store`;
+- `.gradle/`;
+- `build/`;
+- `node_modules/`;
+- `.next/`;
+- package-manager caches.
 
 Before committing, run:
 
 ```bash
 git status --short
-git check-ignore -v .idea .env .DS_Store
+git check-ignore -v .idea .env .DS_Store .gradle build node_modules .next
 ```
 
 Only intentional source, config, lockfile, and documentation changes should be
@@ -191,7 +247,7 @@ staged.
 
 The expected result is:
 
-- `.idea/`, `.env`, and `.DS_Store` are ignored;
+- local-only files are ignored;
 - no private local path is added to committed documentation;
 - any shared IDE setting is added only after the Human Owner explicitly
   approves a narrow allowlist.

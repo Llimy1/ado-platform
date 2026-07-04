@@ -3,7 +3,7 @@
 ## 1. Purpose
 
 This document defines how pull requests should be shaped while ADO Platform is
-rebuilt through NestJS + TypeORM Learning Units.
+rebuilt through Spring Boot + Spring Batch Learning Units.
 
 The PR should prove both code progress and learning progress.
 
@@ -44,10 +44,10 @@ Use the `ado/` prefix.
 Recommended branch names:
 
 ```text
-ado/lu-01-node-pnpm-baseline
-ado/lu-02-nest-app-shells
+ado/lu-01-java-gradle-baseline
+ado/lu-02-spring-app-shells
 ado/lu-03-configuration-policy
-ado/lu-04-nest-health-openapi
+ado/lu-06-spring-health-openapi
 ```
 
 Start every Learning Unit from the repository root with:
@@ -108,6 +108,10 @@ Important output or summary:
 Every PR must include the mandatory verification for its Learning Unit. Extra
 verification is encouraged when the PR claims broader behavior.
 
+Implementation evidence and final verification evidence are different. When the
+Human Owner implements code manually, Codex must independently rerun the
+mandatory verification before the PR or Learning Unit is marked complete.
+
 Documentation-only PRs that are not implementing a Learning Unit:
 
 ```bash
@@ -119,38 +123,55 @@ commands may be included, but they do not replace the mandatory gate.
 
 | LU | Mandatory verification from repo root | Claim boundary |
 |---|---|---|
-| LU-01 | version checks, then `pnpm install` and `pnpm exec tsc --version` after package metadata exists | Node and `pnpm` baseline only |
-| LU-02 | `pnpm typecheck` or `pnpm exec tsc --noEmit` | Nest app/package shell imports and checks |
+| LU-01 | `java -version`, `javac -version`, `./gradlew --version`, `./gradlew projects` after wrapper exists | Java and Gradle baseline only |
+| LU-02 | `./gradlew projects`, `./gradlew :apps:api:test`; add `./gradlew :apps:worker:test` only after `apps/worker` exists | Spring app shells only |
 | LU-03 | config validation command with documented env values | settings parse and fail-fast behavior only |
-| LU-04 | API health test/check and OpenAPI generation command | health route and OpenAPI artifact only |
-| LU-05 | PostgreSQL health check and TypeORM migration command | PostgreSQL connectivity and migrations only |
-| LU-06 | Worker command with `--worker-id local-dev --once` | Worker process shell only |
-| LU-07 | frontend typecheck/build command for Control health screen | browser/API health UI only |
-| LU-08 | `make lint`, `make typecheck`, `make test` | root command surface only |
+| LU-04 | PostgreSQL health check, `./gradlew :apps:api:flywayInfo`, and `./gradlew :apps:api:flywayMigrate` | PostgreSQL connectivity and migrations only |
+| LU-05 | PostgreSQL-backed Testcontainers persistence test and Querydsl Q-class regeneration evidence | JPA/Querydsl persistence behavior only |
+| LU-06 | API health test/check and `./gradlew :apps:api:openApiGenerate` | health route and OpenAPI artifact only |
+| LU-07 | Worker command with `--worker-id local-dev --once` | Worker process shell only |
+| LU-08 | `cd apps/control && npm run build` | browser/API health UI only |
+| LU-09 | `./gradlew test`, `./gradlew integrationTest`, `./gradlew build`, root Flyway/OpenAPI aliases, plus Control build if UI exists | root command and CI surface only |
 
 Reference examples:
 
-Node setup PRs:
+Java setup PRs:
 
 ```bash
-node --version
-corepack --version
-pnpm --version
-pnpm install
-pnpm exec tsc --version
+java -version
+javac -version
+./gradlew --version
+./gradlew projects
 ```
 
 Backend setup PRs:
 
 ```bash
-pnpm typecheck
+./gradlew :apps:api:test
 ```
+
+Add `./gradlew :apps:worker:test` only after `apps/worker` exists.
 
 Database PRs:
 
 ```bash
-docker compose -f infra/docker/compose.local.yml up -d postgres
-make db-migrate
+docker compose --env-file .env -f infra/docker/compose.local.yml up -d postgres
+docker compose --env-file .env -f infra/docker/compose.local.yml exec postgres pg_isready -U ado -d ado_platform
+./gradlew :apps:api:flywayInfo
+./gradlew :apps:api:flywayMigrate
+./gradlew :apps:api:flywayInfo
+```
+
+LU-04 evidence must show that Flyway found at least one migration. `No
+migrations found` is a failed verification, even when the Gradle task exits
+successfully.
+
+Frontend PRs:
+
+```bash
+cd apps/control
+npm install
+npm run build
 ```
 
 The command must match the claim. Do not use a narrow command to prove a broad
@@ -175,6 +196,7 @@ Codex review should check:
 - whether generated framework files are understood and documented;
 - whether secrets are absent;
 - whether verification evidence matches the claim;
+- whether test methods include Korean `@DisplayName` values;
 - whether the next step is clear.
 
 Local reviewer models may provide comments later, but their output is only a
@@ -204,5 +226,6 @@ This policy is satisfied when each Learning Unit PR:
 1. has a clear LU number and title;
 2. has a small scope;
 3. lists verification commands;
-4. records what the Human Owner should understand;
-5. avoids unrelated cleanup or framework jumps.
+4. includes Codex-rerun final verification evidence before ready/merge;
+5. records what the Human Owner should understand;
+6. avoids unrelated cleanup or framework jumps.
