@@ -1,21 +1,34 @@
-# OpenAPI Project API Progress
+# OpenAPI Project API Summary
 
-Date: 2026-07-04
+Date: 2026-07-05
 
-## Current Branch
-
-```text
-ado/openapi-project-api
-```
-
-Base state:
+## Merge Status
 
 ```text
-integrate
-Merge pull request #11 from Llimy1/ado/project-key-db-constraint-mapping
+PR #12 Document project API with OpenAPI
+https://github.com/Llimy1/ado-platform/pull/12
 ```
 
-## Already Merged Before This Branch
+Status:
+
+```text
+Merged into integrate
+```
+
+Merge commit:
+
+```text
+fec53fd Merge pull request #12 from Llimy1/ado/openapi-project-api
+```
+
+Branch commits:
+
+```text
+70fba45 Add ADO agent bootstrap docs
+a72dd87 Document project API with OpenAPI
+```
+
+## Already Merged Before OpenAPI
 
 The project API foundation has already been split and merged through smaller branches:
 
@@ -25,7 +38,7 @@ The project API foundation has already been split and merged through smaller bra
 4. Common `ErrorCode` enum and `BusinessException`
 5. Database unique constraint violation mapping for `projectKey`
 
-Current API behavior before OpenAPI work:
+API behavior before OpenAPI work:
 
 - `GET /v1/projects`
 - `GET /v1/projects/{id}`
@@ -35,9 +48,9 @@ Current API behavior before OpenAPI work:
 - Duplicate project key response: `PROJECT_KEY_ALREADY_EXISTS`
 - Project not found response: `PROJECT_NOT_FOUND`
 
-## Current Branch Scope
+## Implemented Scope
 
-This branch adds backend OpenAPI documentation support and prepares the API for typed frontend client generation.
+This work added backend OpenAPI documentation support and prepared the API for typed frontend client generation.
 
 ### Springdoc Dependency
 
@@ -47,7 +60,7 @@ Added Springdoc WebMVC UI dependency:
 implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.17'
 ```
 
-Expected local endpoints after `bootRun`:
+Local documentation endpoints after `bootRun`:
 
 ```text
 http://localhost:8080/swagger-ui.html
@@ -129,11 +142,13 @@ Current approach:
 
 - Keep endpoint-specific `@Operation` on controller methods.
 - Use custom docs annotations for repeated response documentation.
+- Declare JSON media types on the controller mapping.
 
 Reason:
 
 - `@Operation` summary/description is endpoint-specific and still readable in the controller.
 - Repeated response annotations are extracted to reduce noise.
+- `produces = application/json` and `consumes = application/json` make the HTTP/OpenAPI contract explicit.
 - Endpoint-level composed annotations can be considered later if controller docs become too large.
 
 ### Custom Docs Annotations
@@ -156,7 +171,15 @@ apps/api/src/main/java/com/ado/platform/api/project/api/docs/ProjectKeyConflictR
 Design decision:
 
 - Use small custom annotations for repeated OpenAPI response metadata.
+- Success responses use the controller return type schema with `application/json`.
+- Error responses document `application/json` content, common `ApiResponse` schema, and representative examples.
 - Do not create endpoint-level docs annotations yet.
+
+Documented response codes:
+
+- `GET /v1/projects`: `200`
+- `GET /v1/projects/{id}`: `200`, `404`
+- `POST /v1/projects`: `201`, `400`, `409`
 
 ## Frontend Client Direction
 
@@ -194,34 +217,47 @@ Expected wrapper responsibility:
 - Throw a frontend API error for failed ADO responses
 - Return the domain payload directly
 
-## Verification Done So Far
+## Verification Completed
 
-Already passed during this branch:
+Completed before merge:
 
 ```bash
 git diff --check
 ./gradlew :apps:api:test
-```
-
-Remaining verification before PR:
-
-```bash
+docker compose --env-file .env -f infra/docker/compose.local.yml ps
+./gradlew :apps:api:flywayInfo
+./gradlew :apps:api:flywayMigrate
 ./gradlew :apps:api:bootRun
 curl http://localhost:8080/actuator/health
-curl http://localhost:8080/v3/api-docs
-curl http://localhost:8080/swagger-ui.html
 curl http://localhost:8080/v1/projects
+curl http://localhost:8080/swagger-ui.html
+curl http://localhost:8080/v3/api-docs
+curl -X POST http://localhost:8080/v1/projects \
+  -H 'Content-Type: application/json' \
+  -d '{"projectKey":"ado-test","name":"ADO Test"}'
 ```
 
-Need to confirm in `/v3/api-docs`:
+Confirmed runtime results:
+
+- PostgreSQL compose service was `healthy`.
+- Flyway schema version was `3`.
+- API health returned `{"status":"UP"}`.
+- `GET /v1/projects` returned `ApiResponse<List<AdoProjectResponse>>`.
+- Swagger UI redirected from `/swagger-ui.html` to `/swagger-ui/index.html`.
+- Duplicate `projectKey` POST returned `409 PROJECT_KEY_ALREADY_EXISTS`.
+
+Confirmed in `/v3/api-docs`:
 
 - `Projects` tag appears
 - `GET /v1/projects` appears
 - `GET /v1/projects/{id}` appears
 - `POST /v1/projects` appears
 - `ApiResponse` schema appears
+- `ApiFieldError` schema appears
 - Project request/response schemas appear
 - Response codes `200`, `201`, `400`, `404`, `409` appear where expected
+- Success and error responses use `application/json`
+- Error responses include examples for `VALIDATION_FAILED`, `PROJECT_NOT_FOUND`, and `PROJECT_KEY_ALREADY_EXISTS`
 
 ## Documentation Rules
 
@@ -240,14 +276,13 @@ Current decisions:
 - Repeated response metadata stays in custom docs annotations.
 - Endpoint-level docs annotations remain deferred.
 
-## Remaining Work On This Branch
+## Next Work
 
-1. Verify Swagger UI and `/v3/api-docs` output with running API server.
-2. Confirm generated OpenAPI output includes response codes and error content schemas.
-3. Commit and push `ado/openapi-project-api`.
-4. Create PR into `integrate`.
-5. Merge after review/checks.
-6. Start frontend OpenAPI client integration with Claude Code.
+1. Frontend OpenAPI client integration in the control UI.
+2. Domain wrapper client rule: UI components should call domain client functions, not low-level generated methods directly.
+3. Error handling rule for generated client responses.
+4. Decide whether endpoint-level docs annotations are needed after more APIs are added.
+5. Start the next backend domain design, likely Roadmap table/API or Job/Worker state model.
 
 ## Deferred Decisions
 

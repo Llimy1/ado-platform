@@ -100,6 +100,12 @@ OpenAPI 문서화의 우선순위:
 - HTTP mapping annotation
 - JSON API의 `produces` / `consumes` media type
 
+Media type note:
+
+- Spring MVC는 `@RestController`와 Jackson converter를 통해 보통 명시하지 않아도 JSON으로 응답한다.
+- ADO에서는 OpenAPI contract를 명확히 하기 위해 JSON API controller에 `produces = application/json`을 명시한다.
+- Request body가 있는 JSON endpoint에는 `consumes = application/json`을 명시한다.
+
 커스텀 문서 어노테이션으로 분리하는 것:
 
 - 반복되는 성공 응답
