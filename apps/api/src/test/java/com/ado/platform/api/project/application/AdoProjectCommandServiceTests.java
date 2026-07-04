@@ -1,7 +1,8 @@
 package com.ado.platform.api.project.application;
 
+import com.ado.platform.api.common.api.error.BusinessException;
+import com.ado.platform.api.common.api.error.ErrorCode;
 import com.ado.platform.api.project.api.dto.AdoProjectCreateRequest;
-import com.ado.platform.api.project.exception.DuplicateProjectKeyException;
 import com.ado.platform.api.project.persistence.repository.AdoProjectRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,7 +11,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.never;
@@ -31,9 +33,12 @@ public class AdoProjectCommandServiceTests {
 
         given(repository.existsByProjectKey("ado-platform")).willReturn(true);
 
-        assertThatThrownBy(() -> commandService.createProject(request))
-                .isInstanceOf(DuplicateProjectKeyException.class)
+        Throwable thrown = catchThrowable(() -> commandService.createProject(request));
+
+        assertThat(thrown)
+                .isInstanceOf(BusinessException.class)
                 .hasMessage("이미 존재하는 프로젝트 키입니다.");
+        assertThat(((BusinessException) thrown).errorCode()).isEqualTo(ErrorCode.PROJECT_KEY_ALREADY_EXISTS);
 
         then(repository).should().existsByProjectKey("ado-platform");
         then(repository).should(never()).save(org.mockito.ArgumentMatchers.any());

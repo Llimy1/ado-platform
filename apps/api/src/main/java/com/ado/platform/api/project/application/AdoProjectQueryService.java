@@ -1,8 +1,9 @@
 package com.ado.platform.api.project.application;
 
 
+import com.ado.platform.api.common.api.error.BusinessException;
+import com.ado.platform.api.common.api.error.ErrorCode;
 import com.ado.platform.api.project.api.dto.AdoProjectResponse;
-import com.ado.platform.api.project.exception.ProjectNotFoundException;
 import com.ado.platform.api.project.persistence.entity.AdoProjectEntity;
 import com.ado.platform.api.project.persistence.repository.AdoProjectRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,7 @@ public class AdoProjectQueryService {
 
     public AdoProjectResponse findProject(Long id) {
         AdoProjectEntity project = repository.findById(id)
-                .orElseThrow(ProjectNotFoundException::new);
+                .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
 
         return toResponse(project);
     }

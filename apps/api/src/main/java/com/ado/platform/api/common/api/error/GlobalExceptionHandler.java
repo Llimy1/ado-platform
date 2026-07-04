@@ -2,9 +2,8 @@ package com.ado.platform.api.common.api.error;
 
 import com.ado.platform.api.common.api.response.ApiFieldError;
 import com.ado.platform.api.common.api.response.ApiResponse;
-import com.ado.platform.api.project.exception.DuplicateProjectKeyException;
-import com.ado.platform.api.project.exception.ProjectNotFoundException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -18,6 +17,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiResponse<Void> handleValidationException(MethodArgumentNotValidException exception) {
+        ErrorCode errorCode = ErrorCode.VALIDATION_FAILED;
         List<ApiFieldError> fieldErrors = exception.getBindingResult()
                 .getFieldErrors()
                 .stream()
@@ -25,29 +25,22 @@ public class GlobalExceptionHandler {
                 .toList();
 
         return ApiResponse.error(
-                "VALIDATION_FAILED",
-                "요청 값이 올바르지 않습니다.",
+                errorCode.name(),
+                errorCode.message(),
                 fieldErrors
         );
     }
 
-    @ExceptionHandler(DuplicateProjectKeyException.class)
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ApiResponse<Void> handleDuplicateProjectKeyException(DuplicateProjectKeyException exception) {
-        return ApiResponse.error(
-                DuplicateProjectKeyException.CODE,
-                DuplicateProjectKeyException.MESSAGE,
-                List.of()
-        );
-    }
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ApiResponse<Void>> handleBusinessException(BusinessException exception) {
+        ErrorCode errorCode = exception.errorCode();
 
-    @ExceptionHandler(ProjectNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ApiResponse<Void> handleProjectNotFoundException(ProjectNotFoundException exception) {
-        return ApiResponse.error(
-                ProjectNotFoundException.CODE,
-                ProjectNotFoundException.MESSAGE,
-                List.of()
-        );
+        return ResponseEntity
+                .status(errorCode.status())
+                .body(ApiResponse.error(
+                        errorCode.name(),
+                        errorCode.message(),
+                        List.of()
+                ));
     }
 }
