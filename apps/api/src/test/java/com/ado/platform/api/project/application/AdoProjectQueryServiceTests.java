@@ -1,7 +1,8 @@
 package com.ado.platform.api.project.application;
 
+import com.ado.platform.api.common.api.error.BusinessException;
+import com.ado.platform.api.common.api.error.ErrorCode;
 import com.ado.platform.api.project.api.dto.AdoProjectResponse;
-import com.ado.platform.api.project.exception.ProjectNotFoundException;
 import com.ado.platform.api.project.persistence.entity.AdoProjectEntity;
 import com.ado.platform.api.project.persistence.repository.AdoProjectRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -16,7 +17,7 @@ import java.time.Instant;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
@@ -54,9 +55,12 @@ public class AdoProjectQueryServiceTests {
     void failsWhenProjectDoesNotExist() {
         given(repository.findById(999L)).willReturn(Optional.empty());
 
-        assertThatThrownBy(() -> queryService.findProject(999L))
-                .isInstanceOf(ProjectNotFoundException.class)
+        Throwable thrown = catchThrowable(() -> queryService.findProject(999L));
+
+        assertThat(thrown)
+                .isInstanceOf(BusinessException.class)
                 .hasMessage("프로젝트를 찾을 수 없습니다.");
+        assertThat(((BusinessException) thrown).errorCode()).isEqualTo(ErrorCode.PROJECT_NOT_FOUND);
 
         then(repository).should().findById(999L);
     }

@@ -1,13 +1,13 @@
 package com.ado.platform.api.project.api;
 
 
+import com.ado.platform.api.common.api.error.BusinessException;
+import com.ado.platform.api.common.api.error.ErrorCode;
 import com.ado.platform.api.common.api.error.GlobalExceptionHandler;
 import com.ado.platform.api.project.api.dto.AdoProjectCreateRequest;
 import com.ado.platform.api.project.api.dto.AdoProjectResponse;
 import com.ado.platform.api.project.application.AdoProjectCommandService;
 import com.ado.platform.api.project.application.AdoProjectQueryService;
-import com.ado.platform.api.project.exception.DuplicateProjectKeyException;
-import com.ado.platform.api.project.exception.ProjectNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -138,7 +138,7 @@ public class AdoProjectControllerTests {
     @DisplayName("프로젝트 생성 실패 - 프로젝트 키 중복")
     void failsWhenProjectKeyAlreadyExists() throws Exception {
         given(commandService.createProject(any(AdoProjectCreateRequest.class)))
-                .willThrow(new DuplicateProjectKeyException());
+                .willThrow(new BusinessException(ErrorCode.PROJECT_KEY_ALREADY_EXISTS));
 
         mockMvc.perform(post("/v1/projects")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -165,7 +165,7 @@ public class AdoProjectControllerTests {
     @Test
     @DisplayName("프로젝트 단건 조회 실패 - 프로젝트 없음")
     void failsWhenProjectDoesNotExist() throws Exception {
-        given(queryService.findProject(999L)).willThrow(new ProjectNotFoundException());
+        given(queryService.findProject(999L)).willThrow(new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
 
         mockMvc.perform(get("/v1/projects/999"))
                 .andExpect(status().isNotFound())
