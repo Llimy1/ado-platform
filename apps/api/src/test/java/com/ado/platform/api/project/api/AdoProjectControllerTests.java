@@ -7,6 +7,7 @@ import com.ado.platform.api.project.api.dto.AdoProjectResponse;
 import com.ado.platform.api.project.application.AdoProjectCommandService;
 import com.ado.platform.api.project.application.AdoProjectQueryService;
 import com.ado.platform.api.project.exception.DuplicateProjectKeyException;
+import com.ado.platform.api.project.exception.ProjectNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +67,33 @@ public class AdoProjectControllerTests {
                 .andExpect(jsonPath("$.data[0].createdAt").value("2026-07-03T13:00:00Z"))
                 .andExpect(jsonPath("$.data[0].updatedAt").value("2026-07-03T13:00:00Z"))
                 .andExpect(jsonPath("$.errors").isEmpty());
+    }
+
+    @Test
+    @DisplayName("프로젝트 단건 조회")
+    void findProject() throws Exception {
+        given(queryService.findProject(1L)).willReturn(
+                new AdoProjectResponse(
+                        1L,
+                        "ado-platform",
+                        "ADO Platform",
+                        Instant.parse("2026-07-03T13:00:00Z"),
+                        Instant.parse("2026-07-03T13:00:00Z")
+                ));
+
+        mockMvc.perform(get("/v1/projects/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.code").value("OK"))
+                .andExpect(jsonPath("$.message").value("요청이 성공했습니다."))
+                .andExpect(jsonPath("$.data.id").value(1))
+                .andExpect(jsonPath("$.data.projectKey").value("ado-platform"))
+                .andExpect(jsonPath("$.data.name").value("ADO Platform"))
+                .andExpect(jsonPath("$.data.createdAt").value("2026-07-03T13:00:00Z"))
+                .andExpect(jsonPath("$.data.updatedAt").value("2026-07-03T13:00:00Z"))
+                .andExpect(jsonPath("$.errors").isEmpty());
+
+        then(queryService).should().findProject(1L);
     }
 
     @Test
@@ -132,6 +160,22 @@ public class AdoProjectControllerTests {
                         && request.projectKey().equals("ado-platform")
                         && request.name().equals("ADO Platform")
         ));
+    }
+
+    @Test
+    @DisplayName("프로젝트 단건 조회 실패 - 프로젝트 없음")
+    void failsWhenProjectDoesNotExist() throws Exception {
+        given(queryService.findProject(999L)).willThrow(new ProjectNotFoundException());
+
+        mockMvc.perform(get("/v1/projects/999"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.success").value(false))
+                .andExpect(jsonPath("$.code").value("PROJECT_NOT_FOUND"))
+                .andExpect(jsonPath("$.message").value("프로젝트를 찾을 수 없습니다."))
+                .andExpect(jsonPath("$.data").doesNotExist())
+                .andExpect(jsonPath("$.errors").isEmpty());
+
+        then(queryService).should().findProject(999L);
     }
 
     @Test
