@@ -1,0 +1,90 @@
+.breadcrumb {
+  font-size: var(--ado-text-dense-size);
+  color: var(--ado-color-text-tertiary);
+  margin-bottom: var(--ado-space-2);
+}
+
+.breadcrumb a {
+  color: inherit;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ado-space-2);
+  margin-bottom: var(--ado-space-3);
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--ado-space-3);
+  flex-wrap: wrap;
+}
+
+.title {
+  font-size: var(--ado-text-page-title-size);
+  line-height: var(--ado-text-page-title-line);
+  font-weight: var(--ado-text-page-title-weight);
+  margin: 0;
+}
+
+.metaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ado-space-4);
+  font-size: var(--ado-text-dense-size);
+  color: var(--ado-color-text-secondary);
+  align-items: center;
+}
+
+.metaLabel {
+  color: var(--ado-color-text-tertiary);
+  margin-right: 4px;
+}
+
+.resultBanner {
+  border-radius: var(--ado-radius-panel);
+  padding: var(--ado-panel-padding-large);
+  margin-bottom: var(--ado-space-4);
+  border: var(--ado-border-width) solid var(--ado-color-state-success);
+  background: var(--ado-color-state-success-bg);
+}
+
+.resultBanner.rejected {
+  border-color: var(--ado-color-state-failure);
+  background: var(--ado-color-state-failure-bg);
+}
+
+.resultTitle {
+  font-weight: 650;
+  margin-bottom: var(--ado-space-1);
+}
+
+.resultBody {
+  font-size: var(--ado-text-dense-size);
+  color: var(--ado-color-text-secondary);
+}
+
+.section {
+  margin-bottom: var(--ado-space-4);
+}
+
+.kvGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--ado-space-2) var(--ado-space-4);
+  font-size: var(--ado-text-dense-size);
+}
+
+@media (min-width: 768px) {
+  .kvGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.kvLabel {
+  color: var(--ado-color-text-tertiary);
+  display: block;
+  font-size: var(--ado-text-label-size);
+}

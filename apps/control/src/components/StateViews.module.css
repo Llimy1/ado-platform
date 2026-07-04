@@ -1,0 +1,43 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--ado-space-3);
+  padding: var(--ado-space-8) var(--ado-space-4);
+  border: var(--ado-border-width) dashed var(--ado-color-border-strong);
+  border-radius: var(--ado-radius-panel);
+  color: var(--ado-color-text-secondary);
+}
+
+.title {
+  font-size: var(--ado-text-section-title-size);
+  line-height: var(--ado-text-section-title-line);
+  font-weight: var(--ado-text-section-title-weight);
+  color: var(--ado-color-text-strong);
+  margin: 0;
+}
+
+.errorWrap {
+  composes: wrap;
+  border-style: solid;
+  border-color: var(--ado-color-state-failure);
+  background: var(--ado-color-state-failure-bg);
+}
+
+.requestId {
+  font-size: var(--ado-text-code-size);
+  color: var(--ado-color-text-tertiary);
+}
+
+.staleBanner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ado-space-3);
+  padding: var(--ado-space-2) var(--ado-space-4);
+  border-radius: var(--ado-radius-control);
+  background: var(--ado-color-state-warning-bg);
+  color: var(--ado-color-state-warning);
+  font-size: var(--ado-text-dense-size);
+  margin-bottom: var(--ado-space-3);
+}

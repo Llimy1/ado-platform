@@ -1,0 +1,99 @@
+.breadcrumb {
+  font-size: var(--ado-text-dense-size);
+  color: var(--ado-color-text-tertiary);
+  margin-bottom: var(--ado-space-2);
+}
+
+.breadcrumb a {
+  color: inherit;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ado-space-2);
+  margin-bottom: var(--ado-space-4);
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--ado-space-3);
+  flex-wrap: wrap;
+}
+
+.sequence {
+  font-size: var(--ado-text-dense-size);
+  color: var(--ado-color-text-tertiary);
+}
+
+.title {
+  font-size: var(--ado-text-page-title-size);
+  line-height: var(--ado-text-page-title-line);
+  font-weight: var(--ado-text-page-title-weight);
+  margin: 0;
+}
+
+.intent {
+  font-size: var(--ado-text-body-size);
+  color: var(--ado-color-text-secondary);
+  max-width: 72ch;
+}
+
+.metaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ado-space-4);
+  font-size: var(--ado-text-dense-size);
+  color: var(--ado-color-text-secondary);
+  align-items: center;
+}
+
+.metaLabel {
+  color: var(--ado-color-text-tertiary);
+  margin-right: 4px;
+}
+
+.section {
+  margin-bottom: var(--ado-space-4);
+}
+
+/*
+ * min-width: 0 on grid children is required — grid items default to
+ * min-width: auto, which lets a wide child (e.g. a bounded-scroll table)
+ * push the whole page wider than the viewport. See
+ * project-overview-route.module.css .areaWork for the same fix.
+ */
+.topGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--ado-space-4);
+  margin-bottom: var(--ado-space-4);
+}
+
+.topGrid > * {
+  min-width: 0;
+}
+
+@media (min-width: 1280px) {
+  .topGrid {
+    grid-template-columns: 7fr 5fr;
+  }
+}
+
+.bottomGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--ado-space-4);
+  margin-bottom: var(--ado-space-4);
+}
+
+.bottomGrid > * {
+  min-width: 0;
+}
+
+@media (min-width: 1280px) {
+  .bottomGrid {
+    grid-template-columns: 7fr 5fr;
+  }
+}

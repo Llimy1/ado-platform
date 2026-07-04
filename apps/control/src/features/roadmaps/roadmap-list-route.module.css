@@ -1,0 +1,39 @@
+.breadcrumb {
+  font-size: var(--ado-text-dense-size);
+  color: var(--ado-color-text-tertiary);
+}
+
+.breadcrumb a {
+  color: inherit;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ado-space-1);
+  margin-bottom: var(--ado-space-2);
+}
+
+.titleRow {
+  display: flex;
+  align-items: baseline;
+  gap: var(--ado-space-3);
+  flex-wrap: wrap;
+}
+
+.title {
+  font-size: var(--ado-text-page-title-size);
+  line-height: var(--ado-text-page-title-line);
+  font-weight: var(--ado-text-page-title-weight);
+  margin: 0;
+}
+
+.resultCount {
+  font-size: var(--ado-text-dense-size);
+  color: var(--ado-color-text-secondary);
+}
+
+.snapshotTime {
+  font-size: var(--ado-text-label-size);
+  color: var(--ado-color-text-tertiary);
+}

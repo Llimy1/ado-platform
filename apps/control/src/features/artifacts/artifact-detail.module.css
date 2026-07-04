@@ -1,0 +1,96 @@
+.breadcrumb {
+  font-size: var(--ado-text-dense-size);
+  color: var(--ado-color-text-tertiary);
+  margin-bottom: var(--ado-space-2);
+}
+
+.breadcrumb a {
+  color: inherit;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ado-space-2);
+  margin-bottom: var(--ado-space-4);
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--ado-space-3);
+  flex-wrap: wrap;
+}
+
+.title {
+  font-size: var(--ado-text-page-title-size);
+  line-height: var(--ado-text-page-title-line);
+  font-weight: var(--ado-text-page-title-weight);
+  margin: 0;
+  font-family: var(--ado-font-mono);
+}
+
+.metaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ado-space-4);
+  font-size: var(--ado-text-dense-size);
+  color: var(--ado-color-text-secondary);
+  align-items: center;
+}
+
+.metaLabel {
+  color: var(--ado-color-text-tertiary);
+  margin-right: 4px;
+}
+
+.section {
+  margin-bottom: var(--ado-space-4);
+}
+
+.kvGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--ado-space-2) var(--ado-space-4);
+  font-size: var(--ado-text-dense-size);
+}
+
+@media (min-width: 768px) {
+  .kvGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.kvLabel {
+  color: var(--ado-color-text-tertiary);
+  display: block;
+  font-size: var(--ado-text-label-size);
+}
+
+.unavailableBox {
+  background: var(--ado-color-surface-muted);
+  border: var(--ado-border-width) dashed var(--ado-color-border-strong);
+  border-radius: var(--ado-radius-panel);
+  padding: var(--ado-space-4);
+  text-align: center;
+  color: var(--ado-color-text-secondary);
+  font-size: var(--ado-text-dense-size);
+}
+
+.provenanceList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ado-space-1);
+  font-size: var(--ado-text-dense-size);
+}
+
+.provenanceRow {
+  display: flex;
+  align-items: center;
+  gap: var(--ado-space-2);
+  min-height: var(--ado-row-passive);
+  border-bottom: var(--ado-border-width) solid var(--ado-color-border);
+}

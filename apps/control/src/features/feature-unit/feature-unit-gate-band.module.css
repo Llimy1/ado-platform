@@ -1,0 +1,35 @@
+.band {
+  border-radius: var(--ado-radius-panel);
+  padding: var(--ado-panel-padding);
+  margin-bottom: var(--ado-space-3);
+  border: var(--ado-border-width) solid var(--ado-color-state-warning);
+  background: var(--ado-color-state-warning-bg);
+}
+
+.band.blocked {
+  border-color: var(--ado-color-state-failure);
+  background: var(--ado-color-state-failure-bg);
+}
+
+.bandTitle {
+  font-weight: 650;
+  margin-bottom: var(--ado-space-1);
+}
+
+.bandBody {
+  font-size: var(--ado-text-dense-size);
+  color: var(--ado-color-text-secondary);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ado-space-3);
+  margin-top: var(--ado-space-3);
+}
+
+.disabledReason {
+  font-size: var(--ado-text-label-size);
+  color: var(--ado-color-text-tertiary);
+}

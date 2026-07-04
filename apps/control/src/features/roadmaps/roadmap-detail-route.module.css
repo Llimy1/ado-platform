@@ -1,0 +1,78 @@
+.breadcrumb {
+  font-size: var(--ado-text-dense-size);
+  color: var(--ado-color-text-tertiary);
+  margin-bottom: var(--ado-space-2);
+}
+
+.breadcrumb a {
+  color: inherit;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ado-space-2);
+  margin-bottom: var(--ado-space-4);
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--ado-space-3);
+  flex-wrap: wrap;
+}
+
+.title {
+  font-size: var(--ado-text-page-title-size);
+  line-height: var(--ado-text-page-title-line);
+  font-weight: var(--ado-text-page-title-weight);
+  margin: 0;
+}
+
+.metaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ado-space-4);
+  font-size: var(--ado-text-dense-size);
+  color: var(--ado-color-text-secondary);
+  align-items: center;
+}
+
+.metaLabel {
+  color: var(--ado-color-text-tertiary);
+  margin-right: 4px;
+}
+
+.section {
+  margin-bottom: var(--ado-space-4);
+}
+
+/* min-width: 0 prevents a wide bounded-scroll child from pushing the page
+   wider than the viewport; see feature-unit-detail-route.module.css. */
+.bottomGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--ado-space-4);
+}
+
+.bottomGrid > * {
+  min-width: 0;
+}
+
+@media (min-width: 1440px) {
+  .bottomGrid {
+    grid-template-columns: 7fr 5fr;
+  }
+}
+
+.muted {
+  color: var(--ado-color-text-tertiary);
+  font-size: var(--ado-text-label-size);
+}
+
+.footerLink {
+  display: block;
+  margin-top: var(--ado-space-3);
+  font-size: var(--ado-text-dense-size);
+  color: var(--ado-color-text-tertiary);
+}

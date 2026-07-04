@@ -1,0 +1,38 @@
+.timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ado-space-3);
+}
+
+.timelineItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-bottom: var(--ado-space-3);
+  border-bottom: var(--ado-border-width) solid var(--ado-color-border);
+}
+
+.timelineItem:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.timelineMeta {
+  font-size: var(--ado-text-label-size);
+  color: var(--ado-color-text-tertiary);
+}
+
+.muted {
+  color: var(--ado-color-text-tertiary);
+  font-size: var(--ado-text-label-size);
+}
+
+.footerLink {
+  display: block;
+  margin-top: var(--ado-space-3);
+  font-size: var(--ado-text-dense-size);
+  color: var(--ado-color-text-tertiary);
+}

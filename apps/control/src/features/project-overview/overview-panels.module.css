@@ -1,0 +1,86 @@
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ado-space-3);
+  min-height: var(--ado-row-passive);
+  padding: var(--ado-space-2) 0;
+  border-bottom: var(--ado-border-width) solid var(--ado-color-border);
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.itemTitle {
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.itemMeta {
+  font-size: var(--ado-text-dense-size);
+  color: var(--ado-color-text-tertiary);
+}
+
+.muted {
+  color: var(--ado-color-text-tertiary);
+}
+
+.footerLink {
+  display: block;
+  margin-top: var(--ado-space-3);
+  font-size: var(--ado-text-dense-size);
+}
+
+.kvGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--ado-space-2) var(--ado-space-4);
+  font-size: var(--ado-text-dense-size);
+}
+
+.kvLabel {
+  color: var(--ado-color-text-tertiary);
+  display: block;
+  font-size: var(--ado-text-label-size);
+}
+
+.tableWrap {
+  overflow-x: auto;
+  /* Establishes a containing block so visually-hidden absolutely-positioned
+     descendants (e.g. an icon-only column header's sr-only label) stay
+     clipped inside this scroll region instead of escaping to the viewport's
+     static position and inflating page scrollWidth. */
+  position: relative;
+}
+
+.table {
+  width: 100%;
+  min-width: 640px;
+  border-collapse: collapse;
+  font-size: var(--ado-text-dense-size);
+}
+
+.table th,
+.table td {
+  text-align: left;
+  padding: var(--ado-space-2);
+  border-bottom: var(--ado-border-width) solid var(--ado-color-border);
+}
+
+.table thead th {
+  font-size: var(--ado-text-label-size);
+  font-weight: var(--ado-text-label-weight);
+  color: var(--ado-color-text-secondary);
+  background: var(--ado-color-surface-muted);
+}
+

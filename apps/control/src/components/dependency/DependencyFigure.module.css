@@ -1,0 +1,23 @@
+.figureWrap {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .figureWrap {
+    display: block;
+    overflow-x: auto;
+    margin-bottom: var(--ado-space-3);
+  }
+}
+
+.caption {
+  font-size: var(--ado-text-dense-size);
+  color: var(--ado-color-text-secondary);
+  margin: 0 0 var(--ado-space-2) 0;
+}
+
+.truncatedNote {
+  font-size: var(--ado-text-label-size);
+  color: var(--ado-color-state-warning);
+  margin-top: var(--ado-space-2);
+}

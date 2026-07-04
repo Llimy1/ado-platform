@@ -1,0 +1,60 @@
+.breadcrumb {
+  font-size: var(--ado-text-dense-size);
+  color: var(--ado-color-text-tertiary);
+}
+
+.title {
+  font-size: var(--ado-text-page-title-size);
+  line-height: var(--ado-text-page-title-line);
+  font-weight: var(--ado-text-page-title-weight);
+  margin: 0 0 var(--ado-space-3);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ado-space-3);
+  max-width: 420px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ado-space-1);
+}
+
+.label {
+  font-size: var(--ado-text-label-size);
+  font-weight: var(--ado-text-label-weight);
+  color: var(--ado-color-text-secondary);
+}
+
+.input {
+  height: var(--ado-control-height);
+  min-height: var(--ado-hit-target);
+  padding: 0 var(--ado-space-3);
+  border: var(--ado-border-width) solid var(--ado-color-border-strong);
+  border-radius: var(--ado-radius-control);
+  background: var(--ado-color-surface);
+  font-size: var(--ado-text-body-size);
+}
+
+.input[aria-invalid="true"] {
+  border-color: var(--ado-color-state-failure);
+}
+
+.fieldError {
+  color: var(--ado-color-state-failure);
+  font-size: var(--ado-text-dense-size);
+}
+
+.formError {
+  color: var(--ado-color-state-failure);
+  font-size: var(--ado-text-body-size);
+}
+
+.actions {
+  display: flex;
+  gap: var(--ado-space-2);
+  margin-top: var(--ado-space-2);
+}

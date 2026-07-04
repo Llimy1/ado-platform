@@ -1,0 +1,84 @@
+.breadcrumb {
+  font-size: var(--ado-text-dense-size);
+  color: var(--ado-color-text-tertiary);
+  margin-bottom: var(--ado-space-2);
+}
+
+.breadcrumb a {
+  color: inherit;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ado-space-2);
+  margin-bottom: var(--ado-space-4);
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--ado-space-3);
+  flex-wrap: wrap;
+}
+
+.title {
+  font-size: var(--ado-text-page-title-size);
+  line-height: var(--ado-text-page-title-line);
+  font-weight: var(--ado-text-page-title-weight);
+  margin: 0;
+}
+
+.metaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ado-space-4);
+  font-size: var(--ado-text-dense-size);
+  color: var(--ado-color-text-secondary);
+  align-items: center;
+}
+
+.metaLabel {
+  color: var(--ado-color-text-tertiary);
+  margin-right: 4px;
+}
+
+.section {
+  margin-bottom: var(--ado-space-4);
+}
+
+.scopeList {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 var(--ado-space-3) 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ado-space-1);
+  font-size: var(--ado-text-dense-size);
+}
+
+.scopeRow {
+  display: flex;
+  align-items: center;
+  gap: var(--ado-space-2);
+  min-height: var(--ado-row-passive);
+  border-bottom: var(--ado-border-width) solid var(--ado-color-border);
+}
+
+.scopeGroupLabel {
+  font-weight: 600;
+  margin-top: var(--ado-space-3);
+  margin-bottom: var(--ado-space-1);
+}
+
+.commandStrip {
+  display: flex;
+  gap: var(--ado-space-3);
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.disabledReason {
+  font-size: var(--ado-text-label-size);
+  color: var(--ado-color-text-tertiary);
+}

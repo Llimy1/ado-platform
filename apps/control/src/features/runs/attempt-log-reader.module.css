@@ -1,0 +1,35 @@
+.streamLinks {
+  display: flex;
+  gap: var(--ado-space-2);
+  margin-bottom: var(--ado-space-3);
+}
+
+.streamLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--ado-hit-target);
+  padding: 0 var(--ado-space-3);
+  border-radius: var(--ado-radius-control);
+  font-size: var(--ado-text-dense-size);
+  font-weight: 600;
+  color: var(--ado-color-text-secondary);
+  border: var(--ado-border-width) solid var(--ado-color-border-strong);
+}
+
+.streamLinkActive {
+  background: var(--ado-color-state-info-bg);
+  color: var(--ado-color-focus);
+  border-color: var(--ado-color-focus);
+}
+
+.redactionNote {
+  font-size: var(--ado-text-dense-size);
+  color: var(--ado-color-state-warning);
+  margin-bottom: var(--ado-space-2);
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--ado-space-2);
+}

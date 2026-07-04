@@ -1,0 +1,50 @@
+.wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ado-space-1);
+  max-width: 100%;
+  min-width: 0;
+}
+
+.value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 220px;
+}
+
+.copyButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  min-height: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--ado-color-text-tertiary);
+  border-radius: var(--ado-radius-control);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.copyButton:hover {
+  background: var(--ado-color-surface-muted);
+  color: var(--ado-color-text-strong);
+}
+
+.tooltip {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 0;
+  z-index: var(--ado-z-tooltip);
+  background: var(--ado-color-text-strong);
+  color: var(--ado-color-surface);
+  font-size: var(--ado-text-label-size);
+  line-height: var(--ado-text-label-line);
+  padding: var(--ado-space-1) var(--ado-space-2);
+  border-radius: var(--ado-radius-control);
+  white-space: nowrap;
+  pointer-events: none;
+}

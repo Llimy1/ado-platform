@@ -1,0 +1,45 @@
+.dialog {
+  border: none;
+  border-radius: var(--ado-radius-dialog);
+  padding: 0;
+  box-shadow: var(--ado-shadow-overlay);
+  width: min(480px, calc(100vw - 32px));
+  max-height: calc(100vh - 64px);
+}
+
+.dialog::backdrop {
+  background: rgba(15, 23, 42, 0.4);
+}
+
+.inner {
+  padding: var(--ado-panel-padding-large);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ado-space-4);
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--ado-space-3);
+}
+
+.title {
+  font-size: var(--ado-text-section-title-size);
+  line-height: var(--ado-text-section-title-line);
+  font-weight: var(--ado-text-section-title-weight);
+  margin: 0;
+}
+
+.body {
+  font-size: var(--ado-text-body-size);
+  line-height: var(--ado-text-body-line);
+  color: var(--ado-color-text-secondary);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--ado-space-2);
+}

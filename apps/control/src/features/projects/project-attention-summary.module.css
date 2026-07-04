@@ -1,0 +1,30 @@
+.summary {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: var(--ado-space-3);
+  margin: var(--ado-space-4) 0;
+}
+
+@media (min-width: 768px) {
+  .summary {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.cell {
+  border: var(--ado-border-width) solid var(--ado-color-border);
+  border-radius: var(--ado-radius-panel);
+  padding: var(--ado-space-3) var(--ado-space-4);
+  background: var(--ado-color-surface);
+}
+
+.count {
+  font-size: var(--ado-text-page-title-size);
+  font-weight: var(--ado-text-page-title-weight);
+  line-height: 1.2;
+}
+
+.label {
+  font-size: var(--ado-text-dense-size);
+  color: var(--ado-color-text-secondary);
+}

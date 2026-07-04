@@ -1,0 +1,8 @@
+/*
+ * Static skeleton fill. ADO/CONTROL_ROOM_DESIGN_SYSTEM.md §7 prohibits
+ * infinite pulse and infinite shimmer, so this block never animates.
+ */
+.skeleton {
+  background: var(--ado-color-surface-muted);
+  border-radius: var(--ado-radius-control);
+}
