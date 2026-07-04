@@ -3,6 +3,7 @@ package com.ado.platform.api.common.api.error;
 import com.ado.platform.api.common.api.response.ApiFieldError;
 import com.ado.platform.api.common.api.response.ApiResponse;
 import com.ado.platform.api.project.exception.DuplicateProjectKeyException;
+import com.ado.platform.api.project.exception.ProjectNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -36,6 +37,16 @@ public class GlobalExceptionHandler {
         return ApiResponse.error(
                 DuplicateProjectKeyException.CODE,
                 DuplicateProjectKeyException.MESSAGE,
+                List.of()
+        );
+    }
+
+    @ExceptionHandler(ProjectNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ApiResponse<Void> handleProjectNotFoundException(ProjectNotFoundException exception) {
+        return ApiResponse.error(
+                ProjectNotFoundException.CODE,
+                ProjectNotFoundException.MESSAGE,
                 List.of()
         );
     }
