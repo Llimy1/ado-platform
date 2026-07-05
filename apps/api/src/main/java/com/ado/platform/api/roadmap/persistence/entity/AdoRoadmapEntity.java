@@ -67,4 +67,13 @@ public class AdoRoadmapEntity extends BaseTimeEntity {
                 .status(AdoRoadmapStatus.DRAFT)
                 .build();
     }
+
+    public void updateDetails(String title, String description) {
+        this.title = title;
+        this.description = description;
+    }
+
+    public void archive() {
+        this.status = AdoRoadmapStatus.ARCHIVED;
+    }
 }
