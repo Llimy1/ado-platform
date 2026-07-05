@@ -29,6 +29,22 @@ export interface AdoProjectCreateRequest {
 }
 
 /**
+ * ADO 공통 API 응답
+ */
+export interface ApiResponse {
+  /** 요청 성공 여부 */
+  success?: boolean;
+  /** 응답 코드 */
+  code?: string;
+  /** 응답 메시지 */
+  message?: string;
+  /** 응답 데이터 */
+  data?: unknown;
+  /** 필드 오류 목록 */
+  errors?: ApiFieldError[];
+}
+
+/**
  * ADO 프로젝트 응답
  */
 export interface AdoProjectResponse {
@@ -60,6 +76,64 @@ export interface ApiResponseAdoProjectResponse {
   errors?: ApiFieldError[];
 }
 
+export interface AdoRoadmapCreateRequest {
+  /**
+     * 로드맵 제목
+     * @minLength 1
+     */
+  title: string;
+  /** 로드맵 설명 */
+  description?: string;
+}
+
+/**
+ * 로드맵 상태
+ */
+export type AdoRoadmapResponseStatus = typeof AdoRoadmapResponseStatus[keyof typeof AdoRoadmapResponseStatus];
+
+
+export const AdoRoadmapResponseStatus = {
+  DRAFT: 'DRAFT',
+  ACTIVE: 'ACTIVE',
+  ARCHIVED: 'ARCHIVED',
+} as const;
+
+/**
+ * ADO 로드맵 응답
+ */
+export interface AdoRoadmapResponse {
+  /** 로드맵 ID */
+  id?: number;
+  /** 프로젝트 ID */
+  projectId?: number;
+  /** 로드맵 제목 */
+  title?: string;
+  /** 로드맵 설명 */
+  description?: string;
+  /** 로드맵 상태 */
+  status?: AdoRoadmapResponseStatus;
+  /** 생성 일시 */
+  createdAt?: string;
+  /** 수정 일시 */
+  updatedAt?: string;
+}
+
+/**
+ * ADO 공통 API 응답
+ */
+export interface ApiResponseAdoRoadmapResponse {
+  /** 요청 성공 여부 */
+  success?: boolean;
+  /** 응답 코드 */
+  code?: string;
+  /** 응답 메시지 */
+  message?: string;
+  /** 응답 데이터 */
+  data?: AdoRoadmapResponse;
+  /** 필드 오류 목록 */
+  errors?: ApiFieldError[];
+}
+
 /**
  * ADO 공통 API 응답
  */
@@ -72,6 +146,22 @@ export interface ApiResponseListAdoProjectResponse {
   message?: string;
   /** 응답 데이터 */
   data?: AdoProjectResponse[];
+  /** 필드 오류 목록 */
+  errors?: ApiFieldError[];
+}
+
+/**
+ * ADO 공통 API 응답
+ */
+export interface ApiResponseListAdoRoadmapResponse {
+  /** 요청 성공 여부 */
+  success?: boolean;
+  /** 응답 코드 */
+  code?: string;
+  /** 응답 메시지 */
+  message?: string;
+  /** 응답 데이터 */
+  data?: AdoRoadmapResponse[];
   /** 필드 오류 목록 */
   errors?: ApiFieldError[];
 }

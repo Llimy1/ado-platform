@@ -7,6 +7,7 @@
  */
 import type {
   AdoProjectCreateRequest,
+  ApiResponse,
   ApiResponseAdoProjectResponse,
   ApiResponseListAdoProjectResponse
 } from '../aDOPlatformAPI.schemas';
@@ -55,12 +56,12 @@ export type createProjectResponse201 = {
 }
 
 export type createProjectResponse400 = {
-  data: ApiResponseAdoProjectResponse
+  data: ApiResponse
   status: 400
 }
 
 export type createProjectResponse409 = {
-  data: ApiResponseAdoProjectResponse
+  data: ApiResponse
   status: 409
 }
 
@@ -103,7 +104,7 @@ export type findProjectResponse200 = {
 }
 
 export type findProjectResponse404 = {
-  data: ApiResponseAdoProjectResponse
+  data: ApiResponse
   status: 404
 }
 
