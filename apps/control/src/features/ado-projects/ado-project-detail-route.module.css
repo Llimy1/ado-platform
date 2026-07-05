@@ -35,6 +35,114 @@
   font-size: var(--ado-text-body-size);
 }
 
+.roadmapPanel {
+  margin-top: var(--ado-space-4);
+}
+
+.roadmapForm {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) minmax(220px, 2fr) max-content;
+  gap: var(--ado-space-2);
+  align-items: end;
+  margin-bottom: var(--ado-space-3);
+}
+
+.roadmapField {
+  display: grid;
+  gap: var(--ado-space-1);
+}
+
+.input {
+  width: 100%;
+  min-height: 34px;
+  border: var(--ado-border-width) solid var(--ado-color-border);
+  border-radius: var(--ado-radius-control);
+  background: var(--ado-color-surface);
+  color: var(--ado-color-text-primary);
+  padding: 0 var(--ado-space-2);
+  font: inherit;
+}
+
+.input:focus {
+  border-color: var(--ado-color-focus);
+  outline: 2px solid color-mix(in srgb, var(--ado-color-focus) 24%, transparent);
+  outline-offset: 1px;
+}
+
+.inlineError {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ado-space-2);
+  border: var(--ado-border-width) solid var(--ado-color-danger);
+  border-radius: var(--ado-radius-panel);
+  padding: var(--ado-space-2) var(--ado-space-3);
+  margin-bottom: var(--ado-space-3);
+  color: var(--ado-color-danger);
+  font-size: var(--ado-text-dense-size);
+}
+
+.inlineError code {
+  color: var(--ado-color-text-tertiary);
+  font-size: var(--ado-text-label-size);
+}
+
+.tableWrap {
+  border: var(--ado-border-width) solid var(--ado-color-border);
+  border-radius: var(--ado-radius-panel);
+  overflow-x: auto;
+  background: var(--ado-color-surface);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  text-align: left;
+  padding: var(--ado-space-2) var(--ado-space-3);
+  border-bottom: var(--ado-border-width) solid var(--ado-color-border);
+  font-size: var(--ado-text-dense-size);
+  line-height: var(--ado-text-dense-line);
+  vertical-align: middle;
+}
+
+.table thead th {
+  background: var(--ado-color-surface-muted);
+  font-size: var(--ado-text-label-size);
+  font-weight: var(--ado-text-label-weight);
+  color: var(--ado-color-text-secondary);
+  height: var(--ado-row-passive);
+}
+
+.table tbody tr:hover {
+  background: var(--ado-color-surface-muted);
+}
+
+.roadmapTitle,
+.roadmapDescription {
+  display: block;
+}
+
+.roadmapTitle {
+  font-weight: 600;
+}
+
+.roadmapDescription {
+  color: var(--ado-color-text-tertiary);
+  margin-top: 2px;
+}
+
+.caption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
 .notFoundWrap {
   border: var(--ado-border-width) solid var(--ado-color-border);
   border-radius: var(--ado-radius-panel);
@@ -46,4 +154,10 @@
   color: var(--ado-color-text-tertiary);
   font-size: var(--ado-text-dense-size);
   margin-top: var(--ado-space-1);
+}
+
+@media (max-width: 760px) {
+  .roadmapForm {
+    grid-template-columns: 1fr;
+  }
 }
