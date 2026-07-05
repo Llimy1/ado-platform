@@ -1,14 +1,58 @@
 "use client";
 
+import { useState, type FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import styles from "./ado-project-detail-route.module.css";
 import { Panel } from "@/components/Panel";
 import { Button } from "@/components/Button";
+import { EmptyState } from "@/components/StateViews";
+import { AdoApiError } from "@/lib/api/errors";
+import { roadmapClient } from "@/lib/data/ado-roadmaps";
 import { formatAbsoluteTime } from "@/lib/format";
 import type { AdoProject } from "@/lib/contracts/ado-project";
+import type { AdoRoadmap } from "@/lib/contracts/ado-roadmap";
 
-export function AdoProjectDetailRoute({ project }: { project: AdoProject }) {
+interface AdoProjectDetailRouteProps {
+  project: AdoProject;
+  initialRoadmaps: AdoRoadmap[] | null;
+  initialRoadmapError?: { code: string; message: string } | null;
+}
+
+export function AdoProjectDetailRoute({
+  project,
+  initialRoadmaps,
+  initialRoadmapError,
+}: AdoProjectDetailRouteProps) {
+  const [roadmaps, setRoadmaps] = useState<AdoRoadmap[]>(initialRoadmaps ?? []);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [roadmapError, setRoadmapError] = useState(initialRoadmapError ?? null);
+
+  async function handleCreateRoadmap(e: FormEvent) {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setRoadmapError(null);
+    try {
+      const created = await roadmapClient.createRoadmap(project.id, {
+        title: title.trim(),
+        description: description.trim() || undefined,
+      });
+      setRoadmaps((items) => [created, ...items]);
+      setTitle("");
+      setDescription("");
+    } catch (err) {
+      setRoadmapError(
+        err instanceof AdoApiError
+          ? { code: err.code, message: err.message }
+          : { code: "NETWORK_ERROR", message: err instanceof Error ? err.message : "네트워크 오류가 발생했습니다." },
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
   return (
     <div>
       <p className={styles.breadcrumb}>
@@ -30,6 +74,77 @@ export function AdoProjectDetailRoute({ project }: { project: AdoProject }) {
           <dt className={styles.fieldLabel}>수정일</dt>
           <dd className={styles.fieldValue}>{formatAbsoluteTime(project.updatedAt)}</dd>
         </dl>
+      </Panel>
+
+      <Panel title="로드맵" className={styles.roadmapPanel}>
+        <form className={styles.roadmapForm} onSubmit={handleCreateRoadmap}>
+          <div className={styles.roadmapField}>
+            <label className={styles.fieldLabel} htmlFor="roadmap-title">
+              제목
+            </label>
+            <input
+              id="roadmap-title"
+              className={styles.input}
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+            />
+          </div>
+          <div className={styles.roadmapField}>
+            <label className={styles.fieldLabel} htmlFor="roadmap-description">
+              설명
+            </label>
+            <input
+              id="roadmap-description"
+              className={styles.input}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </div>
+          <Button type="submit" variant="primary" dense disabled={isSubmitting}>
+            {isSubmitting ? "생성 중" : "로드맵 생성"}
+          </Button>
+        </form>
+
+        {roadmapError ? (
+          <div className={styles.inlineError} role="alert">
+            <span>{roadmapError.message}</span>
+            <code>{roadmapError.code}</code>
+          </div>
+        ) : null}
+
+        {roadmaps.length === 0 ? (
+          <EmptyState title="등록된 로드맵이 없습니다." />
+        ) : (
+          <div className={styles.tableWrap}>
+            <table className={styles.table}>
+              <caption className={styles.caption}>프로젝트 로드맵 목록, {roadmaps.length}건</caption>
+              <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">제목</th>
+                  <th scope="col">상태</th>
+                  <th scope="col">생성일</th>
+                </tr>
+              </thead>
+              <tbody>
+                {roadmaps.map((roadmap) => (
+                  <tr key={roadmap.id}>
+                    <td>{roadmap.id}</td>
+                    <td>
+                      <span className={styles.roadmapTitle}>{roadmap.title}</span>
+                      {roadmap.description ? (
+                        <span className={styles.roadmapDescription}>{roadmap.description}</span>
+                      ) : null}
+                    </td>
+                    <td>{roadmap.status}</td>
+                    <td>{formatAbsoluteTime(roadmap.createdAt)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </Panel>
     </div>
   );
