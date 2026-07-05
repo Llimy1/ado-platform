@@ -6,6 +6,7 @@ import com.ado.platform.api.project.persistence.entity.AdoProjectEntity;
 import com.ado.platform.api.project.persistence.repository.AdoProjectRepository;
 import com.ado.platform.api.roadmap.api.dto.AdoRoadmapCreateRequest;
 import com.ado.platform.api.roadmap.api.dto.AdoRoadmapResponse;
+import com.ado.platform.api.roadmap.api.dto.AdoRoadmapUpdateRequest;
 import com.ado.platform.api.roadmap.persistence.entity.AdoRoadmapEntity;
 import com.ado.platform.api.roadmap.persistence.repository.AdoRoadmapRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,5 +30,25 @@ public class AdoRoadmapCommandService {
         );
 
         return AdoRoadmapMapper.toResponse(saved);
+    }
+
+    @Transactional
+    public AdoRoadmapResponse updateRoadmap(Long roadmapId, AdoRoadmapUpdateRequest request) {
+        AdoRoadmapEntity roadmap = roadmapRepository.findById(roadmapId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.ROADMAP_NOT_FOUND));
+
+        roadmap.updateDetails(request.title(), request.description());
+
+        return AdoRoadmapMapper.toResponse(roadmapRepository.saveAndFlush(roadmap));
+    }
+
+    @Transactional
+    public AdoRoadmapResponse archiveRoadmap(Long roadmapId) {
+        AdoRoadmapEntity roadmap = roadmapRepository.findById(roadmapId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.ROADMAP_NOT_FOUND));
+
+        roadmap.archive();
+
+        return AdoRoadmapMapper.toResponse(roadmapRepository.saveAndFlush(roadmap));
     }
 }

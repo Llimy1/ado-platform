@@ -5,6 +5,7 @@ import com.ado.platform.api.common.api.error.ErrorCode;
 import com.ado.platform.api.common.api.error.GlobalExceptionHandler;
 import com.ado.platform.api.roadmap.api.dto.AdoRoadmapCreateRequest;
 import com.ado.platform.api.roadmap.api.dto.AdoRoadmapResponse;
+import com.ado.platform.api.roadmap.api.dto.AdoRoadmapUpdateRequest;
 import com.ado.platform.api.roadmap.application.AdoRoadmapCommandService;
 import com.ado.platform.api.roadmap.application.AdoRoadmapQueryService;
 import com.ado.platform.api.roadmap.persistence.entity.AdoRoadmapStatus;
@@ -26,6 +27,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -117,6 +119,77 @@ public class AdoRoadmapControllerTests {
     }
 
     @Test
+    @DisplayName("로드맵 수정")
+    void updateRoadmap() throws Exception {
+        given(commandService.updateRoadmap(any(Long.class), any(AdoRoadmapUpdateRequest.class)))
+                .willReturn(updatedResponse());
+
+        mockMvc.perform(patch("/v1/roadmaps/10")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "title": "Roadmap Update/Archive API",
+                                  "description": "Roadmap update and archive API"
+                                }
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.code").value("OK"))
+                .andExpect(jsonPath("$.message").value("요청이 성공했습니다."))
+                .andExpect(jsonPath("$.data.id").value(10))
+                .andExpect(jsonPath("$.data.title").value("Roadmap Update/Archive API"))
+                .andExpect(jsonPath("$.data.description").value("Roadmap update and archive API"))
+                .andExpect(jsonPath("$.data.status").value("DRAFT"))
+                .andExpect(jsonPath("$.errors").isEmpty());
+
+        then(commandService).should().updateRoadmap(
+                org.mockito.ArgumentMatchers.eq(10L),
+                argThat(request -> request != null
+                        && request.title().equals("Roadmap Update/Archive API")
+                        && request.description().equals("Roadmap update and archive API"))
+        );
+    }
+
+    @Test
+    @DisplayName("로드맵 수정 실패 - 제목 공백")
+    void failsToUpdateWhenTitleIsBlank() throws Exception {
+        mockMvc.perform(patch("/v1/roadmaps/10")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "title": "",
+                                  "description": "Roadmap update and archive API"
+                                }
+                                """))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.success").value(false))
+                .andExpect(jsonPath("$.code").value("VALIDATION_FAILED"))
+                .andExpect(jsonPath("$.message").value("요청 값이 올바르지 않습니다."))
+                .andExpect(jsonPath("$.data").doesNotExist())
+                .andExpect(jsonPath("$.errors[0].field").value("title"))
+                .andExpect(jsonPath("$.errors[0].message").value("로드맵 제목은 필수입니다."));
+
+        verifyNoInteractions(commandService);
+    }
+
+    @Test
+    @DisplayName("로드맵 아카이브")
+    void archiveRoadmap() throws Exception {
+        given(commandService.archiveRoadmap(10L)).willReturn(archivedResponse());
+
+        mockMvc.perform(post("/v1/roadmaps/10/archive"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.code").value("OK"))
+                .andExpect(jsonPath("$.message").value("요청이 성공했습니다."))
+                .andExpect(jsonPath("$.data.id").value(10))
+                .andExpect(jsonPath("$.data.status").value("ARCHIVED"))
+                .andExpect(jsonPath("$.errors").isEmpty());
+
+        then(commandService).should().archiveRoadmap(10L);
+    }
+
+    @Test
     @DisplayName("로드맵 생성 실패 - 제목 공백")
     void failsWhenTitleIsBlank() throws Exception {
         mockMvc.perform(post("/v1/projects/1/roadmaps")
@@ -192,6 +265,49 @@ public class AdoRoadmapControllerTests {
         then(queryService).should().findRoadmap(999L);
     }
 
+    @Test
+    @DisplayName("로드맵 수정 실패 - 로드맵 없음")
+    void failsToUpdateWhenRoadmapDoesNotExist() throws Exception {
+        given(commandService.updateRoadmap(any(Long.class), any(AdoRoadmapUpdateRequest.class)))
+                .willThrow(new BusinessException(ErrorCode.ROADMAP_NOT_FOUND));
+
+        mockMvc.perform(patch("/v1/roadmaps/999")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "title": "Roadmap Update/Archive API",
+                                  "description": "Roadmap update and archive API"
+                                }
+                                """))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.success").value(false))
+                .andExpect(jsonPath("$.code").value("ROADMAP_NOT_FOUND"))
+                .andExpect(jsonPath("$.message").value("로드맵을 찾을 수 없습니다."))
+                .andExpect(jsonPath("$.data").doesNotExist())
+                .andExpect(jsonPath("$.errors").isEmpty());
+
+        then(commandService).should().updateRoadmap(
+                org.mockito.ArgumentMatchers.eq(999L),
+                any(AdoRoadmapUpdateRequest.class)
+        );
+    }
+
+    @Test
+    @DisplayName("로드맵 아카이브 실패 - 로드맵 없음")
+    void failsToArchiveWhenRoadmapDoesNotExist() throws Exception {
+        given(commandService.archiveRoadmap(999L)).willThrow(new BusinessException(ErrorCode.ROADMAP_NOT_FOUND));
+
+        mockMvc.perform(post("/v1/roadmaps/999/archive"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.success").value(false))
+                .andExpect(jsonPath("$.code").value("ROADMAP_NOT_FOUND"))
+                .andExpect(jsonPath("$.message").value("로드맵을 찾을 수 없습니다."))
+                .andExpect(jsonPath("$.data").doesNotExist())
+                .andExpect(jsonPath("$.errors").isEmpty());
+
+        then(commandService).should().archiveRoadmap(999L);
+    }
+
     private AdoRoadmapResponse response() {
         return new AdoRoadmapResponse(
                 10L,
@@ -199,6 +315,30 @@ public class AdoRoadmapControllerTests {
                 "Roadmap Foundation",
                 "Roadmap persistence and API foundation",
                 AdoRoadmapStatus.DRAFT,
+                Instant.parse("2026-07-05T00:34:40Z"),
+                Instant.parse("2026-07-05T00:34:40Z")
+        );
+    }
+
+    private AdoRoadmapResponse updatedResponse() {
+        return new AdoRoadmapResponse(
+                10L,
+                1L,
+                "Roadmap Update/Archive API",
+                "Roadmap update and archive API",
+                AdoRoadmapStatus.DRAFT,
+                Instant.parse("2026-07-05T00:34:40Z"),
+                Instant.parse("2026-07-05T00:34:40Z")
+        );
+    }
+
+    private AdoRoadmapResponse archivedResponse() {
+        return new AdoRoadmapResponse(
+                10L,
+                1L,
+                "Roadmap Foundation",
+                "Roadmap persistence and API foundation",
+                AdoRoadmapStatus.ARCHIVED,
                 Instant.parse("2026-07-05T00:34:40Z"),
                 Instant.parse("2026-07-05T00:34:40Z")
         );

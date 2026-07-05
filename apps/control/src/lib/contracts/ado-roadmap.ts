@@ -6,7 +6,9 @@
 import type {
   AdoRoadmapCreateRequest,
   AdoRoadmapResponse,
+  AdoRoadmapUpdateRequest,
 } from "@/lib/api/generated/aDOPlatformAPI.schemas";
 
 export type AdoRoadmap = Required<AdoRoadmapResponse>;
 export type AdoRoadmapCreateInput = AdoRoadmapCreateRequest;
+export type AdoRoadmapUpdateInput = AdoRoadmapUpdateRequest;

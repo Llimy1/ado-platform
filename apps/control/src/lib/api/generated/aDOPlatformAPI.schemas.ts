@@ -15,19 +15,6 @@ export interface ApiFieldError {
   message?: string;
 }
 
-export interface AdoProjectCreateRequest {
-  /**
-     * 프로젝트 키
-     * @minLength 1
-     */
-  projectKey: string;
-  /**
-     * 프로젝트 이름
-     * @minLength 1
-     */
-  name: string;
-}
-
 /**
  * ADO 공통 API 응답
  */
@@ -42,48 +29,6 @@ export interface ApiResponse {
   data?: unknown;
   /** 필드 오류 목록 */
   errors?: ApiFieldError[];
-}
-
-/**
- * ADO 프로젝트 응답
- */
-export interface AdoProjectResponse {
-  /** 프로젝트 ID */
-  id?: number;
-  /** 프로젝트 키 */
-  projectKey?: string;
-  /** 프로젝트 이름 */
-  name?: string;
-  /** 생성 일시 */
-  createdAt?: string;
-  /** 수정 일시 */
-  updatedAt?: string;
-}
-
-/**
- * ADO 공통 API 응답
- */
-export interface ApiResponseAdoProjectResponse {
-  /** 요청 성공 여부 */
-  success?: boolean;
-  /** 응답 코드 */
-  code?: string;
-  /** 응답 메시지 */
-  message?: string;
-  /** 응답 데이터 */
-  data?: AdoProjectResponse;
-  /** 필드 오류 목록 */
-  errors?: ApiFieldError[];
-}
-
-export interface AdoRoadmapCreateRequest {
-  /**
-     * 로드맵 제목
-     * @minLength 1
-     */
-  title: string;
-  /** 로드맵 설명 */
-  description?: string;
 }
 
 /**
@@ -132,6 +77,71 @@ export interface ApiResponseAdoRoadmapResponse {
   data?: AdoRoadmapResponse;
   /** 필드 오류 목록 */
   errors?: ApiFieldError[];
+}
+
+export interface AdoProjectCreateRequest {
+  /**
+     * 프로젝트 키
+     * @minLength 1
+     */
+  projectKey: string;
+  /**
+     * 프로젝트 이름
+     * @minLength 1
+     */
+  name: string;
+}
+
+/**
+ * ADO 프로젝트 응답
+ */
+export interface AdoProjectResponse {
+  /** 프로젝트 ID */
+  id?: number;
+  /** 프로젝트 키 */
+  projectKey?: string;
+  /** 프로젝트 이름 */
+  name?: string;
+  /** 생성 일시 */
+  createdAt?: string;
+  /** 수정 일시 */
+  updatedAt?: string;
+}
+
+/**
+ * ADO 공통 API 응답
+ */
+export interface ApiResponseAdoProjectResponse {
+  /** 요청 성공 여부 */
+  success?: boolean;
+  /** 응답 코드 */
+  code?: string;
+  /** 응답 메시지 */
+  message?: string;
+  /** 응답 데이터 */
+  data?: AdoProjectResponse;
+  /** 필드 오류 목록 */
+  errors?: ApiFieldError[];
+}
+
+export interface AdoRoadmapCreateRequest {
+  /**
+     * 로드맵 제목
+     * @minLength 1
+     */
+  title: string;
+  /** 로드맵 설명 */
+  description?: string;
+}
+
+export interface AdoRoadmapUpdateRequest {
+  /**
+     * 로드맵 제목
+     * @minLength 1
+     */
+  title: string;
+  /** 로드맵 설명 */
+  description?: string;
 }
 
 /**

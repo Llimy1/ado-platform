@@ -8,6 +8,7 @@ import com.ado.platform.api.project.api.docs.ProjectNotFoundResponse;
 import com.ado.platform.api.roadmap.api.docs.RoadmapNotFoundResponse;
 import com.ado.platform.api.roadmap.api.dto.AdoRoadmapCreateRequest;
 import com.ado.platform.api.roadmap.api.dto.AdoRoadmapResponse;
+import com.ado.platform.api.roadmap.api.dto.AdoRoadmapUpdateRequest;
 import com.ado.platform.api.roadmap.application.AdoRoadmapCommandService;
 import com.ado.platform.api.roadmap.application.AdoRoadmapQueryService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -79,5 +81,35 @@ public class AdoRoadmapController {
             @Valid @RequestBody AdoRoadmapCreateRequest request
     ) {
         return ApiResponse.success(commandService.createRoadmap(projectId, request));
+    }
+
+    @Operation(
+            summary = "로드맵 수정",
+            description = "로드맵의 제목과 설명을 수정합니다."
+    )
+    @OkResponse
+    @ValidationErrorResponse
+    @RoadmapNotFoundResponse
+    @PatchMapping(value = "/roadmaps/{roadmapId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ApiResponse<AdoRoadmapResponse> updateRoadmap(
+            @Parameter(description = "로드맵 ID", example = "1", required = true)
+            @PathVariable Long roadmapId,
+            @Valid @RequestBody AdoRoadmapUpdateRequest request
+    ) {
+        return ApiResponse.success(commandService.updateRoadmap(roadmapId, request));
+    }
+
+    @Operation(
+            summary = "로드맵 아카이브",
+            description = "로드맵 상태를 ARCHIVED로 변경합니다."
+    )
+    @OkResponse
+    @RoadmapNotFoundResponse
+    @PostMapping("/roadmaps/{roadmapId}/archive")
+    public ApiResponse<AdoRoadmapResponse> archiveRoadmap(
+            @Parameter(description = "로드맵 ID", example = "1", required = true)
+            @PathVariable Long roadmapId
+    ) {
+        return ApiResponse.success(commandService.archiveRoadmap(roadmapId));
     }
 }

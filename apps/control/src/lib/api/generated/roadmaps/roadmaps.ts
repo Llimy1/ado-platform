@@ -7,12 +7,55 @@
  */
 import type {
   AdoRoadmapCreateRequest,
+  AdoRoadmapUpdateRequest,
   ApiResponse,
   ApiResponseAdoRoadmapResponse,
   ApiResponseListAdoRoadmapResponse
 } from '../aDOPlatformAPI.schemas';
 
 import { adoFetch } from '../../mutator';
+
+export type archiveRoadmapResponse200 = {
+  data: ApiResponseAdoRoadmapResponse
+  status: 200
+}
+
+export type archiveRoadmapResponse404 = {
+  data: ApiResponse
+  status: 404
+}
+
+export type archiveRoadmapResponseSuccess = (archiveRoadmapResponse200) & {
+  headers: Headers;
+};
+export type archiveRoadmapResponseError = (archiveRoadmapResponse404) & {
+  headers: Headers;
+};
+
+export type archiveRoadmapResponse = (archiveRoadmapResponseSuccess | archiveRoadmapResponseError)
+
+export const getArchiveRoadmapUrl = (roadmapId: number,) => {
+
+
+
+
+  return `/v1/roadmaps/${roadmapId}/archive`
+}
+
+/**
+ * 로드맵 상태를 ARCHIVED로 변경합니다.
+ * @summary 로드맵 아카이브
+ */
+export const archiveRoadmap = async (roadmapId: number, options?: RequestInit): Promise<archiveRoadmapResponse> => {
+
+  return adoFetch<archiveRoadmapResponse>(getArchiveRoadmapUrl(roadmapId),
+  {
+    ...options,
+    method: 'POST'
+
+
+  }
+);}
 
 export type findRoadmapsResponse200 = {
   data: ApiResponseListAdoRoadmapResponse
@@ -145,5 +188,54 @@ export const findRoadmap = async (roadmapId: number, options?: RequestInit): Pro
     method: 'GET'
 
 
+  }
+);}
+
+
+export type updateRoadmapResponse200 = {
+  data: ApiResponseAdoRoadmapResponse
+  status: 200
+}
+
+export type updateRoadmapResponse400 = {
+  data: ApiResponse
+  status: 400
+}
+
+export type updateRoadmapResponse404 = {
+  data: ApiResponse
+  status: 404
+}
+
+export type updateRoadmapResponseSuccess = (updateRoadmapResponse200) & {
+  headers: Headers;
+};
+export type updateRoadmapResponseError = (updateRoadmapResponse400 | updateRoadmapResponse404) & {
+  headers: Headers;
+};
+
+export type updateRoadmapResponse = (updateRoadmapResponseSuccess | updateRoadmapResponseError)
+
+export const getUpdateRoadmapUrl = (roadmapId: number,) => {
+
+
+
+
+  return `/v1/roadmaps/${roadmapId}`
+}
+
+/**
+ * 로드맵의 제목과 설명을 수정합니다.
+ * @summary 로드맵 수정
+ */
+export const updateRoadmap = async (roadmapId: number,
+    adoRoadmapUpdateRequest: AdoRoadmapUpdateRequest, options?: RequestInit): Promise<updateRoadmapResponse> => {
+
+  return adoFetch<updateRoadmapResponse>(getUpdateRoadmapUrl(roadmapId),
+  {
+    ...options,
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(adoRoadmapUpdateRequest)
   }
 );}

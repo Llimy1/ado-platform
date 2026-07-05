@@ -6,6 +6,7 @@ import com.ado.platform.api.project.persistence.entity.AdoProjectEntity;
 import com.ado.platform.api.project.persistence.repository.AdoProjectRepository;
 import com.ado.platform.api.roadmap.api.dto.AdoRoadmapCreateRequest;
 import com.ado.platform.api.roadmap.api.dto.AdoRoadmapResponse;
+import com.ado.platform.api.roadmap.api.dto.AdoRoadmapUpdateRequest;
 import com.ado.platform.api.roadmap.persistence.entity.AdoRoadmapEntity;
 import com.ado.platform.api.roadmap.persistence.entity.AdoRoadmapStatus;
 import com.ado.platform.api.roadmap.persistence.repository.AdoRoadmapRepository;
@@ -93,5 +94,100 @@ public class AdoRoadmapCommandServiceTests {
 
         then(projectRepository).should().findById(999L);
         then(roadmapRepository).should(never()).save(any());
+    }
+
+    @Test
+    @DisplayName("로드맵 제목과 설명을 수정")
+    void updatesRoadmapDetails() {
+        AdoRoadmapUpdateRequest request = new AdoRoadmapUpdateRequest(
+                "Roadmap Update/Archive API",
+                "Roadmap update and archive API"
+        );
+        AdoProjectEntity project = AdoProjectEntity.create("ado-platform", "ADO Platform");
+        ReflectionTestUtils.setField(project, "id", 1L);
+        AdoRoadmapEntity roadmap = AdoRoadmapEntity.createDraft(
+                project,
+                "Roadmap Foundation",
+                "Roadmap persistence and API foundation"
+        );
+        ReflectionTestUtils.setField(roadmap, "id", 10L);
+        ReflectionTestUtils.setField(roadmap, "createdAt", Instant.parse("2026-07-05T00:34:40Z"));
+        ReflectionTestUtils.setField(roadmap, "updatedAt", Instant.parse("2026-07-05T00:34:40Z"));
+
+        given(roadmapRepository.findById(10L)).willReturn(Optional.of(roadmap));
+        given(roadmapRepository.saveAndFlush(roadmap)).willReturn(roadmap);
+
+        AdoRoadmapResponse response = commandService.updateRoadmap(10L, request);
+
+        assertThat(response.id()).isEqualTo(10L);
+        assertThat(response.title()).isEqualTo("Roadmap Update/Archive API");
+        assertThat(response.description()).isEqualTo("Roadmap update and archive API");
+        assertThat(response.status()).isEqualTo(AdoRoadmapStatus.DRAFT);
+
+        then(roadmapRepository).should().findById(10L);
+        then(roadmapRepository).should().saveAndFlush(roadmap);
+        then(roadmapRepository).should(never()).save(any());
+    }
+
+    @Test
+    @DisplayName("로드맵이 없으면 수정 실패")
+    void failsToUpdateWhenRoadmapDoesNotExist() {
+        AdoRoadmapUpdateRequest request = new AdoRoadmapUpdateRequest(
+                "Roadmap Update/Archive API",
+                "Roadmap update and archive API"
+        );
+
+        given(roadmapRepository.findById(999L)).willReturn(Optional.empty());
+
+        Throwable thrown = catchThrowable(() -> commandService.updateRoadmap(999L, request));
+
+        assertThat(thrown)
+                .isInstanceOf(BusinessException.class)
+                .hasMessage("로드맵을 찾을 수 없습니다.");
+        assertThat(((BusinessException) thrown).errorCode()).isEqualTo(ErrorCode.ROADMAP_NOT_FOUND);
+
+        then(roadmapRepository).should().findById(999L);
+    }
+
+    @Test
+    @DisplayName("로드맵을 아카이브")
+    void archivesRoadmap() {
+        AdoProjectEntity project = AdoProjectEntity.create("ado-platform", "ADO Platform");
+        ReflectionTestUtils.setField(project, "id", 1L);
+        AdoRoadmapEntity roadmap = AdoRoadmapEntity.createDraft(
+                project,
+                "Roadmap Foundation",
+                "Roadmap persistence and API foundation"
+        );
+        ReflectionTestUtils.setField(roadmap, "id", 10L);
+        ReflectionTestUtils.setField(roadmap, "createdAt", Instant.parse("2026-07-05T00:34:40Z"));
+        ReflectionTestUtils.setField(roadmap, "updatedAt", Instant.parse("2026-07-05T00:34:40Z"));
+
+        given(roadmapRepository.findById(10L)).willReturn(Optional.of(roadmap));
+        given(roadmapRepository.saveAndFlush(roadmap)).willReturn(roadmap);
+
+        AdoRoadmapResponse response = commandService.archiveRoadmap(10L);
+
+        assertThat(response.id()).isEqualTo(10L);
+        assertThat(response.status()).isEqualTo(AdoRoadmapStatus.ARCHIVED);
+
+        then(roadmapRepository).should().findById(10L);
+        then(roadmapRepository).should().saveAndFlush(roadmap);
+        then(roadmapRepository).should(never()).save(any());
+    }
+
+    @Test
+    @DisplayName("로드맵이 없으면 아카이브 실패")
+    void failsToArchiveWhenRoadmapDoesNotExist() {
+        given(roadmapRepository.findById(999L)).willReturn(Optional.empty());
+
+        Throwable thrown = catchThrowable(() -> commandService.archiveRoadmap(999L));
+
+        assertThat(thrown)
+                .isInstanceOf(BusinessException.class)
+                .hasMessage("로드맵을 찾을 수 없습니다.");
+        assertThat(((BusinessException) thrown).errorCode()).isEqualTo(ErrorCode.ROADMAP_NOT_FOUND);
+
+        then(roadmapRepository).should().findById(999L);
     }
 }
