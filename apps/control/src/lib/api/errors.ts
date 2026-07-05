@@ -3,6 +3,7 @@ export const KNOWN_ADO_ERROR_CODES = [
   "VALIDATION_FAILED",
   "PROJECT_NOT_FOUND",
   "PROJECT_KEY_ALREADY_EXISTS",
+  "ROADMAP_NOT_FOUND",
 ] as const;
 
 export type KnownAdoErrorCode = (typeof KNOWN_ADO_ERROR_CODES)[number];
