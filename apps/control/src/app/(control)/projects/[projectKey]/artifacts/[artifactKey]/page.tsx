@@ -1,6 +1,6 @@
 import { ArtifactDetail } from "@/features/artifacts/artifact-detail";
 import { DeniedState } from "@/components/StateViews";
-import { artifactClient, getProjectOverview } from "@/lib/data";
+import { artifactClient } from "@/lib/data";
 import { mapArtifactDetail } from "@/lib/contracts/ado-job";
 import { AdoApiError } from "@/lib/api/errors";
 
@@ -11,11 +11,10 @@ export default async function ArtifactDetailPage({
 }) {
   const { projectKey, artifactKey } = await params;
 
-  const project = getProjectOverview(projectKey);
-  if (!project) {
-    return <DeniedState title="이 Project를 볼 수 있는 권한이 없거나 존재하지 않습니다." backHref="/projects" />;
-  }
-
+  // Project-scope validation happens inside the real, project-scoped
+  // GET /v1/projects/{projectKey}/artifacts/{artifactKey} call below —
+  // no separate project existence check needed (a mock-store check here
+  // would reject real projects that the mock store doesn't know about).
   let detail;
   try {
     detail = mapArtifactDetail(projectKey, artifactKey, await artifactClient.getArtifact(projectKey, artifactKey));
