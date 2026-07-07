@@ -20,19 +20,19 @@ public class AdoRoadmapQueryService {
     private final AdoProjectRepository projectRepository;
     private final AdoRoadmapRepository roadmapRepository;
 
-    public List<AdoRoadmapResponse> findRoadmaps(Long projectId) {
-        if (!projectRepository.existsById(projectId)) {
+    public List<AdoRoadmapResponse> findRoadmaps(String projectKey) {
+        if (!projectRepository.existsByProjectKey(projectKey)) {
             throw new BusinessException(ErrorCode.PROJECT_NOT_FOUND);
         }
 
-        return roadmapRepository.findByProjectIdOrderByIdAsc(projectId)
+        return roadmapRepository.findByProjectProjectKeyOrderByRoadmapKeyAsc(projectKey)
                 .stream()
                 .map(AdoRoadmapMapper::toResponse)
                 .toList();
     }
 
-    public AdoRoadmapResponse findRoadmap(Long roadmapId) {
-        AdoRoadmapEntity roadmap = roadmapRepository.findById(roadmapId)
+    public AdoRoadmapResponse findRoadmap(String projectKey, String roadmapKey) {
+        AdoRoadmapEntity roadmap = roadmapRepository.findByProjectProjectKeyAndRoadmapKey(projectKey, roadmapKey)
                 .orElseThrow(() -> new BusinessException(ErrorCode.ROADMAP_NOT_FOUND));
 
         return AdoRoadmapMapper.toResponse(roadmap);

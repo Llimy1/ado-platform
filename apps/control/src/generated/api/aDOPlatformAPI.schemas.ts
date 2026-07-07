@@ -38,9 +38,9 @@ export type AdoRoadmapResponseStatus = typeof AdoRoadmapResponseStatus[keyof typ
 
 
 export const AdoRoadmapResponseStatus = {
-  DRAFT: 'DRAFT',
-  ACTIVE: 'ACTIVE',
-  ARCHIVED: 'ARCHIVED',
+  DRAFT: 'draft',
+  ACTIVE: 'active',
+  ARCHIVED: 'archived',
 } as const;
 
 /**
@@ -48,9 +48,13 @@ export const AdoRoadmapResponseStatus = {
  */
 export interface AdoRoadmapResponse {
   /** 로드맵 ID */
-  id?: number;
+  id?: string;
   /** 프로젝트 ID */
-  projectId?: number;
+  projectId?: string;
+  /** 프로젝트 키 */
+  projectKey?: string;
+  /** 로드맵 키 */
+  roadmapKey?: string;
   /** 로드맵 제목 */
   title?: string;
   /** 로드맵 설명 */
@@ -97,7 +101,7 @@ export interface AdoProjectCreateRequest {
  */
 export interface AdoProjectResponse {
   /** 프로젝트 ID */
-  id?: number;
+  id?: string;
   /** 프로젝트 키 */
   projectKey?: string;
   /** 프로젝트 이름 */
@@ -125,6 +129,11 @@ export interface ApiResponseAdoProjectResponse {
 }
 
 export interface AdoRoadmapCreateRequest {
+  /**
+     * 로드맵 키
+     * @minLength 1
+     */
+  roadmapKey: string;
   /**
      * 로드맵 제목
      * @minLength 1
@@ -175,4 +184,3 @@ export interface ApiResponseListAdoRoadmapResponse {
   /** 필드 오류 목록 */
   errors?: ApiFieldError[];
 }
-

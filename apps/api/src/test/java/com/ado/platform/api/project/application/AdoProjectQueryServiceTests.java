@@ -15,6 +15,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.Instant;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -24,6 +25,8 @@ import static org.mockito.BDDMockito.then;
 @ExtendWith(MockitoExtension.class)
 public class AdoProjectQueryServiceTests {
 
+    private static final UUID PROJECT_ID = UUID.fromString("018f4d0a-7b6e-7b64-9f4b-6f45a2c7f900");
+
     @Mock
     private AdoProjectRepository repository;
 
@@ -31,37 +34,37 @@ public class AdoProjectQueryServiceTests {
     private AdoProjectQueryService queryService;
 
     @Test
-    @DisplayName("프로젝트 ID로 단건 조회")
-    void findsProjectById() {
+    @DisplayName("프로젝트 키로 단건 조회")
+    void findsProjectByKey() {
         AdoProjectEntity project = AdoProjectEntity.create("ado-platform", "ADO Platform");
-        ReflectionTestUtils.setField(project, "id", 1L);
+        ReflectionTestUtils.setField(project, "id", PROJECT_ID);
         ReflectionTestUtils.setField(project, "createdAt", Instant.parse("2026-07-03T13:00:00Z"));
         ReflectionTestUtils.setField(project, "updatedAt", Instant.parse("2026-07-03T13:00:00Z"));
 
-        given(repository.findById(1L)).willReturn(Optional.of(project));
+        given(repository.findByProjectKey("ado-platform")).willReturn(Optional.of(project));
 
-        AdoProjectResponse response = queryService.findProject(1L);
+        AdoProjectResponse response = queryService.findProject("ado-platform");
 
-        assertThat(response.id()).isEqualTo(1L);
+        assertThat(response.id()).isEqualTo(PROJECT_ID);
         assertThat(response.projectKey()).isEqualTo("ado-platform");
         assertThat(response.name()).isEqualTo("ADO Platform");
         assertThat(response.createdAt()).isEqualTo(Instant.parse("2026-07-03T13:00:00Z"));
         assertThat(response.updatedAt()).isEqualTo(Instant.parse("2026-07-03T13:00:00Z"));
-        then(repository).should().findById(1L);
+        then(repository).should().findByProjectKey("ado-platform");
     }
 
     @Test
-    @DisplayName("프로젝트 ID가 없으면 실패")
+    @DisplayName("프로젝트 키가 없으면 실패")
     void failsWhenProjectDoesNotExist() {
-        given(repository.findById(999L)).willReturn(Optional.empty());
+        given(repository.findByProjectKey("missing-project")).willReturn(Optional.empty());
 
-        Throwable thrown = catchThrowable(() -> queryService.findProject(999L));
+        Throwable thrown = catchThrowable(() -> queryService.findProject("missing-project"));
 
         assertThat(thrown)
                 .isInstanceOf(BusinessException.class)
                 .hasMessage("프로젝트를 찾을 수 없습니다.");
         assertThat(((BusinessException) thrown).errorCode()).isEqualTo(ErrorCode.PROJECT_NOT_FOUND);
 
-        then(repository).should().findById(999L);
+        then(repository).should().findByProjectKey("missing-project");
     }
 }

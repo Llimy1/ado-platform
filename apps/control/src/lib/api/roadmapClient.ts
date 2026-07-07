@@ -4,7 +4,7 @@ import {
   findRoadmap,
   findRoadmaps,
   updateRoadmap as requestUpdateRoadmap,
-} from "./generated/roadmaps/roadmaps";
+} from "@/generated/api/roadmaps/roadmaps";
 import type {
   AdoRoadmapCreateInput,
   AdoRoadmapUpdateInput,
@@ -13,28 +13,28 @@ import type {
 import { unwrapAdoResponse } from "./envelope";
 
 export const roadmapClient = {
-  async listRoadmaps(projectId: number): Promise<AdoRoadmap[]> {
-    const res = await findRoadmaps(projectId);
+  async listRoadmaps(projectKey: string): Promise<AdoRoadmap[]> {
+    const res = await findRoadmaps(projectKey);
     return unwrapAdoResponse(res.data) as AdoRoadmap[];
   },
 
-  async getRoadmap(roadmapId: number): Promise<AdoRoadmap> {
-    const res = await findRoadmap(roadmapId);
+  async getRoadmap(projectKey: string, roadmapKey: string): Promise<AdoRoadmap> {
+    const res = await findRoadmap(projectKey, roadmapKey);
     return unwrapAdoResponse(res.data) as AdoRoadmap;
   },
 
-  async createRoadmap(projectId: number, input: AdoRoadmapCreateInput): Promise<AdoRoadmap> {
-    const res = await createRoadmap(projectId, input);
+  async createRoadmap(projectKey: string, input: AdoRoadmapCreateInput): Promise<AdoRoadmap> {
+    const res = await createRoadmap(projectKey, input);
     return unwrapAdoResponse(res.data) as AdoRoadmap;
   },
 
-  async updateRoadmap(roadmapId: number, input: AdoRoadmapUpdateInput): Promise<AdoRoadmap> {
-    const res = await requestUpdateRoadmap(roadmapId, input);
+  async updateRoadmap(projectKey: string, roadmapKey: string, input: AdoRoadmapUpdateInput): Promise<AdoRoadmap> {
+    const res = await requestUpdateRoadmap(projectKey, roadmapKey, input);
     return unwrapAdoResponse(res.data) as AdoRoadmap;
   },
 
-  async archiveRoadmap(roadmapId: number): Promise<AdoRoadmap> {
-    const res = await requestArchiveRoadmap(roadmapId);
+  async archiveRoadmap(projectKey: string, roadmapKey: string): Promise<AdoRoadmap> {
+    const res = await requestArchiveRoadmap(projectKey, roadmapKey);
     return unwrapAdoResponse(res.data) as AdoRoadmap;
   },
 };

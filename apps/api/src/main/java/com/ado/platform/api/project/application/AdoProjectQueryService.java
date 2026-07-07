@@ -30,8 +30,8 @@ public class AdoProjectQueryService {
                 )).toList();
     }
 
-    public AdoProjectResponse findProject(Long id) {
-        AdoProjectEntity project = repository.findById(id)
+    public AdoProjectResponse findProject(String projectKey) {
+        AdoProjectEntity project = repository.findByProjectKey(projectKey)
                 .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
 
         return toResponse(project);

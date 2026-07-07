@@ -11,7 +11,9 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.UuidGenerator;
 
+import java.util.UUID;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -19,8 +21,9 @@ import lombok.NoArgsConstructor;
 @Table(name = "ado_project")
 public class AdoProjectEntity extends BaseTimeEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @UuidGenerator
+    private UUID id;
 
     @Column(name = "project_key", nullable = false, length = 80, unique = true)
     private String projectKey;

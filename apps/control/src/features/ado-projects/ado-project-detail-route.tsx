@@ -25,6 +25,7 @@ export function AdoProjectDetailRoute({
   initialRoadmapError,
 }: AdoProjectDetailRouteProps) {
   const [roadmaps, setRoadmaps] = useState<AdoRoadmap[]>(initialRoadmaps ?? []);
+  const [roadmapKey, setRoadmapKey] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -35,11 +36,13 @@ export function AdoProjectDetailRoute({
     setIsSubmitting(true);
     setRoadmapError(null);
     try {
-      const created = await roadmapClient.createRoadmap(project.id, {
+      const created = await roadmapClient.createRoadmap(project.projectKey, {
+        roadmapKey: roadmapKey.trim(),
         title: title.trim(),
         description: description.trim() || undefined,
       });
       setRoadmaps((items) => [created, ...items]);
+      setRoadmapKey("");
       setTitle("");
       setDescription("");
     } catch (err) {
@@ -78,6 +81,18 @@ export function AdoProjectDetailRoute({
 
       <Panel title="로드맵" className={styles.roadmapPanel}>
         <form className={styles.roadmapForm} onSubmit={handleCreateRoadmap}>
+          <div className={styles.roadmapField}>
+            <label className={styles.fieldLabel} htmlFor="roadmap-key">
+              로드맵 키
+            </label>
+            <input
+              id="roadmap-key"
+              className={styles.input}
+              value={roadmapKey}
+              onChange={(e) => setRoadmapKey(e.target.value)}
+              required
+            />
+          </div>
           <div className={styles.roadmapField}>
             <label className={styles.fieldLabel} htmlFor="roadmap-title">
               제목
@@ -150,15 +165,15 @@ export function AdoProjectDetailRoute({
   );
 }
 
-/** Distinct from the generic ErrorState: PROJECT_NOT_FOUND is an expected, addressable outcome (bad id/link), not an unexpected failure. */
-export function AdoProjectNotFound({ projectId }: { projectId: string }) {
+/** Distinct from the generic ErrorState: PROJECT_NOT_FOUND is an expected, addressable outcome (bad key/link), not an unexpected failure. */
+export function AdoProjectNotFound({ projectKey }: { projectKey: string }) {
   return (
     <div>
       <p className={styles.breadcrumb}>
         <Link href="/ado-projects">ADO Projects</Link>
       </p>
       <div className={styles.notFoundWrap} role="alert">
-        <p>ID {projectId}에 해당하는 프로젝트를 찾을 수 없습니다.</p>
+        <p>프로젝트 키 {projectKey}에 해당하는 프로젝트를 찾을 수 없습니다.</p>
         <p className={styles.notFoundCode}>PROJECT_NOT_FOUND</p>
         <Link href="/ado-projects">목록으로 돌아가기</Link>
       </div>

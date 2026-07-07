@@ -4,6 +4,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 
 public record AdoRoadmapCreateRequest(
+        @Schema(description = "로드맵 키", example = "roadmap-foundation")
+        @NotBlank(message = "로드맵 키는 필수입니다.")
+        String roadmapKey,
+
         @Schema(description = "로드맵 제목", example = "Roadmap Foundation")
         @NotBlank(message = "로드맵 제목은 필수입니다.")
         String title,

@@ -68,6 +68,10 @@ loops, and state transitions require later State/Evidence/Job contracts.
 
 ## Known Spec Alignment Gap
 
-`ado-spec.lock.json` still references `NESTJS_MONOREPO_ARCHITECTURE.md`. This
-repository now treats that as a known alignment gap. Do not claim the Spring
-path is Spec Library approved until the Spec Library revision is updated.
+The current ADO Spec Library source defines
+`SPRING_BOOT_PLATFORM_ARCHITECTURE.md` as the canonical implementation
+architecture, but `ado-spec.lock.json` may still reference an older approved
+manifest containing `NESTJS_MONOREPO_ARCHITECTURE.md`. Treat that as a known
+alignment gap until the Spec Library revision is committed, released, imported,
+and the lock is refreshed. Do not claim the Spring path is runtime-enforced by
+the lock until that update is complete.

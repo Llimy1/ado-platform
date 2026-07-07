@@ -11,13 +11,9 @@ import type { AdoRoadmap } from "@/lib/contracts/ado-roadmap";
 export default async function AdoProjectDetailPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ projectKey: string }>;
 }) {
-  const { id } = await params;
-  const numericId = Number(id);
-  if (!Number.isInteger(numericId)) {
-    return <AdoProjectNotFound projectId={id} />;
-  }
+  const { projectKey } = await params;
 
   let project: AdoProject | null = null;
   let roadmaps: AdoRoadmap[] | null = null;
@@ -25,7 +21,7 @@ export default async function AdoProjectDetailPage({
   let roadmapLoadError: { code: string; message: string } | null = null;
 
   try {
-    project = await projectClient.getProject(numericId);
+    project = await projectClient.getProject(projectKey);
   } catch (err) {
     loadError = {
       code: err instanceof AdoApiError ? err.code : "UNKNOWN",
@@ -35,13 +31,13 @@ export default async function AdoProjectDetailPage({
 
   if (loadError) {
     if (loadError.code === "PROJECT_NOT_FOUND") {
-      return <AdoProjectNotFound projectId={id} />;
+      return <AdoProjectNotFound projectKey={projectKey} />;
     }
     return <AdoProjectLoadError code={loadError.code} message={loadError.message} />;
   }
 
   try {
-    roadmaps = await roadmapClient.listRoadmaps(project!.id);
+    roadmaps = await roadmapClient.listRoadmaps(project!.projectKey);
   } catch (err) {
     roadmapLoadError = {
       code: err instanceof AdoApiError ? err.code : "UNKNOWN",

@@ -50,7 +50,7 @@ public class AdoRoadmapRepositoryTests {
                 AdoProjectEntity.create("ado-platform", "ADO Platform")
         );
         AdoRoadmapEntity saved = roadmapRepository.saveAndFlush(
-                AdoRoadmapEntity.createDraft(project, "Roadmap Foundation", "Roadmap persistence foundation")
+                AdoRoadmapEntity.createDraft(project, "roadmap-foundation", "Roadmap Foundation", "Roadmap persistence foundation")
         );
 
         entityManager.flush();
@@ -59,6 +59,7 @@ public class AdoRoadmapRepositoryTests {
         AdoRoadmapEntity found = roadmapRepository.findById(saved.getId()).orElseThrow();
 
         assertThat(found.getProject().getId()).isEqualTo(project.getId());
+        assertThat(found.getRoadmapKey()).isEqualTo("roadmap-foundation");
         assertThat(found.getTitle()).isEqualTo("Roadmap Foundation");
         assertThat(found.getDescription()).isEqualTo("Roadmap persistence foundation");
         assertThat(found.getStatus()).isEqualTo(AdoRoadmapStatus.DRAFT);
@@ -76,19 +77,19 @@ public class AdoRoadmapRepositoryTests {
                 AdoProjectEntity.create("another-project", "Another Project")
         );
         roadmapRepository.saveAndFlush(
-                AdoRoadmapEntity.createDraft(firstProject, "First Roadmap", "First roadmap")
+                AdoRoadmapEntity.createDraft(firstProject, "first-roadmap", "First Roadmap", "First roadmap")
         );
         roadmapRepository.saveAndFlush(
-                AdoRoadmapEntity.createDraft(firstProject, "Second Roadmap", "Second roadmap")
+                AdoRoadmapEntity.createDraft(firstProject, "second-roadmap", "Second Roadmap", "Second roadmap")
         );
         roadmapRepository.saveAndFlush(
-                AdoRoadmapEntity.createDraft(secondProject, "Other Roadmap", "Other roadmap")
+                AdoRoadmapEntity.createDraft(secondProject, "other-roadmap", "Other Roadmap", "Other roadmap")
         );
 
         entityManager.flush();
         entityManager.clear();
 
-        List<AdoRoadmapEntity> roadmaps = roadmapRepository.findByProjectIdOrderByIdAsc(firstProject.getId());
+        List<AdoRoadmapEntity> roadmaps = roadmapRepository.findByProjectProjectKeyOrderByRoadmapKeyAsc("ado-platform");
 
         assertThat(roadmaps)
                 .extracting(AdoRoadmapEntity::getTitle)

@@ -13,7 +13,7 @@ import type {
   ApiResponseListAdoRoadmapResponse
 } from '../aDOPlatformAPI.schemas';
 
-import { adoFetch } from '../../mutator';
+import { adoFetch } from '../../../lib/api/mutator';
 
 export type archiveRoadmapResponse200 = {
   data: ApiResponseAdoRoadmapResponse
@@ -34,21 +34,21 @@ export type archiveRoadmapResponseError = (archiveRoadmapResponse404) & {
 
 export type archiveRoadmapResponse = (archiveRoadmapResponseSuccess | archiveRoadmapResponseError)
 
-export const getArchiveRoadmapUrl = (roadmapId: number,) => {
+export const getArchiveRoadmapUrl = (projectKey: string, roadmapKey: string,) => {
 
 
 
 
-  return `/v1/roadmaps/${roadmapId}/archive`
+  return `/v1/projects/${projectKey}/roadmaps/${roadmapKey}/archive`
 }
 
 /**
  * 로드맵 상태를 ARCHIVED로 변경합니다.
  * @summary 로드맵 아카이브
  */
-export const archiveRoadmap = async (roadmapId: number, options?: RequestInit): Promise<archiveRoadmapResponse> => {
+export const archiveRoadmap = async (projectKey: string, roadmapKey: string, options?: RequestInit): Promise<archiveRoadmapResponse> => {
 
-  return adoFetch<archiveRoadmapResponse>(getArchiveRoadmapUrl(roadmapId),
+  return adoFetch<archiveRoadmapResponse>(getArchiveRoadmapUrl(projectKey, roadmapKey),
   {
     ...options,
     method: 'POST'
@@ -76,21 +76,21 @@ export type findRoadmapsResponseError = (findRoadmapsResponse404) & {
 
 export type findRoadmapsResponse = (findRoadmapsResponseSuccess | findRoadmapsResponseError)
 
-export const getFindRoadmapsUrl = (projectId: number,) => {
+export const getFindRoadmapsUrl = (projectKey: string,) => {
 
 
 
 
-  return `/v1/projects/${projectId}/roadmaps`
+  return `/v1/projects/${projectKey}/roadmaps`
 }
 
 /**
- * 프로젝트 ID로 ADO 로드맵 목록을 조회합니다.
+ * 프로젝트 키로 ADO 로드맵 목록을 조회합니다.
  * @summary 프로젝트 로드맵 목록 조회
  */
-export const findRoadmaps = async (projectId: number, options?: RequestInit): Promise<findRoadmapsResponse> => {
+export const findRoadmaps = async (projectKey: string, options?: RequestInit): Promise<findRoadmapsResponse> => {
 
-  return adoFetch<findRoadmapsResponse>(getFindRoadmapsUrl(projectId),
+  return adoFetch<findRoadmapsResponse>(getFindRoadmapsUrl(projectKey),
   {
     ...options,
     method: 'GET'
@@ -124,22 +124,22 @@ export type createRoadmapResponseError = (createRoadmapResponse400 | createRoadm
 
 export type createRoadmapResponse = (createRoadmapResponseSuccess | createRoadmapResponseError)
 
-export const getCreateRoadmapUrl = (projectId: number,) => {
+export const getCreateRoadmapUrl = (projectKey: string,) => {
 
 
 
 
-  return `/v1/projects/${projectId}/roadmaps`
+  return `/v1/projects/${projectKey}/roadmaps`
 }
 
 /**
  * 프로젝트에 초안 상태의 ADO 로드맵을 생성합니다.
  * @summary 로드맵 생성
  */
-export const createRoadmap = async (projectId: number,
+export const createRoadmap = async (projectKey: string,
     adoRoadmapCreateRequest: AdoRoadmapCreateRequest, options?: RequestInit): Promise<createRoadmapResponse> => {
 
-  return adoFetch<createRoadmapResponse>(getCreateRoadmapUrl(projectId),
+  return adoFetch<createRoadmapResponse>(getCreateRoadmapUrl(projectKey),
   {
     ...options,
     method: 'POST',
@@ -168,21 +168,21 @@ export type findRoadmapResponseError = (findRoadmapResponse404) & {
 
 export type findRoadmapResponse = (findRoadmapResponseSuccess | findRoadmapResponseError)
 
-export const getFindRoadmapUrl = (roadmapId: number,) => {
+export const getFindRoadmapUrl = (projectKey: string, roadmapKey: string,) => {
 
 
 
 
-  return `/v1/roadmaps/${roadmapId}`
+  return `/v1/projects/${projectKey}/roadmaps/${roadmapKey}`
 }
 
 /**
- * 로드맵 ID로 ADO 로드맵을 조회합니다.
+ * 프로젝트 키와 로드맵 키로 ADO 로드맵을 조회합니다.
  * @summary 로드맵 단건 조회
  */
-export const findRoadmap = async (roadmapId: number, options?: RequestInit): Promise<findRoadmapResponse> => {
+export const findRoadmap = async (projectKey: string, roadmapKey: string, options?: RequestInit): Promise<findRoadmapResponse> => {
 
-  return adoFetch<findRoadmapResponse>(getFindRoadmapUrl(roadmapId),
+  return adoFetch<findRoadmapResponse>(getFindRoadmapUrl(projectKey, roadmapKey),
   {
     ...options,
     method: 'GET'
@@ -216,22 +216,22 @@ export type updateRoadmapResponseError = (updateRoadmapResponse400 | updateRoadm
 
 export type updateRoadmapResponse = (updateRoadmapResponseSuccess | updateRoadmapResponseError)
 
-export const getUpdateRoadmapUrl = (roadmapId: number,) => {
+export const getUpdateRoadmapUrl = (projectKey: string, roadmapKey: string,) => {
 
 
 
 
-  return `/v1/roadmaps/${roadmapId}`
+  return `/v1/projects/${projectKey}/roadmaps/${roadmapKey}`
 }
 
 /**
  * 로드맵의 제목과 설명을 수정합니다.
  * @summary 로드맵 수정
  */
-export const updateRoadmap = async (roadmapId: number,
+export const updateRoadmap = async (projectKey: string, roadmapKey: string,
     adoRoadmapUpdateRequest: AdoRoadmapUpdateRequest, options?: RequestInit): Promise<updateRoadmapResponse> => {
 
-  return adoFetch<updateRoadmapResponse>(getUpdateRoadmapUrl(roadmapId),
+  return adoFetch<updateRoadmapResponse>(getUpdateRoadmapUrl(projectKey, roadmapKey),
   {
     ...options,
     method: 'PATCH',

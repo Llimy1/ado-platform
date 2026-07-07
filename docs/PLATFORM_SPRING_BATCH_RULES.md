@@ -5,25 +5,30 @@
 This document defines the repository-local rules for rebuilding `ado-platform`
 as a learning-first Spring Boot + Spring Batch + PostgreSQL + Next.js platform.
 
-This is the Human Owner's current implementation decision. The pinned Spec
-Library still contains `NESTJS_MONOREPO_ARCHITECTURE.md`, so final Spec
-alignment is confirmation required until a later Spec Library revision replaces
-or supersedes that document.
+This is the Human Owner's current implementation decision. The current ADO Spec
+Library source uses `SPRING_BOOT_PLATFORM_ARCHITECTURE.md` as the canonical
+implementation architecture. Older Django and NestJS architecture documents are
+historical only.
+
+`ado-platform/ado-spec.lock.json` may still pin an older approved manifest until
+the Spec Library is committed, released, and imported again. In that case the
+source policy is Spring, but the runtime-enforced lock refresh remains 확인 필요.
 
 Minimum Spec preflight:
 
 ```bash
 git status --short
 python3 -m json.tool ado-spec.lock.json >/dev/null
-rg -n "NESTJS_MONOREPO_ARCHITECTURE|Spring|Batch" ado-spec.lock.json docs README.md
+rg -n "SPRING_BOOT_PLATFORM_ARCHITECTURE|NESTJS_MONOREPO_ARCHITECTURE|Spring|Batch" ado-spec.lock.json docs README.md
 ```
 
 Expected result:
 
 - `ado-spec.lock.json` parses successfully;
-- the current Nest architecture pin is visible;
-- Spring direction is documented as repository-local until Spec alignment is
-  updated.
+- the current Spring architecture pin is visible where the lock has been
+  updated;
+- if `ado-spec.lock.json` still points at an older manifest, lock/manifest
+  refresh remains 확인 필요 before treating it as a runtime-enforced pin.
 
 ## 2. Non-Negotiable Principles
 

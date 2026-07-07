@@ -49,16 +49,16 @@ public class AdoProjectController {
 
     @Operation(
             summary = "프로젝트 단건 조회",
-            description = "프로젝트 ID로 ADO 프로젝트를 조회합니다."
+            description = "프로젝트 키로 ADO 프로젝트를 조회합니다."
     )
     @OkResponse
     @ProjectNotFoundResponse
-    @GetMapping("/{id}")
+    @GetMapping("/{projectKey}")
     public ApiResponse<AdoProjectResponse> findProject(
-            @Parameter(description = "프로젝트 ID", example = "1", required = true)
-            @PathVariable Long id
+            @Parameter(description = "프로젝트 키", example = "ado-platform", required = true)
+            @PathVariable String projectKey
     ) {
-        return ApiResponse.success(queryService.findProject(id));
+        return ApiResponse.success(queryService.findProject(projectKey));
     }
 
     @Operation(
