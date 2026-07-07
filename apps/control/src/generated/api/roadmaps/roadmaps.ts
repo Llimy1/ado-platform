@@ -15,48 +15,6 @@ import type {
 
 import { adoFetch } from '../../../lib/api/mutator';
 
-export type archiveRoadmapResponse200 = {
-  data: ApiResponseAdoRoadmapResponse
-  status: 200
-}
-
-export type archiveRoadmapResponse404 = {
-  data: ApiResponse
-  status: 404
-}
-
-export type archiveRoadmapResponseSuccess = (archiveRoadmapResponse200) & {
-  headers: Headers;
-};
-export type archiveRoadmapResponseError = (archiveRoadmapResponse404) & {
-  headers: Headers;
-};
-
-export type archiveRoadmapResponse = (archiveRoadmapResponseSuccess | archiveRoadmapResponseError)
-
-export const getArchiveRoadmapUrl = (projectKey: string, roadmapKey: string,) => {
-
-
-
-
-  return `/v1/projects/${projectKey}/roadmaps/${roadmapKey}/archive`
-}
-
-/**
- * 로드맵 상태를 ARCHIVED로 변경합니다.
- * @summary 로드맵 아카이브
- */
-export const archiveRoadmap = async (projectKey: string, roadmapKey: string, options?: RequestInit): Promise<archiveRoadmapResponse> => {
-
-  return adoFetch<archiveRoadmapResponse>(getArchiveRoadmapUrl(projectKey, roadmapKey),
-  {
-    ...options,
-    method: 'POST'
-
-
-  }
-);}
-
 export type findRoadmapsResponse200 = {
   data: ApiResponseListAdoRoadmapResponse
   status: 200
@@ -149,6 +107,51 @@ export const createRoadmap = async (projectKey: string,
 );}
 
 
+export type archiveRoadmapResponse200 = {
+  data: ApiResponseAdoRoadmapResponse
+  status: 200
+}
+
+export type archiveRoadmapResponse404 = {
+  data: ApiResponse
+  status: 404
+}
+
+export type archiveRoadmapResponseSuccess = (archiveRoadmapResponse200) & {
+  headers: Headers;
+};
+export type archiveRoadmapResponseError = (archiveRoadmapResponse404) & {
+  headers: Headers;
+};
+
+export type archiveRoadmapResponse = (archiveRoadmapResponseSuccess | archiveRoadmapResponseError)
+
+export const getArchiveRoadmapUrl = (projectKey: string,
+    roadmapKey: string,) => {
+
+
+
+
+  return `/v1/projects/${projectKey}/roadmaps/${roadmapKey}/archive`
+}
+
+/**
+ * 로드맵 상태를 ARCHIVED로 변경합니다.
+ * @summary 로드맵 아카이브
+ */
+export const archiveRoadmap = async (projectKey: string,
+    roadmapKey: string, options?: RequestInit): Promise<archiveRoadmapResponse> => {
+
+  return adoFetch<archiveRoadmapResponse>(getArchiveRoadmapUrl(projectKey,roadmapKey),
+  {
+    ...options,
+    method: 'POST'
+
+
+  }
+);}
+
+
 export type findRoadmapResponse200 = {
   data: ApiResponseAdoRoadmapResponse
   status: 200
@@ -168,7 +171,8 @@ export type findRoadmapResponseError = (findRoadmapResponse404) & {
 
 export type findRoadmapResponse = (findRoadmapResponseSuccess | findRoadmapResponseError)
 
-export const getFindRoadmapUrl = (projectKey: string, roadmapKey: string,) => {
+export const getFindRoadmapUrl = (projectKey: string,
+    roadmapKey: string,) => {
 
 
 
@@ -180,9 +184,10 @@ export const getFindRoadmapUrl = (projectKey: string, roadmapKey: string,) => {
  * 프로젝트 키와 로드맵 키로 ADO 로드맵을 조회합니다.
  * @summary 로드맵 단건 조회
  */
-export const findRoadmap = async (projectKey: string, roadmapKey: string, options?: RequestInit): Promise<findRoadmapResponse> => {
+export const findRoadmap = async (projectKey: string,
+    roadmapKey: string, options?: RequestInit): Promise<findRoadmapResponse> => {
 
-  return adoFetch<findRoadmapResponse>(getFindRoadmapUrl(projectKey, roadmapKey),
+  return adoFetch<findRoadmapResponse>(getFindRoadmapUrl(projectKey,roadmapKey),
   {
     ...options,
     method: 'GET'
@@ -216,7 +221,8 @@ export type updateRoadmapResponseError = (updateRoadmapResponse400 | updateRoadm
 
 export type updateRoadmapResponse = (updateRoadmapResponseSuccess | updateRoadmapResponseError)
 
-export const getUpdateRoadmapUrl = (projectKey: string, roadmapKey: string,) => {
+export const getUpdateRoadmapUrl = (projectKey: string,
+    roadmapKey: string,) => {
 
 
 
@@ -228,10 +234,11 @@ export const getUpdateRoadmapUrl = (projectKey: string, roadmapKey: string,) => 
  * 로드맵의 제목과 설명을 수정합니다.
  * @summary 로드맵 수정
  */
-export const updateRoadmap = async (projectKey: string, roadmapKey: string,
+export const updateRoadmap = async (projectKey: string,
+    roadmapKey: string,
     adoRoadmapUpdateRequest: AdoRoadmapUpdateRequest, options?: RequestInit): Promise<updateRoadmapResponse> => {
 
-  return adoFetch<updateRoadmapResponse>(getUpdateRoadmapUrl(projectKey, roadmapKey),
+  return adoFetch<updateRoadmapResponse>(getUpdateRoadmapUrl(projectKey,roadmapKey),
   {
     ...options,
     method: 'PATCH',

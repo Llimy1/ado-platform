@@ -15,6 +15,19 @@ export interface ApiFieldError {
   message?: string;
 }
 
+export interface AdoProjectCreateRequest {
+  /**
+     * 프로젝트 키
+     * @minLength 1
+     */
+  projectKey: string;
+  /**
+     * 프로젝트 이름
+     * @minLength 1
+     */
+  name: string;
+}
+
 /**
  * ADO 공통 API 응답
  */
@@ -29,71 +42,6 @@ export interface ApiResponse {
   data?: unknown;
   /** 필드 오류 목록 */
   errors?: ApiFieldError[];
-}
-
-/**
- * 로드맵 상태
- */
-export type AdoRoadmapResponseStatus = typeof AdoRoadmapResponseStatus[keyof typeof AdoRoadmapResponseStatus];
-
-
-export const AdoRoadmapResponseStatus = {
-  DRAFT: 'draft',
-  ACTIVE: 'active',
-  ARCHIVED: 'archived',
-} as const;
-
-/**
- * ADO 로드맵 응답
- */
-export interface AdoRoadmapResponse {
-  /** 로드맵 ID */
-  id?: string;
-  /** 프로젝트 ID */
-  projectId?: string;
-  /** 프로젝트 키 */
-  projectKey?: string;
-  /** 로드맵 키 */
-  roadmapKey?: string;
-  /** 로드맵 제목 */
-  title?: string;
-  /** 로드맵 설명 */
-  description?: string;
-  /** 로드맵 상태 */
-  status?: AdoRoadmapResponseStatus;
-  /** 생성 일시 */
-  createdAt?: string;
-  /** 수정 일시 */
-  updatedAt?: string;
-}
-
-/**
- * ADO 공통 API 응답
- */
-export interface ApiResponseAdoRoadmapResponse {
-  /** 요청 성공 여부 */
-  success?: boolean;
-  /** 응답 코드 */
-  code?: string;
-  /** 응답 메시지 */
-  message?: string;
-  /** 응답 데이터 */
-  data?: AdoRoadmapResponse;
-  /** 필드 오류 목록 */
-  errors?: ApiFieldError[];
-}
-
-export interface AdoProjectCreateRequest {
-  /**
-     * 프로젝트 키
-     * @minLength 1
-     */
-  projectKey: string;
-  /**
-     * 프로젝트 이름
-     * @minLength 1
-     */
-  name: string;
 }
 
 /**
@@ -143,6 +91,276 @@ export interface AdoRoadmapCreateRequest {
   description?: string;
 }
 
+/**
+ * 로드맵 상태
+ */
+export type AdoRoadmapResponseStatus = typeof AdoRoadmapResponseStatus[keyof typeof AdoRoadmapResponseStatus];
+
+
+export const AdoRoadmapResponseStatus = {
+  draft: 'draft',
+  active: 'active',
+  archived: 'archived',
+} as const;
+
+/**
+ * ADO 로드맵 응답
+ */
+export interface AdoRoadmapResponse {
+  /** 로드맵 ID */
+  id?: string;
+  /** 프로젝트 ID */
+  projectId?: string;
+  /** 프로젝트 키 */
+  projectKey?: string;
+  /** 로드맵 키 */
+  roadmapKey?: string;
+  /** 로드맵 제목 */
+  title?: string;
+  /** 로드맵 설명 */
+  description?: string;
+  /** 로드맵 상태 */
+  status?: AdoRoadmapResponseStatus;
+  /** 생성 일시 */
+  createdAt?: string;
+  /** 수정 일시 */
+  updatedAt?: string;
+}
+
+/**
+ * ADO 공통 API 응답
+ */
+export interface ApiResponseAdoRoadmapResponse {
+  /** 요청 성공 여부 */
+  success?: boolean;
+  /** 응답 코드 */
+  code?: string;
+  /** 응답 메시지 */
+  message?: string;
+  /** 응답 데이터 */
+  data?: AdoRoadmapResponse;
+  /** 필드 오류 목록 */
+  errors?: ApiFieldError[];
+}
+
+/**
+ * Job 유형
+ */
+export type AdoJobCreateRequestJobType = typeof AdoJobCreateRequestJobType[keyof typeof AdoJobCreateRequestJobType];
+
+
+export const AdoJobCreateRequestJobType = {
+  document_generation: 'document_generation',
+  artifact_validate: 'artifact_validate',
+  codex_planning: 'codex_planning',
+  git_prepare: 'git_prepare',
+  codex_implementation: 'codex_implementation',
+  verification: 'verification',
+  local_review_single_model: 'local_review_single_model',
+  arbiter_review: 'arbiter_review',
+  github_pr_create: 'github_pr_create',
+  claude_import: 'claude_import',
+} as const;
+
+/**
+ * Job 대상 유형
+ */
+export type AdoJobCreateRequestTargetType = typeof AdoJobCreateRequestTargetType[keyof typeof AdoJobCreateRequestTargetType];
+
+
+export const AdoJobCreateRequestTargetType = {
+  project: 'project',
+  roadmap: 'roadmap',
+  feature_unit: 'feature_unit',
+  component_work: 'component_work',
+  artifact: 'artifact',
+  review_group: 'review_group',
+  verification_run: 'verification_run',
+} as const;
+
+export interface AdoJobCreateRequest {
+  /**
+     * Project 안에서 유일한 Job 키
+     * @minLength 1
+     */
+  jobKey: string;
+  /**
+     * 동일 요청 재생 방지용 idempotency key
+     * @minLength 1
+     */
+  idempotencyKey: string;
+  /** Job 유형 */
+  jobType: AdoJobCreateRequestJobType;
+  /** Job 대상 유형 */
+  targetType: AdoJobCreateRequestTargetType;
+  /**
+     * Job 대상 참조
+     * @minLength 1
+     */
+  targetRef: string;
+  /** 실행 ContextPacket artifact key */
+  contextArtifactKey?: string;
+  /**
+     * Job 제목
+     * @minLength 1
+     */
+  title: string;
+  /** Job 설명 */
+  description?: string;
+  /**
+     * 우선순위. 0이 가장 높습니다.
+     * @minimum 0
+     */
+  priority?: number;
+  /** 예약 실행 시각 */
+  scheduledAt?: string;
+}
+
+/**
+ * Attempt 상태
+ */
+export type AdoJobAttemptSummaryResponseStatus = typeof AdoJobAttemptSummaryResponseStatus[keyof typeof AdoJobAttemptSummaryResponseStatus];
+
+
+export const AdoJobAttemptSummaryResponseStatus = {
+  queued: 'queued',
+  leased: 'leased',
+  running: 'running',
+  succeeded: 'succeeded',
+  failed: 'failed',
+  timed_out: 'timed_out',
+  cancelled: 'cancelled',
+  policy_denied: 'policy_denied',
+  blocked: 'blocked',
+  human_required: 'human_required',
+} as const;
+
+/**
+ * ADO Job Attempt 요약
+ */
+export interface AdoJobAttemptSummaryResponse {
+  /** Job Attempt ID */
+  jobAttemptId?: string;
+  /** Attempt 번호 */
+  attemptNumber?: number;
+  /** Attempt 상태 */
+  status?: AdoJobAttemptSummaryResponseStatus;
+  /** Worker key */
+  workerKey?: string;
+  /** 마지막 heartbeat 시각 */
+  lastHeartbeatAt?: string;
+}
+
+/**
+ * Job 유형
+ */
+export type AdoJobResponseJobType = typeof AdoJobResponseJobType[keyof typeof AdoJobResponseJobType];
+
+
+export const AdoJobResponseJobType = {
+  document_generation: 'document_generation',
+  artifact_validate: 'artifact_validate',
+  codex_planning: 'codex_planning',
+  git_prepare: 'git_prepare',
+  codex_implementation: 'codex_implementation',
+  verification: 'verification',
+  local_review_single_model: 'local_review_single_model',
+  arbiter_review: 'arbiter_review',
+  github_pr_create: 'github_pr_create',
+  claude_import: 'claude_import',
+} as const;
+
+/**
+ * Job 대상 유형
+ */
+export type AdoJobResponseTargetType = typeof AdoJobResponseTargetType[keyof typeof AdoJobResponseTargetType];
+
+
+export const AdoJobResponseTargetType = {
+  project: 'project',
+  roadmap: 'roadmap',
+  feature_unit: 'feature_unit',
+  component_work: 'component_work',
+  artifact: 'artifact',
+  review_group: 'review_group',
+  verification_run: 'verification_run',
+} as const;
+
+/**
+ * Job 상태
+ */
+export type AdoJobResponseStatus = typeof AdoJobResponseStatus[keyof typeof AdoJobResponseStatus];
+
+
+export const AdoJobResponseStatus = {
+  queued: 'queued',
+  leased: 'leased',
+  running: 'running',
+  succeeded: 'succeeded',
+  failed: 'failed',
+  timed_out: 'timed_out',
+  cancelled: 'cancelled',
+  policy_denied: 'policy_denied',
+  blocked: 'blocked',
+  human_required: 'human_required',
+} as const;
+
+/**
+ * ADO Job 응답
+ */
+export interface AdoJobResponse {
+  /** Job ID */
+  id?: string;
+  /** 프로젝트 ID */
+  projectId?: string;
+  /** 프로젝트 키 */
+  projectKey?: string;
+  /** Project 안에서 유일한 Job 키 */
+  jobKey?: string;
+  /** 동일 요청 재생 방지용 idempotency key */
+  idempotencyKey?: string;
+  /** Job 유형 */
+  jobType?: AdoJobResponseJobType;
+  /** Job 대상 유형 */
+  targetType?: AdoJobResponseTargetType;
+  /** Job 대상 참조 */
+  targetRef?: string;
+  /** ContextPacket artifact key */
+  contextArtifactKey?: string;
+  /** Job 제목 */
+  title?: string;
+  /** Job 설명 */
+  description?: string;
+  /** Job 상태 */
+  status?: AdoJobResponseStatus;
+  /** 우선순위. 0이 가장 높습니다. */
+  priority?: number;
+  /** 예약 실행 시각 */
+  scheduledAt?: string;
+  /** 최근 Attempt 요약 */
+  latestAttempt?: AdoJobAttemptSummaryResponse;
+  /** 생성 일시 */
+  createdAt?: string;
+  /** 수정 일시 */
+  updatedAt?: string;
+}
+
+/**
+ * ADO 공통 API 응답
+ */
+export interface ApiResponseAdoJobResponse {
+  /** 요청 성공 여부 */
+  success?: boolean;
+  /** 응답 코드 */
+  code?: string;
+  /** 응답 메시지 */
+  message?: string;
+  /** 응답 데이터 */
+  data?: AdoJobResponse;
+  /** 필드 오류 목록 */
+  errors?: ApiFieldError[];
+}
+
 export interface AdoRoadmapUpdateRequest {
   /**
      * 로드맵 제목
@@ -151,6 +369,30 @@ export interface AdoRoadmapUpdateRequest {
   title: string;
   /** 로드맵 설명 */
   description?: string;
+}
+
+/**
+ * 변경할 Job 상태
+ */
+export type AdoJobStatusUpdateRequestStatus = typeof AdoJobStatusUpdateRequestStatus[keyof typeof AdoJobStatusUpdateRequestStatus];
+
+
+export const AdoJobStatusUpdateRequestStatus = {
+  queued: 'queued',
+  leased: 'leased',
+  running: 'running',
+  succeeded: 'succeeded',
+  failed: 'failed',
+  timed_out: 'timed_out',
+  cancelled: 'cancelled',
+  policy_denied: 'policy_denied',
+  blocked: 'blocked',
+  human_required: 'human_required',
+} as const;
+
+export interface AdoJobStatusUpdateRequest {
+  /** 변경할 Job 상태 */
+  status: AdoJobStatusUpdateRequestStatus;
 }
 
 /**
@@ -184,3 +426,268 @@ export interface ApiResponseListAdoRoadmapResponse {
   /** 필드 오류 목록 */
   errors?: ApiFieldError[];
 }
+
+/**
+ * ADO 공통 API 응답
+ */
+export interface ApiResponseListAdoJobResponse {
+  /** 요청 성공 여부 */
+  success?: boolean;
+  /** 응답 코드 */
+  code?: string;
+  /** 응답 메시지 */
+  message?: string;
+  /** 응답 데이터 */
+  data?: AdoJobResponse[];
+  /** 필드 오류 목록 */
+  errors?: ApiFieldError[];
+}
+
+/**
+ * Artifact 유형
+ */
+export type AdoArtifactResponseArtifactType = typeof AdoArtifactResponseArtifactType[keyof typeof AdoArtifactResponseArtifactType];
+
+
+export const AdoArtifactResponseArtifactType = {
+  context_packet: 'context_packet',
+  review_packet: 'review_packet',
+  candidate_artifact: 'candidate_artifact',
+  implementation_artifact: 'implementation_artifact',
+  git_diff_artifact: 'git_diff_artifact',
+  command_run_log: 'command_run_log',
+  review_result: 'review_result',
+  arbiter_decision: 'arbiter_decision',
+  verification_summary: 'verification_summary',
+} as const;
+
+/**
+ * Artifact 상태
+ */
+export type AdoArtifactResponseStatus = typeof AdoArtifactResponseStatus[keyof typeof AdoArtifactResponseStatus];
+
+
+export const AdoArtifactResponseStatus = {
+  available: 'available',
+  quarantined: 'quarantined',
+  expired: 'expired',
+  deleted: 'deleted',
+  redaction_failed: 'redaction_failed',
+} as const;
+
+/**
+ * Artifact 분류
+ */
+export type AdoArtifactResponseClassification = typeof AdoArtifactResponseClassification[keyof typeof AdoArtifactResponseClassification];
+
+
+export const AdoArtifactResponseClassification = {
+  internal: 'internal',
+  restricted: 'restricted',
+} as const;
+
+/**
+ * ADO Artifact 응답
+ */
+export interface AdoArtifactResponse {
+  /** Artifact ID */
+  id?: string;
+  /** Artifact key */
+  artifactKey?: string;
+  /** Artifact 유형 */
+  artifactType?: AdoArtifactResponseArtifactType;
+  /** Artifact 상태 */
+  status?: AdoArtifactResponseStatus;
+  /** Artifact 분류 */
+  classification?: AdoArtifactResponseClassification;
+  /** 내용 SHA-256 */
+  contentSha256?: string;
+  /** byte 크기 */
+  byteSize?: number;
+  /** 저장 위치. 브라우저에 직접 노출할 수 없는 값일 수 있습니다. */
+  storageUri?: string;
+  /** 생성 일시 */
+  createdAt?: string;
+}
+
+/**
+ * ADO 공통 API 응답
+ */
+export interface ApiResponseAdoArtifactResponse {
+  /** 요청 성공 여부 */
+  success?: boolean;
+  /** 응답 코드 */
+  code?: string;
+  /** 응답 메시지 */
+  message?: string;
+  /** 응답 데이터 */
+  data?: AdoArtifactResponse;
+  /** 필드 오류 목록 */
+  errors?: ApiFieldError[];
+}
+
+/**
+ * Attempt 상태
+ */
+export type AdoJobAttemptDetailResponseState = typeof AdoJobAttemptDetailResponseState[keyof typeof AdoJobAttemptDetailResponseState];
+
+
+export const AdoJobAttemptDetailResponseState = {
+  queued: 'queued',
+  leased: 'leased',
+  running: 'running',
+  succeeded: 'succeeded',
+  failed: 'failed',
+  timed_out: 'timed_out',
+  cancelled: 'cancelled',
+  policy_denied: 'policy_denied',
+  blocked: 'blocked',
+  human_required: 'human_required',
+} as const;
+
+export interface JobSummary {
+  jobKey?: string;
+  type?: string;
+  targetHref?: string;
+}
+
+export interface WorkerSummary {
+  workerKey?: string;
+  href?: string;
+}
+
+export interface LeaseSummary {
+  leasedAt?: string;
+  expiresAt?: string;
+  lastHeartbeatAt?: string;
+}
+
+export interface TimingSummary {
+  startedAt?: string;
+  finishedAt?: string;
+  timeoutAt?: string;
+}
+
+export interface TerminalSummary {
+  exitCode?: number;
+  signal?: string;
+  failureCode?: string;
+  redactedSummary?: string;
+}
+
+/**
+ * ADO Job Attempt 상세
+ */
+export interface AdoJobAttemptDetailResponse {
+  /** Job Attempt ID */
+  jobAttemptId?: string;
+  /** Attempt 번호 */
+  attemptNumber?: number;
+  /** Attempt 상태 */
+  state?: AdoJobAttemptDetailResponseState;
+  /** Job 요약 */
+  job?: JobSummary;
+  /** Worker 요약 */
+  worker?: WorkerSummary;
+  /** Lease 정보 */
+  lease?: LeaseSummary;
+  /** 실행 시간 정보 */
+  timing?: TimingSummary;
+  /** 터미널 결과 */
+  terminal?: TerminalSummary;
+  /** 결과 Artifact href */
+  resultArtifactHref?: string;
+  /** AgentRun 목록. Runner 구현 전에는 빈 배열입니다. */
+  agentRuns?: unknown[];
+  /** CommandRun 목록. Runner 구현 전에는 빈 배열입니다. */
+  commandRuns?: unknown[];
+  /** Artifact 목록. Runner 구현 전에는 빈 배열입니다. */
+  artifacts?: unknown[];
+}
+
+/**
+ * ADO 공통 API 응답
+ */
+export interface ApiResponseAdoJobAttemptDetailResponse {
+  /** 요청 성공 여부 */
+  success?: boolean;
+  /** 응답 코드 */
+  code?: string;
+  /** 응답 메시지 */
+  message?: string;
+  /** 응답 데이터 */
+  data?: AdoJobAttemptDetailResponse;
+  /** 필드 오류 목록 */
+  errors?: ApiFieldError[];
+}
+
+/**
+ * 로그 레벨
+ */
+export type AdoJobEventResponseLevel = typeof AdoJobEventResponseLevel[keyof typeof AdoJobEventResponseLevel];
+
+
+export const AdoJobEventResponseLevel = {
+  info: 'info',
+  warn: 'warn',
+  error: 'error',
+} as const;
+
+/**
+ * Job Event 응답
+ */
+export interface AdoJobEventResponse {
+  /** 이벤트 sequence */
+  sequence?: number;
+  /** 발생 시각 */
+  occurredAt?: string;
+  /** 로그 레벨 */
+  level?: AdoJobEventResponseLevel;
+  /** 이벤트 유형 */
+  eventType?: string;
+  /** 이벤트 메시지 */
+  text?: string;
+}
+
+/**
+ * Job Attempt 로그 페이지
+ */
+export interface AdoJobLogPageResponse {
+  /** Job Attempt ID */
+  attemptId?: string;
+  /** 로그 스트림 */
+  stream?: string;
+  /** 로그 항목 */
+  entries?: AdoJobEventResponse[];
+  /** 다음 cursor */
+  nextCursor?: string;
+  /** 최신 sequence */
+  newestSequence?: number;
+}
+
+/**
+ * ADO 공통 API 응답
+ */
+export interface ApiResponseAdoJobLogPageResponse {
+  /** 요청 성공 여부 */
+  success?: boolean;
+  /** 응답 코드 */
+  code?: string;
+  /** 응답 메시지 */
+  message?: string;
+  /** 응답 데이터 */
+  data?: AdoJobLogPageResponse;
+  /** 필드 오류 목록 */
+  errors?: ApiFieldError[];
+}
+
+export type FindJobAttemptLogsParams = {
+/**
+ * 로그 스트림
+ */
+stream?: string;
+/**
+ * 이전 응답의 nextCursor
+ */
+cursor?: string;
+};
