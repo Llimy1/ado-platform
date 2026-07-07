@@ -24,13 +24,30 @@ function snapshot(resourceVersion: string) {
 const CW1_TARGET = "/projects/orion-billing/roadmaps/rm-01/feature-units/fu-orion-402/component-works/cw-orion-1";
 const CW3_TARGET = "/projects/orion-billing/roadmaps/rm-01/feature-units/fu-orion-402/component-works/cw-orion-3";
 
+function componentWorkJob(jobKey: string, targetHref: string) {
+  const componentWorkKey = targetHref.split("/").at(-1) ?? "";
+
+  return {
+    jobKey,
+    type: "component_work_implementation",
+    jobApiHref: null,
+    target: {
+      type: "component_work",
+      ref: componentWorkKey,
+      apiHref: null,
+      uiHref: targetHref,
+      label: componentWorkKey,
+    },
+  };
+}
+
 const RICH: Record<string, JobAttemptDetailResponse> = {
   "ja-cw1-3": {
     attempt: {
       jobAttemptId: "ja-cw1-3",
       attemptNumber: 3,
       state: "failed",
-      job: { jobKey: "job-cw1", type: "component_work_implementation", targetHref: CW1_TARGET },
+      job: componentWorkJob("job-cw1", CW1_TARGET),
       worker: { workerKey: "worker-macos-3", href: null },
       lease: { leasedAt: iso(0, 2), expiresAt: iso(0, 1), lastHeartbeatAt: iso(0, 1) },
       timing: { startedAt: iso(0, 2), finishedAt: iso(0, 1), timeoutAt: iso(0, 1), durationMs: 3_412_000 },
@@ -133,7 +150,7 @@ const RICH: Record<string, JobAttemptDetailResponse> = {
       jobAttemptId: "ja-cw3-1",
       attemptNumber: 1,
       state: "succeeded",
-      job: { jobKey: "job-cw3", type: "component_work_implementation", targetHref: CW3_TARGET },
+      job: componentWorkJob("job-cw3", CW3_TARGET),
       worker: { workerKey: "worker-macos-2", href: null },
       lease: { leasedAt: iso(1, 2), expiresAt: iso(1, 1), lastHeartbeatAt: iso(1, 1) },
       timing: { startedAt: iso(1, 2), finishedAt: iso(1, 1), timeoutAt: iso(1, 1), durationMs: 2_875_000 },
@@ -246,7 +263,7 @@ function buildFallbackDetail(seed: FallbackAttemptSeed): JobAttemptDetailRespons
       jobAttemptId: seed.jobAttemptId,
       attemptNumber: seed.attemptNumber,
       state: "failed",
-      job: { jobKey: seed.jobKey, type: "component_work_implementation", targetHref: seed.targetHref },
+      job: componentWorkJob(seed.jobKey, seed.targetHref),
       worker: { workerKey: seed.workerKey, href: null },
       lease: { leasedAt: iso(0, seed.startedAgo), expiresAt: iso(0, seed.startedAgo - 1), lastHeartbeatAt: iso(0, seed.startedAgo - 1) },
       timing: {

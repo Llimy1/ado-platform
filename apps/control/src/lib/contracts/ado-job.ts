@@ -45,7 +45,14 @@ export function mapJobAttemptDetail(jobAttemptId: string, real: AdoJobAttemptDet
       job: {
         jobKey: real.job?.jobKey ?? "",
         type: real.job?.type ?? "",
-        targetHref: real.job?.targetHref ?? "/projects",
+        jobApiHref: real.job?.jobApiHref ?? null,
+        target: {
+          type: real.job?.target?.type ?? "",
+          ref: real.job?.target?.ref ?? "",
+          apiHref: real.job?.target?.apiHref ?? null,
+          uiHref: real.job?.target?.uiHref ?? null,
+          label: real.job?.target?.label ?? null,
+        },
       },
       worker: real.worker ? { workerKey: real.worker.workerKey ?? "", href: real.worker.href ?? null } : null,
       lease: {

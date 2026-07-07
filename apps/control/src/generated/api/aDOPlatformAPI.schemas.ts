@@ -545,10 +545,44 @@ export const AdoJobAttemptDetailResponseState = {
   human_required: 'human_required',
 } as const;
 
+/**
+ * Job 대상 유형
+ */
+export type TargetSummaryType = typeof TargetSummaryType[keyof typeof TargetSummaryType];
+
+
+export const TargetSummaryType = {
+  project: 'project',
+  roadmap: 'roadmap',
+  feature_unit: 'feature_unit',
+  component_work: 'component_work',
+  artifact: 'artifact',
+  review_group: 'review_group',
+  verification_run: 'verification_run',
+} as const;
+
+export interface TargetSummary {
+  /** Job 대상 유형 */
+  type?: TargetSummaryType;
+  /** Job 대상 참조 */
+  ref?: string;
+  /** 대상 API href. 아직 API가 없는 대상은 null입니다. */
+  apiHref?: string;
+  /** 대상 Control Room UI href. 아직 안정된 UI route가 없는 대상은 null입니다. */
+  uiHref?: string;
+  /** 사람이 읽는 대상 표시 이름 */
+  label?: string;
+}
+
 export interface JobSummary {
+  /** Project 안에서 유일한 Job 키 */
   jobKey?: string;
+  /** Job 유형 */
   type?: string;
-  targetHref?: string;
+  /** Job API href */
+  jobApiHref?: string;
+  /** Job 실행 대상 */
+  target?: TargetSummary;
 }
 
 export interface WorkerSummary {
