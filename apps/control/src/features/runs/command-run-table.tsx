@@ -6,10 +6,20 @@ import { LIFECYCLE_STATE_LABEL, LIFECYCLE_STATE_TONE, formatAbsoluteTime } from 
 import type { JobAttemptDetailResponse } from "@/lib/contracts/job-attempt";
 
 /** P-06.3: CommandRun table; stdout/stderr availability is surfaced, not the raw text itself. */
-export function CommandRunTable({ commandRuns }: { commandRuns: JobAttemptDetailResponse["commandRuns"] }) {
+export function CommandRunTable({
+  commandRuns,
+  available = true,
+}: {
+  commandRuns: JobAttemptDetailResponse["commandRuns"];
+  available?: boolean;
+}) {
   return (
     <Panel title="CommandRun" headingId="command-run-table-heading">
-      {commandRuns.length === 0 ? (
+      {!available ? (
+        <EmptyState title="CommandRun 정보는 아직 제공되지 않습니다.">
+          <p>백엔드 Runner가 구현되기 전까지는 이 Attempt가 실제로 어떤 명령을 실행했는지 조회할 수 없습니다.</p>
+        </EmptyState>
+      ) : commandRuns.length === 0 ? (
         <EmptyState title="실행된 명령이 없습니다." />
       ) : (
         <div className={styles.wrapper}>

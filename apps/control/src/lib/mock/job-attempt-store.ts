@@ -31,7 +31,7 @@ const RICH: Record<string, JobAttemptDetailResponse> = {
       attemptNumber: 3,
       state: "failed",
       job: { jobKey: "job-cw1", type: "component_work_implementation", targetHref: CW1_TARGET },
-      worker: { workerKey: "worker-macos-3", version: "1.4.2", href: null },
+      worker: { workerKey: "worker-macos-3", href: null },
       lease: { leasedAt: iso(0, 2), expiresAt: iso(0, 1), lastHeartbeatAt: iso(0, 1) },
       timing: { startedAt: iso(0, 2), finishedAt: iso(0, 1), timeoutAt: iso(0, 1), durationMs: 3_412_000 },
       terminal: {
@@ -126,6 +126,7 @@ const RICH: Record<string, JobAttemptDetailResponse> = {
       },
     ],
     snapshot: snapshot("rv-ja-cw1-3"),
+    runnerDataAvailable: true,
   },
   "ja-cw3-1": {
     attempt: {
@@ -133,7 +134,7 @@ const RICH: Record<string, JobAttemptDetailResponse> = {
       attemptNumber: 1,
       state: "succeeded",
       job: { jobKey: "job-cw3", type: "component_work_implementation", targetHref: CW3_TARGET },
-      worker: { workerKey: "worker-macos-2", version: "1.4.2", href: null },
+      worker: { workerKey: "worker-macos-2", href: null },
       lease: { leasedAt: iso(1, 2), expiresAt: iso(1, 1), lastHeartbeatAt: iso(1, 1) },
       timing: { startedAt: iso(1, 2), finishedAt: iso(1, 1), timeoutAt: iso(1, 1), durationMs: 2_875_000 },
       terminal: { exitCode: 0, signal: null, failureCode: null, redactedSummary: "검증 3건 통과, PR #214 생성" },
@@ -203,6 +204,7 @@ const RICH: Record<string, JobAttemptDetailResponse> = {
       },
     ],
     snapshot: snapshot("rv-ja-cw3-1"),
+    runnerDataAvailable: true,
   },
 };
 
@@ -245,7 +247,7 @@ function buildFallbackDetail(seed: FallbackAttemptSeed): JobAttemptDetailRespons
       attemptNumber: seed.attemptNumber,
       state: "failed",
       job: { jobKey: seed.jobKey, type: "component_work_implementation", targetHref: seed.targetHref },
-      worker: { workerKey: seed.workerKey, version: "1.4.1", href: null },
+      worker: { workerKey: seed.workerKey, href: null },
       lease: { leasedAt: iso(0, seed.startedAgo), expiresAt: iso(0, seed.startedAgo - 1), lastHeartbeatAt: iso(0, seed.startedAgo - 1) },
       timing: {
         startedAt: iso(0, seed.startedAgo),
@@ -267,6 +269,7 @@ function buildFallbackDetail(seed: FallbackAttemptSeed): JobAttemptDetailRespons
     commandRuns: [],
     artifacts: [],
     snapshot: snapshot(rv),
+    runnerDataAvailable: true,
   };
 }
 

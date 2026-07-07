@@ -137,10 +137,10 @@ const RICH: Record<string, DecisionDetailResponse> = {
   },
 };
 
-/** Pending count reported per project overview/list (P-09.1); some are intentionally omitted from this bounded fixture set. */
+/** Pending count reported per project overview/list (P-09.1). */
 const PROJECT_TOTALS: Record<string, { projectName: string; totalCount: number }> = {
   "orion-billing": { projectName: "Orion 결제 플랫폼", totalCount: 1 },
-  "nova-support": { projectName: "Nova 고객 지원 콘솔", totalCount: 2 },
+  "nova-support": { projectName: "Nova 고객 지원 콘솔", totalCount: 1 },
   "lyra-inventory": { projectName: "Lyra 재고 관리", totalCount: 1 },
 };
 

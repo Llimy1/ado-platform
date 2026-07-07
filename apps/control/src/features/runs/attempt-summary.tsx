@@ -27,7 +27,7 @@ export function AttemptSummary({ attempt }: { attempt: JobAttemptDetailResponse[
         </div>
         <div>
           <span className={styles.kvLabel}>Worker</span>
-          {attempt.worker ? `${attempt.worker.workerKey} (v${attempt.worker.version})` : "없음"}
+          {attempt.worker ? attempt.worker.workerKey : "없음"}
         </div>
         <div>
           <span className={styles.kvLabel}>리스 만료</span>

@@ -17,10 +17,20 @@ function formatBytes(byteSize: number): string {
 }
 
 /** P-06.3: artifact links describe type and redaction status; no raw payload rendering. */
-export function RedactedArtifactList({ artifacts }: { artifacts: JobAttemptDetailResponse["artifacts"] }) {
+export function RedactedArtifactList({
+  artifacts,
+  available = true,
+}: {
+  artifacts: JobAttemptDetailResponse["artifacts"];
+  available?: boolean;
+}) {
   return (
     <Panel title="Artifact" headingId="redacted-artifact-list-heading">
-      {artifacts.length === 0 ? (
+      {!available ? (
+        <EmptyState title="Artifact 목록은 아직 제공되지 않습니다.">
+          <p>백엔드 Runner가 구현되기 전까지는 이 Attempt가 생성한 Artifact 목록을 조회할 수 없습니다.</p>
+        </EmptyState>
+      ) : artifacts.length === 0 ? (
         <EmptyState title="등록된 Artifact가 없습니다." />
       ) : (
         <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: "var(--ado-space-2)" }}>
