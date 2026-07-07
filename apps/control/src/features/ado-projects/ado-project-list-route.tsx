@@ -90,7 +90,7 @@ export function AdoProjectListRoute({ initialItems, initialError }: AdoProjectLi
                     <td>{item.name}</td>
                     <td>{formatAbsoluteTime(item.createdAt)}</td>
                     <td>
-                      <Link className={styles.openLink} href={`/ado-projects/${item.id}`}>
+                      <Link className={styles.openLink} href={`/ado-projects/${item.projectKey}`}>
                         보기
                       </Link>
                     </td>

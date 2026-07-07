@@ -1,4 +1,4 @@
-import type { ApiFieldError } from "./generated/aDOPlatformAPI.schemas";
+import type { ApiFieldError } from "@/generated/api/aDOPlatformAPI.schemas";
 import { AdoApiError } from "./errors";
 
 export function unwrapAdoResponse<T>(envelope: {

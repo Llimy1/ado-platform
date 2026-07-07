@@ -12,7 +12,7 @@ import type {
   ApiResponseListAdoProjectResponse
 } from '../aDOPlatformAPI.schemas';
 
-import { adoFetch } from '../../mutator';
+import { adoFetch } from '../../../lib/api/mutator';
 
 export type findProjectsResponse200 = {
   data: ApiResponseListAdoProjectResponse
@@ -117,21 +117,21 @@ export type findProjectResponseError = (findProjectResponse404) & {
 
 export type findProjectResponse = (findProjectResponseSuccess | findProjectResponseError)
 
-export const getFindProjectUrl = (id: number,) => {
+export const getFindProjectUrl = (projectKey: string,) => {
 
 
 
 
-  return `/v1/projects/${id}`
+  return `/v1/projects/${projectKey}`
 }
 
 /**
- * 프로젝트 ID로 ADO 프로젝트를 조회합니다.
+ * 프로젝트 키로 ADO 프로젝트를 조회합니다.
  * @summary 프로젝트 단건 조회
  */
-export const findProject = async (id: number, options?: RequestInit): Promise<findProjectResponse> => {
+export const findProject = async (projectKey: string, options?: RequestInit): Promise<findProjectResponse> => {
 
-  return adoFetch<findProjectResponse>(getFindProjectUrl(id),
+  return adoFetch<findProjectResponse>(getFindProjectUrl(projectKey),
   {
     ...options,
     method: 'GET'
@@ -139,5 +139,3 @@ export const findProject = async (id: number, options?: RequestInit): Promise<fi
 
   }
 );}
-
-

@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
@@ -36,6 +37,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import(GlobalExceptionHandler.class)
 public class AdoProjectControllerTests {
 
+    private static final UUID PROJECT_ID = UUID.fromString("018f4d0a-7b6e-7b64-9f4b-6f45a2c7f900");
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -50,7 +53,7 @@ public class AdoProjectControllerTests {
     void findProjects() throws Exception {
         given(queryService.findProjects()).willReturn(
                 List.of(new AdoProjectResponse(
-                        1L,
+                        PROJECT_ID,
                         "ado-platform",
                         "ADO Platform",
                         Instant.parse("2026-07-03T13:00:00Z"),
@@ -62,7 +65,7 @@ public class AdoProjectControllerTests {
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.code").value("OK"))
                 .andExpect(jsonPath("$.message").value("요청이 성공했습니다."))
-                .andExpect(jsonPath("$.data[0].id").value(1))
+                .andExpect(jsonPath("$.data[0].id").value(PROJECT_ID.toString()))
                 .andExpect(jsonPath("$.data[0].projectKey").value("ado-platform"))
                 .andExpect(jsonPath("$.data[0].name").value("ADO Platform"))
                 .andExpect(jsonPath("$.data[0].createdAt").value("2026-07-03T13:00:00Z"))
@@ -73,28 +76,28 @@ public class AdoProjectControllerTests {
     @Test
     @DisplayName("프로젝트 단건 조회")
     void findProject() throws Exception {
-        given(queryService.findProject(1L)).willReturn(
+        given(queryService.findProject("ado-platform")).willReturn(
                 new AdoProjectResponse(
-                        1L,
+                        PROJECT_ID,
                         "ado-platform",
                         "ADO Platform",
                         Instant.parse("2026-07-03T13:00:00Z"),
                         Instant.parse("2026-07-03T13:00:00Z")
                 ));
 
-        mockMvc.perform(get("/v1/projects/1"))
+        mockMvc.perform(get("/v1/projects/ado-platform"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.code").value("OK"))
                 .andExpect(jsonPath("$.message").value("요청이 성공했습니다."))
-                .andExpect(jsonPath("$.data.id").value(1))
+                .andExpect(jsonPath("$.data.id").value(PROJECT_ID.toString()))
                 .andExpect(jsonPath("$.data.projectKey").value("ado-platform"))
                 .andExpect(jsonPath("$.data.name").value("ADO Platform"))
                 .andExpect(jsonPath("$.data.createdAt").value("2026-07-03T13:00:00Z"))
                 .andExpect(jsonPath("$.data.updatedAt").value("2026-07-03T13:00:00Z"))
                 .andExpect(jsonPath("$.errors").isEmpty());
 
-        then(queryService).should().findProject(1L);
+        then(queryService).should().findProject("ado-platform");
     }
 
     @Test
@@ -102,7 +105,7 @@ public class AdoProjectControllerTests {
     void createProject() throws Exception {
         given(commandService.createProject(any(AdoProjectCreateRequest.class))).willReturn(
                 new AdoProjectResponse(
-                        1L,
+                        PROJECT_ID,
                         "ado-platform",
                         "ADO Platform",
                         Instant.parse("2026-07-03T13:00:00Z"),
@@ -121,7 +124,7 @@ public class AdoProjectControllerTests {
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.code").value("OK"))
                 .andExpect(jsonPath("$.message").value("요청이 성공했습니다."))
-                .andExpect(jsonPath("$.data.id").value(1))
+                .andExpect(jsonPath("$.data.id").value(PROJECT_ID.toString()))
                 .andExpect(jsonPath("$.data.projectKey").value("ado-platform"))
                 .andExpect(jsonPath("$.data.name").value("ADO Platform"))
                 .andExpect(jsonPath("$.data.createdAt").value("2026-07-03T13:00:00Z"))
@@ -196,9 +199,9 @@ public class AdoProjectControllerTests {
     @Test
     @DisplayName("프로젝트 단건 조회 실패 - 프로젝트 없음")
     void failsWhenProjectDoesNotExist() throws Exception {
-        given(queryService.findProject(999L)).willThrow(new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
+        given(queryService.findProject("missing-project")).willThrow(new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
 
-        mockMvc.perform(get("/v1/projects/999"))
+        mockMvc.perform(get("/v1/projects/missing-project"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.success").value(false))
                 .andExpect(jsonPath("$.code").value("PROJECT_NOT_FOUND"))
@@ -206,7 +209,7 @@ public class AdoProjectControllerTests {
                 .andExpect(jsonPath("$.data").doesNotExist())
                 .andExpect(jsonPath("$.errors").isEmpty());
 
-        then(queryService).should().findProject(999L);
+        then(queryService).should().findProject("missing-project");
     }
 
     @Test

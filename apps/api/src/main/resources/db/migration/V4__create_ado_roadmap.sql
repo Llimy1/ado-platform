@@ -1,6 +1,7 @@
 create table ado_roadmap (
-    id bigint generated always as identity primary key,
-    project_id bigint not null,
+    id uuid primary key,
+    project_id uuid not null,
+    roadmap_key varchar(80) not null,
     title varchar(200) not null,
     description varchar(1000),
     status varchar(30) not null,
@@ -13,3 +14,6 @@ create table ado_roadmap (
 
 create index idx_ado_roadmap_project_id
     on ado_roadmap (project_id);
+
+create unique index uq_ado_roadmap_project_key
+    on ado_roadmap (project_id, roadmap_key);

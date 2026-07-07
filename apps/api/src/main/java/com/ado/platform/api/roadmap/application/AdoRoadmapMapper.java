@@ -12,6 +12,8 @@ final class AdoRoadmapMapper {
         return new AdoRoadmapResponse(
                 roadmap.getId(),
                 roadmap.getProject().getId(),
+                roadmap.getProject().getProjectKey(),
+                roadmap.getRoadmapKey(),
                 roadmap.getTitle(),
                 roadmap.getDescription(),
                 roadmap.getStatus(),

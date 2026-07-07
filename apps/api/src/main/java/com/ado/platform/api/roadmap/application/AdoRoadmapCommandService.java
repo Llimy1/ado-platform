@@ -21,20 +21,20 @@ public class AdoRoadmapCommandService {
     private final AdoRoadmapRepository roadmapRepository;
 
     @Transactional
-    public AdoRoadmapResponse createRoadmap(Long projectId, AdoRoadmapCreateRequest request) {
-        AdoProjectEntity project = projectRepository.findById(projectId)
+    public AdoRoadmapResponse createRoadmap(String projectKey, AdoRoadmapCreateRequest request) {
+        AdoProjectEntity project = projectRepository.findByProjectKey(projectKey)
                 .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
 
         AdoRoadmapEntity saved = roadmapRepository.save(
-                AdoRoadmapEntity.createDraft(project, request.title(), request.description())
+                AdoRoadmapEntity.createDraft(project, request.roadmapKey(), request.title(), request.description())
         );
 
         return AdoRoadmapMapper.toResponse(saved);
     }
 
     @Transactional
-    public AdoRoadmapResponse updateRoadmap(Long roadmapId, AdoRoadmapUpdateRequest request) {
-        AdoRoadmapEntity roadmap = roadmapRepository.findById(roadmapId)
+    public AdoRoadmapResponse updateRoadmap(String projectKey, String roadmapKey, AdoRoadmapUpdateRequest request) {
+        AdoRoadmapEntity roadmap = roadmapRepository.findByProjectProjectKeyAndRoadmapKey(projectKey, roadmapKey)
                 .orElseThrow(() -> new BusinessException(ErrorCode.ROADMAP_NOT_FOUND));
 
         roadmap.updateDetails(request.title(), request.description());
@@ -43,8 +43,8 @@ public class AdoRoadmapCommandService {
     }
 
     @Transactional
-    public AdoRoadmapResponse archiveRoadmap(Long roadmapId) {
-        AdoRoadmapEntity roadmap = roadmapRepository.findById(roadmapId)
+    public AdoRoadmapResponse archiveRoadmap(String projectKey, String roadmapKey) {
+        AdoRoadmapEntity roadmap = roadmapRepository.findByProjectProjectKeyAndRoadmapKey(projectKey, roadmapKey)
                 .orElseThrow(() -> new BusinessException(ErrorCode.ROADMAP_NOT_FOUND));
 
         roadmap.archive();

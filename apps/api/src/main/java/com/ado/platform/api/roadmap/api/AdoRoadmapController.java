@@ -40,30 +40,32 @@ public class AdoRoadmapController {
 
     @Operation(
             summary = "프로젝트 로드맵 목록 조회",
-            description = "프로젝트 ID로 ADO 로드맵 목록을 조회합니다."
+            description = "프로젝트 키로 ADO 로드맵 목록을 조회합니다."
     )
     @OkResponse
     @ProjectNotFoundResponse
-    @GetMapping("/projects/{projectId}/roadmaps")
+    @GetMapping("/projects/{projectKey}/roadmaps")
     public ApiResponse<List<AdoRoadmapResponse>> findRoadmaps(
-            @Parameter(description = "프로젝트 ID", example = "1", required = true)
-            @PathVariable Long projectId
+            @Parameter(description = "프로젝트 키", example = "ado-platform", required = true)
+            @PathVariable String projectKey
     ) {
-        return ApiResponse.success(queryService.findRoadmaps(projectId));
+        return ApiResponse.success(queryService.findRoadmaps(projectKey));
     }
 
     @Operation(
             summary = "로드맵 단건 조회",
-            description = "로드맵 ID로 ADO 로드맵을 조회합니다."
+            description = "프로젝트 키와 로드맵 키로 ADO 로드맵을 조회합니다."
     )
     @OkResponse
     @RoadmapNotFoundResponse
-    @GetMapping("/roadmaps/{roadmapId}")
+    @GetMapping("/projects/{projectKey}/roadmaps/{roadmapKey}")
     public ApiResponse<AdoRoadmapResponse> findRoadmap(
-            @Parameter(description = "로드맵 ID", example = "1", required = true)
-            @PathVariable Long roadmapId
+            @Parameter(description = "프로젝트 키", example = "ado-platform", required = true)
+            @PathVariable String projectKey,
+            @Parameter(description = "로드맵 키", example = "roadmap-foundation", required = true)
+            @PathVariable String roadmapKey
     ) {
-        return ApiResponse.success(queryService.findRoadmap(roadmapId));
+        return ApiResponse.success(queryService.findRoadmap(projectKey, roadmapKey));
     }
 
     @Operation(
@@ -73,14 +75,14 @@ public class AdoRoadmapController {
     @CreatedResponse
     @ValidationErrorResponse
     @ProjectNotFoundResponse
-    @PostMapping(value = "/projects/{projectId}/roadmaps", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/projects/{projectKey}/roadmaps", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public ApiResponse<AdoRoadmapResponse> createRoadmap(
-            @Parameter(description = "프로젝트 ID", example = "1", required = true)
-            @PathVariable Long projectId,
+            @Parameter(description = "프로젝트 키", example = "ado-platform", required = true)
+            @PathVariable String projectKey,
             @Valid @RequestBody AdoRoadmapCreateRequest request
     ) {
-        return ApiResponse.success(commandService.createRoadmap(projectId, request));
+        return ApiResponse.success(commandService.createRoadmap(projectKey, request));
     }
 
     @Operation(
@@ -90,13 +92,15 @@ public class AdoRoadmapController {
     @OkResponse
     @ValidationErrorResponse
     @RoadmapNotFoundResponse
-    @PatchMapping(value = "/roadmaps/{roadmapId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PatchMapping(value = "/projects/{projectKey}/roadmaps/{roadmapKey}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ApiResponse<AdoRoadmapResponse> updateRoadmap(
-            @Parameter(description = "로드맵 ID", example = "1", required = true)
-            @PathVariable Long roadmapId,
+            @Parameter(description = "프로젝트 키", example = "ado-platform", required = true)
+            @PathVariable String projectKey,
+            @Parameter(description = "로드맵 키", example = "roadmap-foundation", required = true)
+            @PathVariable String roadmapKey,
             @Valid @RequestBody AdoRoadmapUpdateRequest request
     ) {
-        return ApiResponse.success(commandService.updateRoadmap(roadmapId, request));
+        return ApiResponse.success(commandService.updateRoadmap(projectKey, roadmapKey, request));
     }
 
     @Operation(
@@ -105,11 +109,13 @@ public class AdoRoadmapController {
     )
     @OkResponse
     @RoadmapNotFoundResponse
-    @PostMapping("/roadmaps/{roadmapId}/archive")
+    @PostMapping("/projects/{projectKey}/roadmaps/{roadmapKey}/archive")
     public ApiResponse<AdoRoadmapResponse> archiveRoadmap(
-            @Parameter(description = "로드맵 ID", example = "1", required = true)
-            @PathVariable Long roadmapId
+            @Parameter(description = "프로젝트 키", example = "ado-platform", required = true)
+            @PathVariable String projectKey,
+            @Parameter(description = "로드맵 키", example = "roadmap-foundation", required = true)
+            @PathVariable String roadmapKey
     ) {
-        return ApiResponse.success(commandService.archiveRoadmap(roadmapId));
+        return ApiResponse.success(commandService.archiveRoadmap(projectKey, roadmapKey));
     }
 }
