@@ -1,6 +1,7 @@
 package com.ado.platform.api.job.api.dto;
 
 import com.ado.platform.api.job.persistence.entity.AdoJobAttemptStatus;
+import com.ado.platform.api.job.persistence.entity.AdoJobTargetType;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.Instant;
@@ -47,9 +48,35 @@ public record AdoJobAttemptDetailResponse(
 ) {
 
     public record JobSummary(
+            @Schema(description = "Project 안에서 유일한 Job 키", example = "job-ado-api-contract-001")
             String jobKey,
+
+            @Schema(description = "Job 유형", example = "codex_implementation")
             String type,
-            String targetHref
+
+            @Schema(description = "Job API href", example = "/v1/projects/ado-platform/jobs/job-ado-api-contract-001")
+            String jobApiHref,
+
+            @Schema(description = "Job 실행 대상")
+            TargetSummary target
+    ) {
+    }
+
+    public record TargetSummary(
+            @Schema(description = "Job 대상 유형", example = "project")
+            AdoJobTargetType type,
+
+            @Schema(description = "Job 대상 참조", example = "ado-platform")
+            String ref,
+
+            @Schema(description = "대상 API href. 아직 API가 없는 대상은 null입니다.", example = "/v1/projects/ado-platform")
+            String apiHref,
+
+            @Schema(description = "대상 Control Room UI href. 아직 안정된 UI route가 없는 대상은 null입니다.", example = "/ado-projects/ado-platform")
+            String uiHref,
+
+            @Schema(description = "사람이 읽는 대상 표시 이름", example = "ado-platform")
+            String label
     ) {
     }
 

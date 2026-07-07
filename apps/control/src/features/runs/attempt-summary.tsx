@@ -14,16 +14,22 @@ function formatDuration(ms: number | null): string {
 
 /** P-06.3: timing and worker facts, separate from the terminal summary in the header. */
 export function AttemptSummary({ attempt }: { attempt: JobAttemptDetailResponse["attempt"] }) {
+  const targetLabel = attempt.job.target.label ?? attempt.job.target.ref;
+
   return (
     <Panel title="타이밍 및 Worker" headingId="attempt-summary-heading">
       <dl className={styles.kvGrid}>
         <div>
           <span className={styles.kvLabel}>Job</span>
-          <Link href={attempt.job.targetHref}>{attempt.job.jobKey}</Link>
+          {attempt.job.jobKey}
         </div>
         <div>
           <span className={styles.kvLabel}>Job 유형</span>
           {attempt.job.type}
+        </div>
+        <div>
+          <span className={styles.kvLabel}>대상</span>
+          {attempt.job.target.uiHref ? <Link href={attempt.job.target.uiHref}>{targetLabel}</Link> : targetLabel || "-"}
         </div>
         <div>
           <span className={styles.kvLabel}>Worker</span>

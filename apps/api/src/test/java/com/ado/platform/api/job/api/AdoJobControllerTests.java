@@ -197,7 +197,12 @@ public class AdoJobControllerTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.jobAttemptId").value(JOB_ATTEMPT_ID.toString()))
                 .andExpect(jsonPath("$.data.state").value("queued"))
-                .andExpect(jsonPath("$.data.job.jobKey").value(JOB_KEY));
+                .andExpect(jsonPath("$.data.job.jobKey").value(JOB_KEY))
+                .andExpect(jsonPath("$.data.job.jobApiHref").value("/v1/projects/ado-platform/jobs/" + JOB_KEY))
+                .andExpect(jsonPath("$.data.job.target.type").value("project"))
+                .andExpect(jsonPath("$.data.job.target.ref").value("ado-platform"))
+                .andExpect(jsonPath("$.data.job.target.apiHref").value("/v1/projects/ado-platform"))
+                .andExpect(jsonPath("$.data.job.target.uiHref").value("/ado-projects/ado-platform"));
     }
 
     @Test
@@ -248,7 +253,14 @@ public class AdoJobControllerTests {
                 new AdoJobAttemptDetailResponse.JobSummary(
                         JOB_KEY,
                         AdoJobType.CODEX_IMPLEMENTATION.value(),
-                        "/v1/projects/ado-platform/jobs/" + JOB_KEY
+                        "/v1/projects/ado-platform/jobs/" + JOB_KEY,
+                        new AdoJobAttemptDetailResponse.TargetSummary(
+                                AdoJobTargetType.PROJECT,
+                                "ado-platform",
+                                "/v1/projects/ado-platform",
+                                "/ado-projects/ado-platform",
+                                "ado-platform"
+                        )
                 ),
                 null,
                 new AdoJobAttemptDetailResponse.LeaseSummary(null, null, null),

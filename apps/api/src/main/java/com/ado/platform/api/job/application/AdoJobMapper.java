@@ -9,6 +9,7 @@ import com.ado.platform.api.job.persistence.entity.AdoArtifactEntity;
 import com.ado.platform.api.job.persistence.entity.AdoJobAttemptEntity;
 import com.ado.platform.api.job.persistence.entity.AdoJobEntity;
 import com.ado.platform.api.job.persistence.entity.AdoJobEventEntity;
+import com.ado.platform.api.job.persistence.entity.AdoJobTargetType;
 
 import java.util.List;
 
@@ -55,9 +56,15 @@ final class AdoJobMapper {
 
     static AdoJobAttemptDetailResponse toDetailResponse(AdoJobAttemptEntity attempt) {
         AdoJobEntity job = attempt.getJob();
-        String targetHref = "/v1/projects/%s/jobs/%s".formatted(
-                job.getProject().getProjectKey(),
+        String projectKey = job.getProject().getProjectKey();
+        String jobApiHref = "/v1/projects/%s/jobs/%s".formatted(
+                projectKey,
                 job.getJobKey()
+        );
+        AdoJobAttemptDetailResponse.TargetSummary target = toTargetSummary(
+                projectKey,
+                job.getTargetType(),
+                job.getTargetRef()
         );
 
         return new AdoJobAttemptDetailResponse(
@@ -67,7 +74,8 @@ final class AdoJobMapper {
                 new AdoJobAttemptDetailResponse.JobSummary(
                         job.getJobKey(),
                         job.getJobType().value(),
-                        targetHref
+                        jobApiHref,
+                        target
                 ),
                 attempt.getWorkerKey() == null
                         ? null
@@ -94,12 +102,39 @@ final class AdoJobMapper {
                 attempt.getResultArtifact() == null
                         ? null
                         : "/v1/projects/%s/artifacts/%s".formatted(
-                                job.getProject().getProjectKey(),
+                                projectKey,
                                 attempt.getResultArtifact().getArtifactKey()
                         ),
                 List.of(),
                 List.of(),
                 List.of()
+        );
+    }
+
+    private static AdoJobAttemptDetailResponse.TargetSummary toTargetSummary(
+            String projectKey,
+            AdoJobTargetType targetType,
+            String targetRef
+    ) {
+        String apiHref = switch (targetType) {
+            case PROJECT -> "/v1/projects/" + targetRef;
+            case ROADMAP -> "/v1/projects/%s/roadmaps/%s".formatted(projectKey, targetRef);
+            case ARTIFACT -> "/v1/projects/%s/artifacts/%s".formatted(projectKey, targetRef);
+            case FEATURE_UNIT, COMPONENT_WORK, REVIEW_GROUP, VERIFICATION_RUN -> null;
+        };
+        String uiHref = switch (targetType) {
+            case PROJECT -> "/ado-projects/" + targetRef;
+            case ROADMAP -> "/projects/%s/roadmaps/%s".formatted(projectKey, targetRef);
+            case ARTIFACT -> "/projects/%s/artifacts/%s".formatted(projectKey, targetRef);
+            case FEATURE_UNIT, COMPONENT_WORK, REVIEW_GROUP, VERIFICATION_RUN -> null;
+        };
+
+        return new AdoJobAttemptDetailResponse.TargetSummary(
+                targetType,
+                targetRef,
+                apiHref,
+                uiHref,
+                targetRef
         );
     }
 

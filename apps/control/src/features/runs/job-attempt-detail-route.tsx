@@ -48,11 +48,13 @@ interface JobAttemptDetailRouteProps {
  */
 export function JobAttemptDetailRoute({ detail, activeStream, logPage }: JobAttemptDetailRouteProps) {
   const { attempt, agentRuns, commandRuns, artifacts, runnerDataAvailable } = detail;
+  const targetHref = attempt.job.target.uiHref;
+  const targetLabel = attempt.job.target.label ?? attempt.job.target.ref;
 
   return (
     <div>
       <p className={styles.breadcrumb}>
-        <Link href={attempt.job.targetHref}>Component Work로 돌아가기</Link>
+        {targetHref ? <Link href={targetHref}>{targetLabel}로 돌아가기</Link> : <span>{targetLabel || "대상"} 화면 없음</span>}
       </p>
 
       <div className={styles.header}>

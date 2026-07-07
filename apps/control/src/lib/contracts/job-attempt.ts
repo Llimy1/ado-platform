@@ -21,7 +21,18 @@ export interface JobAttemptDetailResponse {
     jobAttemptId: string;
     attemptNumber: number;
     state: JobAttemptState;
-    job: { jobKey: string; type: string; targetHref: string };
+    job: {
+      jobKey: string;
+      type: string;
+      jobApiHref: string | null;
+      target: {
+        type: string;
+        ref: string;
+        apiHref: string | null;
+        uiHref: string | null;
+        label: string | null;
+      };
+    };
     worker: { workerKey: string; href: string | null } | null;
     lease: { leasedAt: string | null; expiresAt: string | null; lastHeartbeatAt: string | null };
     timing: { startedAt: string | null; finishedAt: string | null; timeoutAt: string | null; durationMs: number | null };
