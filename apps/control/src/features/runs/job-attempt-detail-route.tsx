@@ -11,6 +11,7 @@ import { formatAbsoluteTime } from "@/lib/format";
 import type { JobAttemptDetailResponse, LogStream, AttemptLogPageResponse } from "@/lib/contracts/job-attempt";
 
 const STATE_LABEL: Record<string, string> = {
+  queued: "대기 중",
   leased: "할당됨",
   running: "실행 중",
   succeeded: "성공",
@@ -23,6 +24,7 @@ const STATE_LABEL: Record<string, string> = {
 };
 
 const STATE_TONE: Record<string, "queued" | "running" | "success" | "failure" | "warning"> = {
+  queued: "queued",
   leased: "queued",
   running: "running",
   succeeded: "success",
@@ -45,7 +47,7 @@ interface JobAttemptDetailRouteProps {
  * live only on Component Work detail. This route is read-only history.
  */
 export function JobAttemptDetailRoute({ detail, activeStream, logPage }: JobAttemptDetailRouteProps) {
-  const { attempt, agentRuns, commandRuns, artifacts } = detail;
+  const { attempt, agentRuns, commandRuns, artifacts, runnerDataAvailable } = detail;
 
   return (
     <div>
@@ -80,13 +82,13 @@ export function JobAttemptDetailRoute({ detail, activeStream, logPage }: JobAtte
         <AttemptSummary attempt={attempt} />
       </div>
       <div className={styles.section}>
-        <AgentRunTable agentRuns={agentRuns} />
+        <AgentRunTable agentRuns={agentRuns} available={runnerDataAvailable} />
       </div>
       <div className={styles.section}>
-        <CommandRunTable commandRuns={commandRuns} />
+        <CommandRunTable commandRuns={commandRuns} available={runnerDataAvailable} />
       </div>
       <div className={styles.section}>
-        <RedactedArtifactList artifacts={artifacts} />
+        <RedactedArtifactList artifacts={artifacts} available={runnerDataAvailable} />
       </div>
       <div className={styles.section}>
         <AttemptLogReader jobAttemptId={attempt.jobAttemptId} activeStream={activeStream} page={logPage} />

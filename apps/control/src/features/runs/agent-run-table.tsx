@@ -6,10 +6,20 @@ import { formatAbsoluteTime } from "@/lib/format";
 import type { JobAttemptDetailResponse } from "@/lib/contracts/job-attempt";
 
 /** P-06.4: "no AgentRun" is explicit — never fabricate model/provider data. */
-export function AgentRunTable({ agentRuns }: { agentRuns: JobAttemptDetailResponse["agentRuns"] }) {
+export function AgentRunTable({
+  agentRuns,
+  available = true,
+}: {
+  agentRuns: JobAttemptDetailResponse["agentRuns"];
+  available?: boolean;
+}) {
   return (
     <Panel title="AgentRun" headingId="agent-run-table-heading">
-      {agentRuns.length === 0 ? (
+      {!available ? (
+        <EmptyState title="AgentRun 정보는 아직 제공되지 않습니다.">
+          <p>백엔드 Runner가 구현되기 전까지는 이 Attempt가 실제로 어떤 AgentRun을 실행했는지 조회할 수 없습니다.</p>
+        </EmptyState>
+      ) : agentRuns.length === 0 ? (
         <EmptyState title="AgentRun 없음" />
       ) : (
         <div className={styles.wrapper}>

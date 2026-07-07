@@ -5,6 +5,7 @@
  */
 
 export type JobAttemptState =
+  | "queued"
   | "leased"
   | "running"
   | "succeeded"
@@ -21,14 +22,20 @@ export interface JobAttemptDetailResponse {
     attemptNumber: number;
     state: JobAttemptState;
     job: { jobKey: string; type: string; targetHref: string };
-    worker: { workerKey: string; version: string; href: string | null } | null;
+    worker: { workerKey: string; href: string | null } | null;
     lease: { leasedAt: string | null; expiresAt: string | null; lastHeartbeatAt: string | null };
     timing: { startedAt: string | null; finishedAt: string | null; timeoutAt: string | null; durationMs: number | null };
     terminal: { exitCode: number | null; signal: string | null; failureCode: string | null; redactedSummary: string | null };
     resultArtifactHref: string | null;
     replacementAttemptHref: string | null;
-    resourceVersion: string;
+    resourceVersion: string | null;
   };
+  /**
+   * False when the backend hasn't implemented the Runner yet, so agentRuns/
+   * commandRuns/artifacts below are always empty regardless of what actually
+   * ran — distinct from a legitimately-empty attempt.
+   */
+  runnerDataAvailable: boolean;
   agentRuns: Array<{
     agentRunId: string;
     role: string;
@@ -71,5 +78,6 @@ export interface AttemptLogPageResponse {
   entries: Array<{ sequence: number; occurredAt: string; level: "info" | "warn" | "error"; text: string }>;
   nextCursor: string | null;
   newestSequence: number;
-  redaction: { applied: boolean; omittedEntryCount: number; reasonCode: string | null };
+  /** Null when the source doesn't report redaction metadata (real API doesn't yet). */
+  redaction: { applied: boolean; omittedEntryCount: number; reasonCode: string | null } | null;
 }

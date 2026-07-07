@@ -18,7 +18,16 @@ const TYPE_LABEL: Record<ArtifactType, string> = {
   pull_request_packet: "PR 패킷",
   incident_summary: "사고 요약",
   allowed_paths: "허용 경로 규칙",
+  context_packet: "컨텍스트 패킷",
+  candidate_artifact: "후보 Artifact",
+  implementation_artifact: "구현 Artifact",
+  git_diff_artifact: "Git Diff Artifact",
+  command_run_log: "명령 실행 로그",
+  review_result: "리뷰 결과",
+  arbiter_decision: "중재 결정",
 };
+
+const NOT_PROVIDED = "제공되지 않음";
 
 const STATUS_LABEL: Record<ArtifactStatus, string> = {
   available: "사용 가능",
@@ -89,15 +98,15 @@ export function ArtifactDetail({ detail, backHref }: { detail: ArtifactDetailRes
             </div>
             <div>
               <span className={styles.kvLabel}>MIME / 크기</span>
-              {artifact.mimeType} · {formatBytes(artifact.byteSize)}
+              {artifact.mimeType ?? NOT_PROVIDED} · {formatBytes(artifact.byteSize)}
             </div>
             <div>
               <span className={styles.kvLabel}>소스 버전</span>
-              <MachineValue value={artifact.sourceVersion} label="소스 버전" />
+              {artifact.sourceVersion ? <MachineValue value={artifact.sourceVersion} label="소스 버전" /> : NOT_PROVIDED}
             </div>
             <div>
               <span className={styles.kvLabel}>컨텍스트 해시</span>
-              <MachineValue value={artifact.contextHash} label="컨텍스트 해시" />
+              {artifact.contextHash ? <MachineValue value={artifact.contextHash} label="컨텍스트 해시" /> : NOT_PROVIDED}
             </div>
             {artifact.specRevision !== null ? (
               <div>
@@ -113,7 +122,7 @@ export function ArtifactDetail({ detail, backHref }: { detail: ArtifactDetailRes
             ) : null}
             <div>
               <span className={styles.kvLabel}>보존 정책</span>
-              {artifact.retentionPolicy}
+              {artifact.retentionPolicy ?? NOT_PROVIDED}
             </div>
           </dl>
         </Panel>
@@ -131,7 +140,9 @@ export function ArtifactDetail({ detail, backHref }: { detail: ArtifactDetailRes
             ) : undefined
           }
         >
-          {render.kind === "unavailable" ? (
+          {render === null ? (
+            <div className={styles.unavailableBox}>이 근거의 렌더링 정보는 아직 백엔드에서 제공하지 않습니다.</div>
+          ) : render.kind === "unavailable" ? (
             <div className={styles.unavailableBox}>{render.unavailableReason ?? "이 근거는 미리보기할 수 없습니다."}</div>
           ) : (
             <div style={{ display: "flex", alignItems: "center", gap: "var(--ado-space-3)", flexWrap: "wrap" }}>
@@ -150,7 +161,11 @@ export function ArtifactDetail({ detail, backHref }: { detail: ArtifactDetailRes
 
       <div className={styles.section}>
         <Panel title="출처" headingId="artifact-provenance-heading">
-          {provenance.length === 0 ? (
+          {provenance === null ? (
+            <EmptyState title="출처 정보는 아직 제공되지 않습니다.">
+              <p>이 근거가 어떤 Job/Component Work에서 만들어졌는지 추적하는 기능은 아직 백엔드에서 제공하지 않습니다.</p>
+            </EmptyState>
+          ) : provenance.length === 0 ? (
             <EmptyState title="기록된 출처 관계가 없습니다." />
           ) : (
             <ul className={styles.provenanceList}>

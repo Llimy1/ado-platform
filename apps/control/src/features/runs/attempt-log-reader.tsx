@@ -40,7 +40,7 @@ export function AttemptLogReader({ jobAttemptId, activeStream, page }: AttemptLo
         <EmptyState title={`${STREAM_LABEL[activeStream]} 스트림에 출력이 없습니다.`} />
       ) : (
         <>
-          {page.redaction.applied ? (
+          {page.redaction?.applied ? (
             <p className={styles.redactionNote}>
               일부 항목이 편집되었습니다 ({page.redaction.omittedEntryCount}건 생략
               {page.redaction.reasonCode ? ` · ${page.redaction.reasonCode}` : ""})
