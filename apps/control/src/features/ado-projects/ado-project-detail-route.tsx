@@ -6,10 +6,13 @@ import { useRouter } from "next/navigation";
 import styles from "./ado-project-detail-route.module.css";
 import { Panel } from "@/components/Panel";
 import { Button } from "@/components/Button";
+import { MachineValue } from "@/components/MachineValue";
+import { StatusBadge } from "@/components/StatusBadge";
+import { IconRefresh } from "@/components/icons";
 import { EmptyState } from "@/components/StateViews";
 import { AdoApiError } from "@/lib/api/errors";
 import { roadmapClient } from "@/lib/data/ado-roadmaps";
-import { formatAbsoluteTime } from "@/lib/format";
+import { ADO_ROADMAP_STATUS_LABEL, ADO_ROADMAP_STATUS_TONE, formatAbsoluteTime } from "@/lib/format";
 import type { AdoProject } from "@/lib/contracts/ado-project";
 import type { AdoRoadmap } from "@/lib/contracts/ado-roadmap";
 
@@ -24,6 +27,7 @@ export function AdoProjectDetailRoute({
   initialRoadmaps,
   initialRoadmapError,
 }: AdoProjectDetailRouteProps) {
+  const router = useRouter();
   const [roadmaps, setRoadmaps] = useState<AdoRoadmap[]>(initialRoadmaps ?? []);
   const [roadmapKey, setRoadmapKey] = useState("");
   const [title, setTitle] = useState("");
@@ -59,27 +63,42 @@ export function AdoProjectDetailRoute({
   return (
     <div>
       <p className={styles.breadcrumb}>
-        <Link href="/ado-projects">ADO Projects</Link>
+        <Link href="/ado-projects">ADO Projects</Link> / {project.name}
       </p>
-      <div className={styles.header}>
-        <h1 className={styles.title}>{project.name}</h1>
-      </div>
-      <Panel title="프로젝트 정보">
-        <dl className={styles.fieldList}>
-          <dt className={styles.fieldLabel}>ID</dt>
-          <dd className={styles.fieldValue}>{project.id}</dd>
-          <dt className={styles.fieldLabel}>프로젝트 키</dt>
-          <dd className={styles.fieldValue}>{project.projectKey}</dd>
-          <dt className={styles.fieldLabel}>이름</dt>
-          <dd className={styles.fieldValue}>{project.name}</dd>
-          <dt className={styles.fieldLabel}>생성일</dt>
-          <dd className={styles.fieldValue}>{formatAbsoluteTime(project.createdAt)}</dd>
-          <dt className={styles.fieldLabel}>수정일</dt>
-          <dd className={styles.fieldValue}>{formatAbsoluteTime(project.updatedAt)}</dd>
-        </dl>
-      </Panel>
 
-      <Panel title="로드맵" className={styles.roadmapPanel}>
+      <div className={styles.header}>
+        <div className={styles.titleRow}>
+          <h1 className={styles.title}>{project.name}</h1>
+        </div>
+        <div className={styles.metaRow}>
+          <span>
+            <span className={styles.metaLabel}>ID</span>
+            <MachineValue value={project.id} label="Project ID" />
+          </span>
+          <span>
+            <span className={styles.metaLabel}>프로젝트 키</span>
+            <MachineValue value={project.projectKey} label="projectKey" />
+          </span>
+          <span>
+            <span className={styles.metaLabel}>생성일</span>
+            {formatAbsoluteTime(project.createdAt)}
+          </span>
+          <span>
+            <span className={styles.metaLabel}>수정일</span>
+            {formatAbsoluteTime(project.updatedAt)}
+          </span>
+          <Button variant="ghost" dense onClick={() => router.refresh()} aria-label="새로고침">
+            <IconRefresh />
+            새로고침
+          </Button>
+        </div>
+      </div>
+
+      <Panel
+        title="로드맵"
+        headingId="ado-project-roadmap-heading"
+        action={<span className={styles.roadmapCount}>{roadmaps.length}건</span>}
+      >
         <form className={styles.roadmapForm} onSubmit={handleCreateRoadmap}>
           <div className={styles.roadmapField}>
             <label className={styles.fieldLabel} htmlFor="roadmap-key">
@@ -136,8 +155,7 @@ export function AdoProjectDetailRoute({
               <caption className={styles.caption}>프로젝트 로드맵 목록, {roadmaps.length}건</caption>
               <thead>
                 <tr>
-                  <th scope="col">ID</th>
-                  <th scope="col">제목</th>
+                  <th scope="col">Roadmap</th>
                   <th scope="col">상태</th>
                   <th scope="col">생성일</th>
                 </tr>
@@ -145,14 +163,16 @@ export function AdoProjectDetailRoute({
               <tbody>
                 {roadmaps.map((roadmap) => (
                   <tr key={roadmap.id}>
-                    <td>{roadmap.id}</td>
                     <td>
                       <span className={styles.roadmapTitle}>{roadmap.title}</span>
                       {roadmap.description ? (
                         <span className={styles.roadmapDescription}>{roadmap.description}</span>
                       ) : null}
+                      <MachineValue value={roadmap.id} label="roadmap ID" />
                     </td>
-                    <td>{roadmap.status}</td>
+                    <td>
+                      <StatusBadge tone={ADO_ROADMAP_STATUS_TONE[roadmap.status]} label={ADO_ROADMAP_STATUS_LABEL[roadmap.status]} />
+                    </td>
                     <td>{formatAbsoluteTime(roadmap.createdAt)}</td>
                   </tr>
                 ))}

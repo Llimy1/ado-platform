@@ -12,11 +12,29 @@
   color: var(--ado-color-text-tertiary);
 }
 
+.titleRow {
+  display: flex;
+  align-items: baseline;
+  gap: var(--ado-space-3);
+  flex-wrap: wrap;
+}
+
 .title {
   font-size: var(--ado-text-page-title-size);
   line-height: var(--ado-text-page-title-line);
   font-weight: var(--ado-text-page-title-weight);
   margin: 0;
+}
+
+.resultCount {
+  font-size: var(--ado-text-dense-size);
+  color: var(--ado-color-text-secondary);
+}
+
+.projectName {
+  display: block;
+  font-weight: 600;
+  color: var(--ado-color-text-strong);
 }
 
 .actions {
