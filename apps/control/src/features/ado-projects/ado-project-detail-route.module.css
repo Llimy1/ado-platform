@@ -5,11 +5,16 @@
 
 .header {
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: var(--ado-space-2);
+  margin-bottom: var(--ado-space-4);
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
   gap: var(--ado-space-3);
   flex-wrap: wrap;
-  margin-bottom: var(--ado-space-2);
 }
 
 .title {
@@ -19,24 +24,29 @@
   margin: 0;
 }
 
-.fieldList {
-  display: grid;
-  grid-template-columns: max-content 1fr;
-  gap: var(--ado-space-2) var(--ado-space-4);
+.metaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ado-space-4);
+  font-size: var(--ado-text-dense-size);
+  color: var(--ado-color-text-secondary);
+  align-items: center;
+}
+
+.metaLabel {
+  color: var(--ado-color-text-tertiary);
+  margin-right: 4px;
+}
+
+.roadmapCount {
+  font-size: var(--ado-text-dense-size);
+  color: var(--ado-color-text-secondary);
 }
 
 .fieldLabel {
   color: var(--ado-color-text-secondary);
   font-size: var(--ado-text-label-size);
   font-weight: var(--ado-text-label-weight);
-}
-
-.fieldValue {
-  font-size: var(--ado-text-body-size);
-}
-
-.roadmapPanel {
-  margin-top: var(--ado-space-4);
 }
 
 .roadmapForm {

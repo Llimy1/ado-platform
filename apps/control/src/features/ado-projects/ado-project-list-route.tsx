@@ -6,6 +6,7 @@ import styles from "./ado-project-list-route.module.css";
 import buttonStyles from "@/components/Button.module.css";
 import { Panel } from "@/components/Panel";
 import { Button } from "@/components/Button";
+import { MachineValue } from "@/components/MachineValue";
 import { EmptyState, ErrorState } from "@/components/StateViews";
 import { formatAbsoluteTime } from "@/lib/format";
 import { projectClient } from "@/lib/data/ado-projects";
@@ -48,7 +49,10 @@ export function AdoProjectListRoute({ initialItems, initialError }: AdoProjectLi
     <div>
       <p className={styles.breadcrumb}>ADO Control Room</p>
       <div className={styles.header}>
-        <h1 className={styles.title}>ADO Projects</h1>
+        <div className={styles.titleRow}>
+          <h1 className={styles.title}>ADO Projects</h1>
+          <span className={styles.resultCount}>{items.length}건</span>
+        </div>
         <div className={styles.actions}>
           <Button variant="secondary" dense onClick={refresh} disabled={isRefreshing}>
             {isRefreshing ? "새로고침 중" : "새로고침"}
@@ -73,9 +77,8 @@ export function AdoProjectListRoute({ initialItems, initialError }: AdoProjectLi
               <caption className={styles.caption}>ADO 프로젝트 목록, {items.length}건</caption>
               <thead>
                 <tr>
-                  <th scope="col">ID</th>
-                  <th scope="col">프로젝트 키</th>
                   <th scope="col">이름</th>
+                  <th scope="col">프로젝트 키</th>
                   <th scope="col">생성일</th>
                   <th scope="col">
                     <span className={styles.caption}>열기</span>
@@ -85,9 +88,13 @@ export function AdoProjectListRoute({ initialItems, initialError }: AdoProjectLi
               <tbody>
                 {items.map((item) => (
                   <tr key={item.id}>
-                    <td>{item.id}</td>
+                    <td>
+                      <Link href={`/ado-projects/${item.projectKey}`} className={styles.projectName}>
+                        {item.name}
+                      </Link>
+                      <MachineValue value={item.id} label="Project ID" />
+                    </td>
                     <td>{item.projectKey}</td>
-                    <td>{item.name}</td>
                     <td>{formatAbsoluteTime(item.createdAt)}</td>
                     <td>
                       <Link className={styles.openLink} href={`/ado-projects/${item.projectKey}`}>

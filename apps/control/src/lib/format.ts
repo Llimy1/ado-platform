@@ -4,6 +4,7 @@ import type {
   ProjectOperationalStatus,
 } from "@/lib/contracts/projects";
 import type { RoadmapState } from "@/lib/contracts/roadmaps";
+import type { AdoRoadmap } from "@/lib/contracts/ado-roadmap";
 import type { FeatureUnitRiskLevel } from "@/lib/contracts/feature-unit";
 import type { DecisionStatus } from "@/lib/contracts/decision";
 import type { IncidentSeverity, IncidentState } from "@/lib/contracts/incident";
@@ -171,6 +172,19 @@ export const ROADMAP_STATE_TONE: Record<RoadmapState, StatusTone> = {
   blocked: "failure",
   cancelled: "queued",
   incident_hold: "failure",
+};
+
+/** Real `apps/api` Roadmap status (draft/active/archived) — reuses the mock ROADMAP_STATE vocabulary for the overlapping states. */
+export const ADO_ROADMAP_STATUS_LABEL: Record<AdoRoadmap["status"], string> = {
+  draft: "초안",
+  active: "실행 중",
+  archived: "보관됨",
+};
+
+export const ADO_ROADMAP_STATUS_TONE: Record<AdoRoadmap["status"], StatusTone> = {
+  draft: "queued",
+  active: "running",
+  archived: "queued",
 };
 
 /**
