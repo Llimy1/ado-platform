@@ -17,6 +17,7 @@ import java.util.List;
 public class GlobalExceptionHandler {
 
     private static final String ADO_PROJECT_PROJECT_KEY_CONSTRAINT = "ado_project_project_key_key";
+    private static final String ADO_JOB_PROJECT_JOB_KEY_CONSTRAINT = "uq_ado_job_project_job_key";
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -49,6 +50,9 @@ public class GlobalExceptionHandler {
         if (isProjectKeyUniqueConstraintViolation(exception)) {
             return toErrorResponse(ErrorCode.PROJECT_KEY_ALREADY_EXISTS);
         }
+        if (isConstraintViolation(exception, ADO_JOB_PROJECT_JOB_KEY_CONSTRAINT)) {
+            return toErrorResponse(ErrorCode.JOB_KEY_ALREADY_EXISTS);
+        }
 
         throw exception;
     }
@@ -64,16 +68,20 @@ public class GlobalExceptionHandler {
     }
 
     private boolean isProjectKeyUniqueConstraintViolation(Throwable exception) {
+        return isConstraintViolation(exception, ADO_PROJECT_PROJECT_KEY_CONSTRAINT);
+    }
+
+    private boolean isConstraintViolation(Throwable exception, String constraintName) {
         Throwable current = exception;
 
         while (current != null) {
             if (current instanceof ConstraintViolationException constraintViolation
-                    && ADO_PROJECT_PROJECT_KEY_CONSTRAINT.equals(constraintViolation.getConstraintName())) {
+                    && constraintName.equals(constraintViolation.getConstraintName())) {
                 return true;
             }
 
             if (current.getMessage() != null
-                    && current.getMessage().contains(ADO_PROJECT_PROJECT_KEY_CONSTRAINT)) {
+                    && current.getMessage().contains(constraintName)) {
                 return true;
             }
 
